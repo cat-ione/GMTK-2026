@@ -21,6 +21,7 @@ class Furniture(Sprite["Room"]):
             )
         else:
             self.hitbox = None
+        self.drawbox = RectHitbox(self.pos, self.image.size, Anchor.TOPLEFT)
 
     def draw(self, screen: pygame.Surface) -> None:
         screen.blit(self.image, self.pos)

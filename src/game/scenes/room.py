@@ -48,6 +48,16 @@ class Room(Scene):
 
         self.sprite_manager.draw(screen)
 
+    def set_boundary(self, boundary: list[VecLike]) -> None:
+        self.boundary = boundary
+
+    def contains_point(self, point: VecLike, margin: float = 0) -> bool:
+        if not point_in_polygon(point, self.boundary):
+            return False
+        if margin > 0 and distance_to_polygon_edges(point, self.boundary) < margin:
+            return False
+        return True
+
     def add_item(self, item: Item) -> None:
         self.items.add(item)
         self.add(item)
