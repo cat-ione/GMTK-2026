@@ -46,7 +46,19 @@ class Player(Sprite["Room"]):
             self.game.keys[K_d] - self.game.keys[K_a],
             self.game.keys[K_s] - self.game.keys[K_w],
         ).normalize() * SPEED
-        self.pos += self.vel * self.game.dt
+
+        # Boundary collisions
+        self.pos.x += self.vel.x * self.game.dt
+        self.hitbox.set_pos(self.pos)
+        if not self._within_boundary():
+            self.pos.x -= self.vel.x * self.game.dt
+            self.hitbox.set_pos(self.pos)
+        self.pos.y += self.vel.y * self.game.dt
+        self.hitbox.set_pos(self.pos)
+        if not self._within_boundary():
+            self.pos.y -= self.vel.y * self.game.dt
+            self.hitbox.set_pos(self.pos)
+
         self.drawbox.set_pos(self.pos)
         self.hitbox.set_pos(self.pos)
 
@@ -121,6 +133,16 @@ class Player(Sprite["Room"]):
         offset = self.held_item_offsets[self.direction_text]
         anchor = self.held_item.held_anchors[self.direction_text]
         anchored_blit(screen, image, self.drawbox.topleft + offset, anchor)
+
+    def _within_boundary(self) -> bool:
+        corners = (
+            self.hitbox.topleft, self.hitbox.topright,
+            self.hitbox.bottomleft, self.hitbox.bottomright,
+        )
+        return all(
+            point_in_polygon(corner, self.scene.boundary)
+            for corner in corners
+        )
 
     def _resolve_collision(self, other: RectHitbox) -> None:
         overlap_x = floor(min(self.hitbox.bottomright.x, other.bottomright.x)
