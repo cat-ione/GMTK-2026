@@ -33,6 +33,9 @@ class Item(Sprite["MainScene"]):
     def update(self) -> None:
         pass
 
+    def update_when_held(self) -> None:
+        pass
+
     def draw(self, screen: pygame.Surface) -> None:
         draw_pos = self.pos - Vec(self.image.size) / 2
 
@@ -131,3 +134,16 @@ class Vacuum(Item):
             held_left_anchor=Anchor.TOPLEFT.offset((8, 2)),
             held_right_anchor=Anchor.TOPLEFT.offset((0, 2)),
         )
+        self.offsets = {
+            "left": Vec(-13, 2),
+            "right": Vec(12, 2),
+            "up": Vec(-3, -8),
+            "down": Vec(2, 3),
+        }
+
+    def update_when_held(self) -> None:
+        player = self.scene.player
+        for dust in self.scene.dusts.copy():
+            pos = player.pos + self.offsets[player.direction_text]
+            if pos.distance_to(dust.pos) < 4:
+                self.scene.remove_dust(dust)

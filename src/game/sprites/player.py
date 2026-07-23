@@ -19,8 +19,9 @@ class Player(Sprite["MainScene"]):
 
         # Direction the player was most recently walking towards
         # (used for calculating the item to select) (8-directional)
-        self.direction = Vec(0, 1)
+        self.ordinal_direction = Vec(0, 1)
         # 4-directional
+        self.cardinal_direction = Vec(0, 1)
         self.direction_text = "down"
         self.key_queue = []
 
@@ -48,7 +49,7 @@ class Player(Sprite["MainScene"]):
         self.hitbox.set_pos(self.pos)
 
         if self.vel != Vec(0, 0):
-            self.direction = self.vel.normalize()
+            self.ordinal_direction = self.vel.normalize()
 
         self._update_animation()
 
@@ -65,26 +66,30 @@ class Player(Sprite["MainScene"]):
                 self.selected_item = None
             # If holding an item, drop it in front
             elif self.held_item is not None:
-                self.held_item.pos = self.pos + self.direction * 8
+                self.held_item.pos = self.pos + self.ordinal_direction * 8
                 self.scene.add_item(self.held_item)
                 self.held_item = None
+
+        if self.held_item is not None:
+            self.held_item.update_when_held()
 
         watch("vel", self.vel)
         watch("animation", self.animation.current_name)
         watch("held_item", self.held_item)
-        watch("direction", self.direction)
+        watch("ordinal_direction", self.ordinal_direction)
+        watch("cardinal_direction", self.cardinal_direction)
         watch("direction_text", self.direction_text)
 
     def draw(self, screen: pygame.Surface) -> None:
         # If facing up, left, or right, draw the item behind the player
-        if self.direction.y <= 0:
+        if self.ordinal_direction.y <= 0:
             self._draw_held_item(screen)
 
         self.image = self.animation.frame
         screen.blit(self.image, self.hitbox.get_rect())
 
         # If facing down, draw the item in front of the player
-        if self.direction.y > 0:
+        if self.ordinal_direction.y > 0:
             self._draw_held_item(screen)
 
     def draw_hitbox(self, screen: pygame.Surface) -> None:
@@ -106,7 +111,7 @@ class Player(Sprite["MainScene"]):
         for item in self.scene.items:
             if item.pos.distance_to(pos) > ITEM_RANGE + item.image.width: continue
             item_facing = (item.pos - pos).normalize()
-            dot = self.direction.dot(item_facing)
+            dot = self.ordinal_direction.dot(item_facing)
             if dot < 0.7: continue # not directly in front of player
             if dot > max_dot:
                 max_dot = dot
@@ -192,8 +197,13 @@ class Player(Sprite["MainScene"]):
             self.key_queue.append(K_s)
         elif not self.game.keys[K_s] and K_s in self.key_queue:
             self.key_queue.remove(K_s)
-        if self.direction in self.anim_vec_mapping:
-            self.direction_text = self.anim_vec_mapping[self.direction]
+
+        # If the direction is one of the four cardinal directions
+        if self.ordinal_direction in self.anim_vec_mapping:
+            self.direction_text = self.anim_vec_mapping[self.ordinal_direction]
+            self.cardinal_direction = self.ordinal_direction.copy()
+        # Otherwise it's on a diagonal, in which case we find the key that was
+        # first pressed sitting in the key queue
         elif self.key_queue:
             self.direction_text = self.anim_key_mapping[self.key_queue[0]]
 
