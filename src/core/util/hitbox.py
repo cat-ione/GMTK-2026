@@ -51,6 +51,10 @@ class RectHitbox(Hitbox):
             self.topleft.y + self.size.y > other.topleft.y
         )
 
+    def collides_point(self, point: VecLike, margin: float = 0) -> bool:
+        return self.topleft.x - margin < point[0] < self.bottomright.x + margin \
+            and self.topleft.y - margin < point[1] < self.bottomright.y + margin
+
     @property
     def topleft(self) -> Vec:
         return self.pos - self._offset

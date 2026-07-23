@@ -1,7 +1,7 @@
+from math import floor, hypot
 from typing import Iterable
 from pathlib import Path
 from .vector import Vec
-from math import floor
 from enum import Enum
 import weakref
 import pygame
@@ -95,6 +95,70 @@ def iter_rect(left: int, right: int,
     for x in range(int(left), int(right) + 1):
         for y in range(int(top), int(bottom) + 1):
             yield (x, y)
+
+def point_in_polygon(point: VecLike, polygon: list[VecLike]) -> bool:
+    """Check whether a point lies within a polygon.
+
+    Uses the ray casting algorithm, so it works for concave polygons too.
+
+    Args:
+        point: The point to check.
+        polygon: The vertices of the polygon, in order.
+
+    Returns:
+        Whether the point lies within the polygon.
+    """
+    x, y = point
+    inside = False
+    n = len(polygon)
+    x1, y1 = polygon[-1]
+    for i in range(n):
+        x2, y2 = polygon[i]
+        if (y1 > y) != (y2 > y):
+            x_intersect = x1 + (y - y1) * (x2 - x1) / (y2 - y1)
+            if x < x_intersect:
+                inside = not inside
+        x1, y1 = x2, y2
+    return inside
+
+def point_segment_distance(point: VecLike, a: VecLike, b: VecLike) -> float:
+    """Compute the shortest distance from a point to a line segment.
+
+    Args:
+        point: The point to measure from.
+        a: One endpoint of the segment.
+        b: The other endpoint of the segment.
+
+    Returns:
+        The shortest distance between the point and the segment.
+    """
+    px, py = point
+    ax, ay = a
+    bx, by = b
+    dx, dy = bx - ax, by - ay
+    length_sq = dx * dx + dy * dy
+    if length_sq == 0:
+        return hypot(px - ax, py - ay)
+    t = max(0, min(1, ((px - ax) * dx + (py - ay) * dy) / length_sq))
+    closest_x = ax + t * dx
+    closest_y = ay + t * dy
+    return hypot(px - closest_x, py - closest_y)
+
+def distance_to_polygon_edges(point: VecLike, polygon: list[VecLike]) -> float:
+    """Compute the shortest distance from a point to a polygon's edges.
+
+    Args:
+        point: The point to measure from.
+        polygon: The vertices of the polygon, in order.
+
+    Returns:
+        The shortest distance between the point and any edge of the polygon.
+    """
+    n = len(polygon)
+    return min(
+        point_segment_distance(point, polygon[i], polygon[(i + 1) % n])
+        for i in range(n)
+    )
 
 def iter_square(size: int) -> Iterable[tuple[int, int]]:
     """Iterate over the coordinates of a square.
@@ -243,6 +307,9 @@ __all__ = [
     "read_file",
     "inttup",
     "sign",
+    "point_in_polygon",
+    "point_segment_distance",
+    "distance_to_polygon_edges",
     "iter_rect",
     "iter_square",
     "Anchor",
