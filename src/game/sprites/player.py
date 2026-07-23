@@ -29,7 +29,7 @@ class Player(Sprite["Room"]):
         self.image = self.animation.frame
         self.drawbox = RectHitbox(self.pos, self.image.size,
             Anchor.BOTTOM.offset((0, -3)))
-        self.hitbox = RectHitbox(self.pos, (6, 6), Anchor.CENTER.offset((0, -1)))
+        self.hitbox = RectHitbox(self.pos, (6, 4), Anchor.CENTER.offset((0, -1)))
 
         self.selected_item: Item | None = None
         self.held_item: Item | None = None
@@ -94,6 +94,16 @@ class Player(Sprite["Room"]):
             self._draw_held_item(screen)
 
         self.image = self.animation.frame
+
+        if self.cardinal_direction.y != 0:
+            shadow = pygame.Surface((12, 8), flags=pygame.SRCALPHA)
+            pygame.draw.rect(shadow, (0, 0, 0, 40), (0, 0, 12, 8), border_radius=3)
+            anchored_blit(screen, shadow, self.pos, Anchor.CENTER.offset((0, -2)))
+        else:
+            shadow = pygame.Surface((10, 10), flags=pygame.SRCALPHA)
+            pygame.draw.rect(shadow, (0, 0, 0, 40), (0, 0, 10, 10), border_radius=3)
+            anchored_blit(screen, shadow, self.pos, Anchor.CENTER.offset((0, -1)))
+
         screen.blit(self.image, self.drawbox.get_rect())
 
         # If facing down, draw the item in front of the player
