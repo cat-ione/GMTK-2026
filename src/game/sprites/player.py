@@ -8,11 +8,11 @@ if TYPE_CHECKING:
 SPEED = 50 # px/s
 ITEM_RANGE = 15
 
-class Player(Sprite["MainScene"]):
+class Player(Sprite["Room"]):
     update_group = UGroup.MAIN
-    draw_group = DGroup.PLAYER
+    draw_group = DGroup.ROOM
 
-    def __init__(self, scene: MainScene) -> None:
+    def __init__(self, scene: Room) -> None:
         super().__init__(scene)
 
         self.pos = Vec(SIZE) / 2
@@ -27,8 +27,9 @@ class Player(Sprite["MainScene"]):
 
         self._define_animations()
         self.image = self.animation.frame
-        self.hitbox = RectHitbox(self.pos, self.image.size,
+        self.drawbox = RectHitbox(self.pos, self.image.size,
             Anchor.BOTTOM.offset((0, -3)))
+        self.hitbox = RectHitbox(self.pos, (6, 6), Anchor.CENTER.offset((0, -1)))
 
         self.selected_item: Item | None = None
         self.held_item: Item | None = None
@@ -46,10 +47,17 @@ class Player(Sprite["MainScene"]):
             self.game.keys[K_s] - self.game.keys[K_w],
         ).normalize() * SPEED
         self.pos += self.vel * self.game.dt
+        self.drawbox.set_pos(self.pos)
         self.hitbox.set_pos(self.pos)
 
         if self.vel != Vec(0, 0):
             self.ordinal_direction = self.vel.normalize()
+
+        for furniture in self.scene.furnitures:
+            if furniture.hitbox is None: continue
+            if furniture.hitbox.size == Vec(0, 0): continue
+            if self.hitbox.collides(furniture.hitbox):
+                self._resolve_collision(furniture.hitbox)
 
         self._update_animation()
 
@@ -86,7 +94,7 @@ class Player(Sprite["MainScene"]):
             self._draw_held_item(screen)
 
         self.image = self.animation.frame
-        screen.blit(self.image, self.hitbox.get_rect())
+        screen.blit(self.image, self.drawbox.get_rect())
 
         # If facing down, draw the item in front of the player
         if self.ordinal_direction.y > 0:
@@ -102,10 +110,31 @@ class Player(Sprite["MainScene"]):
         image = self.held_item.held_images[self.direction_text]
         offset = self.held_item_offsets[self.direction_text]
         anchor = self.held_item.held_anchors[self.direction_text]
-        anchored_blit(screen, image, self.hitbox.topleft + offset, anchor)
+        anchored_blit(screen, image, self.drawbox.topleft + offset, anchor)
+
+    def _resolve_collision(self, other: RectHitbox) -> None:
+        overlap_x = floor(min(self.hitbox.bottomright.x, other.bottomright.x)
+            - max(self.hitbox.topleft.x, other.topleft.x))
+        overlap_y = floor(min(self.hitbox.bottomright.y, other.bottomright.y)
+            - max(self.hitbox.topleft.y, other.topleft.y))
+
+        # Push out along the axis with the smaller overlap
+        if overlap_x < overlap_y:
+            if self.hitbox.center.x < other.center.x:
+                self.pos.x -= overlap_x
+            else:
+                self.pos.x += overlap_x
+        else:
+            if self.hitbox.center.y < other.center.y:
+                self.pos.y -= overlap_y
+            else:
+                self.pos.y += overlap_y
+
+        self.hitbox.set_pos(self.pos)
+        self.drawbox.set_pos(self.pos)
 
     def _select_item(self) -> None:
-        pos = self.hitbox.center
+        pos = self.drawbox.center
         max_dot = -1
         closest_item = None
         for item in self.scene.items:

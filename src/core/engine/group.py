@@ -1,5 +1,5 @@
+from typing import Generator, Callable, Any
 from src.settings import UGroup, DGroup
-from typing import Generator
 from .sprite import Sprite
 import pygame
 
@@ -96,6 +96,9 @@ class DrawGroup:
             The sprites in the draw group.
         """
         yield from self.sprites.values()
+
+    def sort(self, key: Callable[[tuple[int, Sprite]], Any]) -> None:
+        self.sprites = dict(sorted(self.sprites.items(), key=key))
 
     def __len__(self) -> int:
         return len(self.sprites)

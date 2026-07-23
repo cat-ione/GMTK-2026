@@ -1,9 +1,9 @@
 from src.core import *
 
-class Dust(Sprite["MainScene"]):
-    draw_group = DGroup.ITEM
+class Dust(Sprite["LivingRoom"]):
+    draw_group = DGroup.ROOM
 
-    def __init__(self, scene: MainScene, pos: VecLike) -> None:
+    def __init__(self, scene: LivingRoom, pos: VecLike) -> None:
         super().__init__(scene)
 
         self.pos = Vec(pos)

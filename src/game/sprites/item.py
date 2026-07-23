@@ -1,11 +1,11 @@
 from src.core import *
 
-class Item(Sprite["MainScene"]):
+class Item(Sprite["LivingRoom"]):
     update_group = UGroup.MAIN
-    draw_group = DGroup.ITEM
+    draw_group = DGroup.ROOM
 
     def __init__(self,
-        scene: MainScene,
+        scene: LivingRoom,
         pos: VecLike,
         world_image: pygame.Surface,
         held_image_front: pygame.Surface | None = None,
@@ -120,11 +120,11 @@ class Item(Sprite["MainScene"]):
         }
 
 class TestItem(Item):
-    def __init__(self, scene: MainScene, pos: VecLike) -> None:
+    def __init__(self, scene: LivingRoom, pos: VecLike) -> None:
         super().__init__(scene, pos, Image.get("test_item"))
 
 class Vacuum(Item):
-    def __init__(self, scene: MainScene, pos: VecLike) -> None:
+    def __init__(self, scene: LivingRoom, pos: VecLike) -> None:
         super().__init__(
             scene, pos,
             Image.get("vacuum_world"),

@@ -1,4 +1,4 @@
-from src.core.util.resource import Image, Spritesheet, Sound, Font
+from src.core.util.resource import Image, Spritesheet, Sound, Font, RoomData
 
 def define_resources() -> None:
     Spritesheet("player_walk_back", "player/walk_back.png", 4)
@@ -11,3 +11,5 @@ def define_resources() -> None:
     Image("vacuum_world", "items/vacuum_world.png")
     Image("vacuum_front", "items/vacuum_front.png")
     Image("vacuum_side", "items/vacuum_side.png")
+
+    RoomData("living_room", "living_room.json")

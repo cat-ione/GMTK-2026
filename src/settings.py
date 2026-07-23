@@ -37,11 +37,11 @@ OVERLAY_ALPHA = 128
 
 class DGroup(Enum):
     BACKGROUND = auto()
-    ITEM = auto()
-    PLAYER = auto()
+    ROOM = auto()
     HUD = auto()
 
 class UGroup(Enum):
+    CAMERA = auto()
     MAIN = auto()
     HUD = auto()
 

@@ -5,10 +5,10 @@
 # ]
 # ///
 
-from src.game.scenes.main_scene import MainScene
+from src.game.scenes.living_room import LivingRoom
 from src.core.engine.game import Game
 import asyncio
 
 if __name__ == "__main__":
-    game = Game(MainScene)
+    game = Game(LivingRoom)
     asyncio.run(game.run())

@@ -1,9 +1,11 @@
 from src.core.util.debug.logger import info
 from src.core.util.general import pathof
+from src.core.util.vector import Vec
 from dataclasses import dataclass
 from typing import Any, ClassVar
 from abc import abstractmethod
 import pygame
+import json
 import os
 
 class ResourceMeta(type):
@@ -74,10 +76,10 @@ class Image(Resource[pygame.Surface]):
     @staticmethod
     def load_image(
         path: str,
-        scale: float,
-        convert_alpha: bool,
-        colorkey: tuple[int, int, int] | None,
-        opacity: int,
+        scale: float = 1.0,
+        convert_alpha: bool = True,
+        colorkey: tuple[int, int, int] | None = None,
+        opacity: int = 255,
     ) -> pygame.Surface:
         if convert_alpha:
             surface = pygame.image.load(path).convert_alpha()
@@ -166,10 +168,33 @@ class Font(Resource[pygame.Font]):
         font.set_strikethrough(self.striketrough)
         return font
 
+class RoomData(Resource[dict]):
+    DIR = "data/rooms"
+
+    def load(self) -> dict:
+        with open(self.path, "r") as file:
+            data = json.loads(file.read())
+
+        name = self.path.split("/")[-1].split("\\")[-1].removesuffix(".json")
+        print(name, self.path)
+        folder = f"res/images/rooms/{name}"
+        bg = Image.load_image(f"{folder}/background.png")
+        images = {}
+        for name in data["positions"]:
+            images[name] = Image.load_image(f"{folder}/{name}.png")
+            # Make each position a vector for easier use later
+            data["positions"][name] = list(map(Vec, data["positions"][name]))
+
+        data["background"] = bg
+        data["images"] = images
+
+        return data
+
 __all__ = [
     "Resource",
     "Image",
     "Spritesheet",
     "Sound",
     "Font",
+    "RoomData",
 ]
