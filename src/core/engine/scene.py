@@ -1,4 +1,3 @@
-from abc import ABC as AbstractClass, abstractmethod
 from .sprite_manager import SpriteManager
 from .sprite import Sprite
 from src.core.util import *

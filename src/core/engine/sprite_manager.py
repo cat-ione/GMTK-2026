@@ -17,6 +17,7 @@ class SpriteManager:
         self.sprites_registry = {}
         self.u_groups = {group: UpdateGroup(group) for group in UGroup}
         self.d_groups = {group: DrawGroup(group) for group in DGroup}
+        self.current_uuid = 0
 
     def update(self) -> None:
         """Update all sprites in the sprite manager."""
@@ -125,3 +126,13 @@ class SpriteManager:
             True if the sprite exists, False otherwise.
         """
         return uuid in self.sprites_registry
+
+    def get_next_uuid(self) -> int:
+        """Get the next UUID to give to a sprite, which is one larger than the
+        previous UUID.
+
+        Returns:
+            The next uuid.
+        """
+        self.current_uuid += 1
+        return self.current_uuid

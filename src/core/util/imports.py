@@ -11,6 +11,7 @@ from typing import Any, cast, Never, Callable, TypedDict, Protocol, \
 from os import system, name, chdir, getcwd, listdir, mkdir, remove, rename, \
     rmdir, walk
 from functools import lru_cache, cache, cached_property
+from abc import ABC as AbstractClass, abstractmethod
 from enum import Enum, auto
 import pygame
 import time

@@ -1,5 +1,4 @@
 from src.settings import UGroup, DGroup
-from abc import ABC as AbstractClass
 from src.core.util import *
 import pygame
 
@@ -33,7 +32,7 @@ class Sprite[S: Scene](AbstractClass):
         Args:
             scene: The scene the sprite belongs to.
         """
-        self.uuid = id(self)
+        self.uuid = scene.sprite_manager.get_next_uuid()
         self.game = ref_proxy(scene.game)
         self.scene: S = ref_proxy(scene)
         self.pos = Vec()

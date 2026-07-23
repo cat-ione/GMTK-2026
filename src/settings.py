@@ -37,14 +37,23 @@ OVERLAY_ALPHA = 128
 
 class DGroup(Enum):
     BACKGROUND = auto()
+    ITEM = auto()
     PLAYER = auto()
     HUD = auto()
 
 class UGroup(Enum):
-    PLAYER = auto()
+    MAIN = auto()
     HUD = auto()
 
 TITLE = "Pygame"
-SIZE = WIDTH, HEIGHT = 200, 150
-PX = 6 # Size of a pixel
-FPS = 1200
+SIZE = WIDTH, HEIGHT = 240, 180
+PX = 5 # Size of a pixel
+FPS = 60
+
+# Color palette
+COLOR1 = (70, 66, 94)
+COLOR2 = (21, 120, 140)
+COLOR3 = (0, 185, 190)
+COLOR4 = (255, 238, 204)
+COLOR5 = (255, 176, 163)
+COLOR6 = (255, 105, 115)

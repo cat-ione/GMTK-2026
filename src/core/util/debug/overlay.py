@@ -16,7 +16,7 @@ class Overlay:
 
         This method must be called before the overlay can be drawn.
         """
-        Overlay._surface = pygame.Surface((WIDTH, HEIGHT))
+        Overlay._surface = pygame.Surface((WIDTH * PX, HEIGHT * PX))
         Overlay._surface.set_colorkey(CYAN)
         Overlay._surface.set_alpha(OVERLAY_ALPHA)
 
