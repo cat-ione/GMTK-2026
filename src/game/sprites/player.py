@@ -194,14 +194,14 @@ class Player(Sprite["Room"]):
             [pygame.transform.flip(frame, True, False)
                 for frame in Spritesheet.get("player_walk_side")], 0.15)
 
-        stand_hold_up = Animation(Spritesheet.get("player_walk_back")[:1], -1)
+        stand_hold_up = Animation(Spritesheet.get("player_walk_hold_back")[:1], -1)
         stand_hold_down = Animation(Spritesheet.get("player_walk_hold_front")[:1], -1)
         stand_hold_left = Animation(Spritesheet.get("player_walk_hold_side")[:1], -1)
         stand_hold_right = Animation(
             [pygame.transform.flip(
                 Spritesheet.get("player_walk_hold_side")[0], True, False)], -1)
 
-        walk_hold_up = Animation(Spritesheet.get("player_walk_back"), 0.15)
+        walk_hold_up = Animation(Spritesheet.get("player_walk_hold_back"), 0.15)
         walk_hold_down = Animation(Spritesheet.get("player_walk_hold_front"), 0.15)
         walk_hold_left = Animation(Spritesheet.get("player_walk_hold_side"), 0.15)
         walk_hold_right = Animation(
