@@ -16,6 +16,7 @@ class Room(Scene):
             self.add(self.player)
             self.camera = game_data.camera
             self.add(self.camera)
+            self.clipboard = game_data.clipboard
 
         self.data = RoomData.get(name)
         self.furnitures: set[Furniture] = set()
@@ -25,6 +26,8 @@ class Room(Scene):
         self.dusts: set[Dust] = set()
         self.boundary: list[VecLike] = []
         self.interactable_furniture: dict[str, type[Furniture]] = {}
+
+        self.clipboard_visible = False
 
         self.cutscene: Cutscene | None = None
 
@@ -50,6 +53,14 @@ class Room(Scene):
         if self.cutscene is not None:
             self.cutscene.update()
 
+        if self.game.keydown == pygame.K_c:
+            if not self.clipboard_visible:
+                self.clipboard.slide_in()
+                self.clipboard_visible = True
+            else:
+                self.clipboard.slide_out()
+                self.clipboard_visible = False
+
         watch("cutscene", self.cutscene)
 
     def start_cutscene(self, cutscene: Cutscene) -> None:
@@ -61,6 +72,9 @@ class Room(Scene):
             if furniture.name == name:
                 return furniture
         raise ValueError(f"No furniture named {name}.")
+
+    def find_all_furniture(self, name: str) -> list[Furniture]:
+        return [furniture for furniture in self.furnitures if furniture.name == name]
 
     def objects_sort_key(self, item: tuple[int, Sprite]) -> float:
         sprite = item[1]
@@ -78,6 +92,10 @@ class Room(Scene):
         screen.blit(self.data["background"], -self.camera.pos)
 
         self.sprite_manager.draw(screen)
+
+        if not self.clipboard_visible:
+            img = Image.get("clipboard_icon")
+            screen.blit(img, (WIDTH - img.width - 4, 4))
 
     def set_interactable_furniture(self, d: dict[str, type[Furniture]]) -> None:
         self.interactable_furniture = d

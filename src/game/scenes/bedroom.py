@@ -19,3 +19,4 @@ class Bedroom(Room):
         super().update()
 
         self.game_data.living_room.microwave.update()
+        self.game_data.living_room.fridge.update()

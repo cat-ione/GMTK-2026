@@ -1,7 +1,7 @@
 # /// script
 # dependencies = [
 #     "pygame-ce",
-#     "pytweening",
+#     "numpy"
 # ]
 # ///
 

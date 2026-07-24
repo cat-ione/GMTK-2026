@@ -176,7 +176,6 @@ class RoomData(Resource[dict]):
             data = json.loads(file.read())
 
         name = self.path.split("/")[-1].split("\\")[-1].removesuffix(".json")
-        print(name, self.path)
         folder = f"res/images/rooms/{name}"
         bg = Image.load_image(f"{folder}/background.png")
         images = {}

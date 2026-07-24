@@ -8,6 +8,7 @@ from src.game.sprites.vacuum import Vacuum
 from .game_data import GameData
 from src.game.sprites.camera import Camera
 from src.game.cutscenes.hamster_cutscene import HamsterCutscene
+from src.game.sprites.clipboard import Clipboard
 
 class LivingRoom(Room):
     def __init__(self, game: Game) -> None:
@@ -23,7 +24,10 @@ class LivingRoom(Room):
             "tablecloth": Tablecloth,
         })
         self.load_furniture()
+
         self.microwave = self.find_furniture("microwave")
+        self.fridge = self.find_furniture("fridge")
+        self.tablecloths = cast(list[Tablecloth], self.find_all_furniture("tablecloth"))
 
         self._spawn_dust()
 
@@ -35,6 +39,8 @@ class LivingRoom(Room):
         self.camera = Camera(self)
         self.add(self.camera)
         self.camera.center_on(self.player.pos)
+
+        self.clipboard = Clipboard(self)
 
         self.game_data = GameData(game, self)
 
@@ -48,6 +54,16 @@ class LivingRoom(Room):
             self.hamster_cs_timer.reset()
             self.hamster_cs_timer.pause()
             self.start_cutscene(self.hamster_cutscene)
+
+        if len(self.dusts) == 0:
+            self.clipboard.cross_out("vacuum")
+        else:
+            self.clipboard.uncross("vacuum")
+
+        if all((tablecloth.has_plate() for tablecloth in self.tablecloths)):
+            self.clipboard.cross_out("plates")
+        else:
+            self.clipboard.uncross("plates")
 
     def _spawn_dust(self) -> None:
         min_x = int(min(x for x, _ in self.boundary))

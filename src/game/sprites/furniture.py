@@ -210,6 +210,9 @@ class Tablecloth(InteractableFurniture):
             self.item = self.scene.player.held_item
             self.scene.player.drop_item(self.get_pos())
 
+    def has_plate(self) -> bool:
+        return isinstance(self.item, Plate)
+
 class HamsterCage(InteractableFurniture):
     def interact(self) -> None:
         if isinstance(self.scene.player.held_item, HamsterItem):
