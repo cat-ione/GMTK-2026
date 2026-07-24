@@ -9,4 +9,4 @@ class Dust(Sprite["LivingRoom"]):
         self.pos = Vec(pos)
 
     def draw(self, screen: pygame.Surface) -> None:
-        pygame.draw.rect(screen, COLOR1, (self.pos, (2, 1)))
+        pygame.draw.rect(screen, COLOR1, (self.screen_pos, (2, 1)))

@@ -27,7 +27,7 @@ class Furniture(Sprite["Room"]):
         self.drawbox = RectHitbox(self.pos, self.image.size, Anchor.TOPLEFT)
 
     def draw(self, screen: pygame.Surface) -> None:
-        screen.blit(self.image, self.pos)
+        screen.blit(self.image, self.screen_pos)
 
     def draw_hitbox(self, screen: pygame.Surface) -> None:
         if self.hitbox is None: return
@@ -70,7 +70,7 @@ class InteractableFurniture(Furniture):
 
     def draw(self, screen: pygame.Surface) -> None:
         if self.selected:
-            screen.blit(self.outline, self.pos - (1, 1))
+            screen.blit(self.outline, self.screen_pos - (1, 1))
 
         super().draw(screen)
 
@@ -95,24 +95,48 @@ class StackOfPlates(InteractableFurniture):
 
 class BedroomDoor(InteractableFurniture):
     def interact(self) -> None:
+        new_scene = self.scene.game_data.bedroom
+        self.scene.player.scene = new_scene
+        self.scene.camera.scene = new_scene
+
+        rel_pos = self.scene.camera.pos - self.scene.player.pos
         self.scene.player.pos = Vec(36, 30)
-        self.scene.player.scene = self.scene.game_data.bedroom
-        self.game.set_scene(self.scene.game_data.bedroom)
+        self.scene.camera.pos = self.scene.player.pos + rel_pos
+
+        self.game.set_scene(new_scene)
 
 class LivingRoomDoor(InteractableFurniture):
     def interact(self) -> None:
+        new_scene = self.scene.game_data.living_room
+        self.scene.player.scene = new_scene
+        self.scene.camera.scene = new_scene
+
+        rel_pos = self.scene.camera.pos - self.scene.player.pos
         self.scene.player.pos = Vec(36, 82)
-        self.scene.player.scene = self.scene.game_data.living_room
-        self.game.set_scene(self.scene.game_data.living_room)
+        self.scene.camera.pos = self.scene.player.pos + rel_pos
+
+        self.game.set_scene(new_scene)
 
 class BathroomDoor(InteractableFurniture):
     def interact(self) -> None:
+        new_scene = self.scene.game_data.bathroom
+        self.scene.player.scene = new_scene
+        self.scene.camera.scene = new_scene
+
+        rel_pos = self.scene.camera.pos - self.scene.player.pos
         self.scene.player.pos = Vec(10, 68)
-        self.scene.player.scene = self.scene.game_data.bathroom
-        self.game.set_scene(self.scene.game_data.bathroom)
+        self.scene.camera.pos = self.scene.player.pos + rel_pos
+
+        self.game.set_scene(new_scene)
 
 class BedroomDoor2(InteractableFurniture):
     def interact(self) -> None:
+        new_scene = self.scene.game_data.bedroom
+        self.scene.player.scene = new_scene
+        self.scene.camera.scene = new_scene
+
+        rel_pos = self.scene.camera.pos - self.scene.player.pos
         self.scene.player.pos = Vec(67, 55)
-        self.scene.player.scene = self.scene.game_data.bedroom
-        self.game.set_scene(self.scene.game_data.bedroom)
+        self.scene.camera.pos = self.scene.player.pos + rel_pos
+
+        self.game.set_scene(new_scene)

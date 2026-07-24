@@ -104,13 +104,13 @@ class Player(Sprite["Room"]):
         if self.cardinal_direction.y != 0:
             shadow = pygame.Surface((12, 8), flags=pygame.SRCALPHA)
             pygame.draw.rect(shadow, (0, 0, 0, 40), (0, 0, 12, 8), border_radius=3)
-            anchored_blit(screen, shadow, self.pos, Anchor.CENTER.offset((0, -2)))
+            anchored_blit(screen, shadow, self.screen_pos, Anchor.CENTER.offset((0, -2)))
         else:
             shadow = pygame.Surface((10, 10), flags=pygame.SRCALPHA)
             pygame.draw.rect(shadow, (0, 0, 0, 40), (0, 0, 10, 10), border_radius=3)
-            anchored_blit(screen, shadow, self.pos, Anchor.CENTER.offset((0, -1)))
+            anchored_blit(screen, shadow, self.screen_pos, Anchor.CENTER.offset((0, -1)))
 
-        screen.blit(self.image, self.drawbox.get_rect())
+        screen.blit(self.image, self.drawbox.topleft - self.scene.camera.pos)
 
         # If facing down, draw the item in front of the player
         if self.ordinal_direction.y > 0:
@@ -126,7 +126,7 @@ class Player(Sprite["Room"]):
         image = self.held_item.held_images[self.direction_text]
         offset = self.held_item_offsets[self.direction_text]
         anchor = self.held_item.held_anchors[self.direction_text]
-        anchored_blit(screen, image, self.drawbox.topleft + offset, anchor)
+        anchored_blit(screen, image, self.drawbox.topleft + offset - self.scene.camera.pos, anchor)
 
     def _within_boundary(self) -> bool:
         corners = (

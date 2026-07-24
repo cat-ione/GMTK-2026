@@ -1,6 +1,5 @@
 from src.core import *
 
-from src.game.sprites.player import Player
 from src.game.sprites.item import Item
 from src.game.sprites.dust import Dust
 from src.game.sprites.furniture import Furniture, InteractableFurniture
@@ -14,6 +13,8 @@ class Room(Scene):
             self.game_data = game_data
             self.player = game_data.player
             self.add(self.player)
+            self.camera = game_data.camera
+            self.add(self.camera)
 
         self.data = RoomData.get(name)
         self.furnitures: set[Furniture] = set()
@@ -56,7 +57,7 @@ class Room(Scene):
     def draw(self, screen: pygame.Surface) -> None:
         screen.fill(COLOR1)
 
-        screen.blit(self.data["background"])
+        screen.blit(self.data["background"], -self.camera.pos)
 
         self.sprite_manager.draw(screen)
 

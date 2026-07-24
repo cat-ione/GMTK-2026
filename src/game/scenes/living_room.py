@@ -6,6 +6,7 @@ from src.game.sprites.dust import Dust
 from src.game.sprites.player import Player
 from src.game.sprites.item import Vacuum
 from .game_data import GameData
+from src.game.sprites.camera import Camera
 
 class LivingRoom(Room):
     def __init__(self, game: Game) -> None:
@@ -25,6 +26,9 @@ class LivingRoom(Room):
 
         self.player = Player(self, (105, 42))
         self.add(self.player)
+        self.camera = Camera(self)
+        self.add(self.camera)
+        self.camera.center_on(self.player.pos)
 
         self.game_data = GameData(game, self)
 

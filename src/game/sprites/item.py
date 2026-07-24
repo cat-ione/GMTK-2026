@@ -55,7 +55,7 @@ class Item(Sprite["Room"]):
         self.interaction_target.pos = Vec(new)
 
     def draw(self, screen: pygame.Surface) -> None:
-        draw_pos = self.pos - Vec(self.image.size) / 2
+        draw_pos = self.screen_pos - Vec(self.image.size) / 2
 
         # Draw outline behind the actual sprite
         if self.selected:
