@@ -42,6 +42,7 @@ class Hamster(Sprite["Room"]):
         self.detour_target = Vec(0, 0)
 
         self.scare_timer = LoopTimer(0.5)
+        self.bored_timer = LoopTimer(6)
 
         self.interaction_target = InteractionTarget(self.scene, self.pos, self)
         self.scene.interaction_targets.add(self.interaction_target)
@@ -63,6 +64,8 @@ class Hamster(Sprite["Room"]):
         if self.scare_timer.done:
             if self.scene.player.pos.distance_to(self.pos) < 20:
                 self.go_to_random(90)
+        if self.bored_timer.done:
+            self.go_to_random(60)
 
     def select(self) -> None:
         self.selected = True
