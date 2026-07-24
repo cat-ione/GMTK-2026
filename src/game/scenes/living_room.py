@@ -4,7 +4,7 @@ from .room import Room
 from src.game.sprites.furniture import StackOfPlates, BedroomDoor
 from src.game.sprites.dust import Dust
 from src.game.sprites.player import Player
-from src.game.sprites.item import Vacuum
+from src.game.sprites.vacuum import Vacuum
 from .game_data import GameData
 from src.game.sprites.camera import Camera
 from src.game.cutscenes.hamster_cutscene import HamsterCutscene
