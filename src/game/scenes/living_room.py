@@ -19,7 +19,7 @@ class LivingRoom(Room):
 
         self._spawn_dust()
 
-        self.player = Player(self, (32, 42))
+        self.player = Player(self, (105, 42))
         self.add(self.player)
 
         self.game_data = GameData(game, self)
