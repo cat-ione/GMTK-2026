@@ -127,10 +127,6 @@ class Item(Sprite["Room"]):
             "down": self.held_front_anchor,
         }
 
-class TestItem(Item):
-    def __init__(self, scene: Room, pos: VecLike) -> None:
-        super().__init__(scene, pos, Image.get("test_item"))
-
 class Plate(Item):
     def __init__(self, scene: Room, pos: VecLike) -> None:
         super().__init__(

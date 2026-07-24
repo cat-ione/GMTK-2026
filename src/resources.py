@@ -11,7 +11,6 @@ def define_resources() -> None:
     Spritesheet("player_walk_hold_back", "player/walk_hold_back.png", 4)
     Spritesheet("player_walk_hold_side", "player/walk_hold_side.png", 4)
 
-    Image("test_item", "items/test_item.png")
     Image("vacuum_world", "items/vacuum_world.png")
     Image("vacuum_front", "items/vacuum_front.png")
     Image("vacuum_side", "items/vacuum_side.png")
