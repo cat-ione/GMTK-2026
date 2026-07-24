@@ -222,10 +222,12 @@ class Player(Sprite["Room"]):
         self.scene.remove_item(new)
         self.change_selection(None)
 
-    def drop_item(self) -> None:
+    def drop_item(self, pos: VecLike | None = None) -> None:
         """Drop the currently held item."""
         if self.held_item is not None:
-            self.held_item.set_pos(self.pos + self.ordinal_direction * 8)
+            if pos is None:
+                pos = self.pos + self.ordinal_direction * 8
+            self.held_item.set_pos(pos)
             self.scene.add_item(self.held_item)
             self.held_item.drop()
             self.held_item = None

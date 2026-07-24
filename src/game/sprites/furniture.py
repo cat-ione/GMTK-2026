@@ -147,6 +147,20 @@ class RiceCooker(InteractableFurniture):
     def interact(self) -> None:
         info("interacted with rice cooker")
 
+class Tablecloth(InteractableFurniture):
+    def __init__(self, scene: Room, name: str, pos: VecLike, image: pygame.Surface, hitbox: list[int] | None) -> None:
+        super().__init__(scene, name, pos, image, hitbox)
+        self.item = None
+
+    def interact(self) -> None:
+        if self.item is not None:
+            item = self.item
+            self.item = self.scene.player.held_item
+            self.scene.player.pickup_item(item)
+        elif self.scene.player.held_item is not None:
+            self.item = self.scene.player.held_item
+            self.scene.player.drop_item(self.get_pos())
+
 class HamsterCage(InteractableFurniture):
     def interact(self) -> None:
         if isinstance(self.scene.player.held_item, HamsterItem):

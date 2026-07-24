@@ -116,7 +116,7 @@ class Sprite[S: Scene](AbstractClass):
         camera = getattr(self.scene, "camera", None)
         if camera is None:
             return self.pos
-        return self.pos - camera.pos
+        return (self.pos - camera.pos) // 1
 
     @property
     def screen_center_pos(self) -> Vec:

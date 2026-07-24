@@ -19,6 +19,7 @@
     "stack_of_plates_6": [[205, 24]],
 
     "dining_table": [[161, 91]],
+    "tablecloth": [[163, 93], [163, 104], [163, 115], [183, 93], [183, 104], [183, 115]],
     "dining_chair_right": [[153, 92], [153, 104], [153, 116]],
     "dining_chair_left": [[189, 92], [189, 104], [189, 116]],
 
@@ -43,6 +44,7 @@
     "trash_can_1": [0, 0, 6, 9],
     "fridge": [0, 29, 18, 10],
     "dining_table": [0, 4, 30, 38],
+    "tablecloth": [3, 4, 0, 0],
     "dining_chair_right": [4, 11, 0, 0],
     "dining_chair_left": [4, 11, 0, 0],
     "microwave": [6, 9, 0, 0],
