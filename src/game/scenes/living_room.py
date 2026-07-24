@@ -4,6 +4,7 @@ from .room import Room
 from src.game.sprites.furniture import StackOfPlates, BedroomDoor
 from src.game.sprites.dust import Dust
 from src.game.sprites.player import Player
+from src.game.sprites.item import Vacuum
 from .game_data import GameData
 
 class LivingRoom(Room):
@@ -18,6 +19,9 @@ class LivingRoom(Room):
         self.load_furniture()
 
         self._spawn_dust()
+
+        vacuum = Vacuum(self, (21, 30))
+        self.add_item(vacuum)
 
         self.player = Player(self, (105, 42))
         self.add(self.player)
