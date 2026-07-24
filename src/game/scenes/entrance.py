@@ -9,3 +9,4 @@ class Entrance(Room):
         super().__init__(game, "entrance")
 
         self.set_boundary([(0, 29), (139, 29), (139, 139), (65, 139), (65, 86), (0, 86)])
+        self.load_furniture()

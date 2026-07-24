@@ -9,3 +9,4 @@ class Bedroom(Room):
         super().__init__(game, "bedroom")
 
         self.set_boundary([(0, 29), (140, 140), (71, 85), (139, 85), (139, 139), (0, 139)])
+        self.load_furniture()
