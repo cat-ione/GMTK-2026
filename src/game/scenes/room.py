@@ -19,9 +19,6 @@ class Room(Scene):
         self.boundary: list[VecLike] = []
         self.interactable_furniture: dict[str, type[Furniture]] = {}
 
-        self.player = Player(self)
-        self.add(self.player)
-
     def load_furniture(self) -> None:
         for name, positions in self.data["positions"].items():
             for pos in positions:
@@ -70,6 +67,10 @@ class Room(Scene):
         if margin > 0 and distance_to_polygon_edges(point, self.boundary) < margin:
             return False
         return True
+
+    def spawn_player(self, pos: VecLike) -> None:
+        self.player = Player(self, pos)
+        self.add(self.player)
 
     def add_item(self, item: Item) -> None:
         self.items.add(item)

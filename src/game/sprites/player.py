@@ -13,10 +13,10 @@ class Player(Sprite["Room"]):
     update_group = UGroup.MAIN
     draw_group = DGroup.ROOM
 
-    def __init__(self, scene: Room) -> None:
+    def __init__(self, scene: Room, pos: VecLike) -> None:
         super().__init__(scene)
 
-        self.pos = Vec(SIZE) / 2
+        self.pos = Vec(pos)
 
         # Direction the player was most recently walking towards
         # (used for calculating the item to select) (8-directional)
@@ -86,6 +86,7 @@ class Player(Sprite["Room"]):
         if self.held_item is not None:
             self.held_item.update_when_held()
 
+        watch("pos", self.pos)
         watch("vel", self.vel)
         watch("animation", self.animation.current_name)
         watch("held_item", self.held_item)

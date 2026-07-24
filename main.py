@@ -13,5 +13,5 @@ from src.core.engine.game import Game
 import asyncio
 
 if __name__ == "__main__":
-    game = Game(Entrance)
+    game = Game(LivingRoom)
     asyncio.run(game.run())

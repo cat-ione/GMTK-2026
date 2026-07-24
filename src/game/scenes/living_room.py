@@ -15,14 +15,9 @@ class LivingRoom(Room):
         })
         self.load_furniture()
 
-        # test_item = TestItem(self, (50, 50))
-        # self.add_item(test_item)
-        # test_item = TestItem(self, (40, 45))
-        # self.add_item(test_item)
-        vacuum = Vacuum(self, (60, 75))
-        self.add_item(vacuum)
-
         self._spawn_dust()
+
+        self.spawn_player((32, 42))
 
     def _spawn_dust(self) -> None:
         min_x = int(min(x for x, _ in self.boundary))

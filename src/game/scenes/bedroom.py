@@ -10,3 +10,5 @@ class Bedroom(Room):
 
         self.set_boundary([(0, 29), (70, 29), (70, 85), (139, 85), (139, 139), (0, 139)])
         self.load_furniture()
+
+        self.spawn_player((36, 68))

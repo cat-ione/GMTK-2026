@@ -13,3 +13,5 @@ class Entrance(Room):
 
         vacuum = Vacuum(self, (88, 30))
         self.add_item(vacuum)
+
+        self.spawn_player((104, 37))
