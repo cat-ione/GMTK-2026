@@ -3,12 +3,14 @@ from src.core import *
 from .room import Room
 from src.game.sprites.item import Vacuum
 from src.game.sprites.dust import Dust
+from src.game.sprites.furniture import BedroomDoor2
 
 class Bathroom(Room):
-    def __init__(self, game: Game) -> None:
-        super().__init__(game, "bathroom")
+    def __init__(self, game: Game, game_data: GameData) -> None:
+        super().__init__(game, game_data, "bathroom")
 
-        self.set_boundary([(71, 29), (139, 29), (139, 86), (71, 86)])
+        self.set_boundary([(6, 29), (72, 29), (72, 86), (6, 86)])
+        self.set_interactable_furniture({
+            "door": BedroomDoor2,
+        })
         self.load_furniture()
-
-        self.spawn_player((87, 46))

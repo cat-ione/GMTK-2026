@@ -103,6 +103,10 @@ class Game:
 
     def set_scene(self, scene: Scene) -> Never:
         self.scene = scene
+        if __debug__:
+            self.update_profiler = Profiler(self.scene.update)
+            self.draw_profiler = Profiler(self.scene.draw)
+            self.events_profiler = Profiler(self._poll_events)
         raise AbortScene
 
     def _poll_events(self) -> None:

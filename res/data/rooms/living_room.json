@@ -26,7 +26,9 @@
     "shoe_rack": [[51, 15]],
     "cactus": [[62, 70]],
     "flower": [[5, 39]],
-    "trash_can_2": [[0, 76]]
+    "trash_can_2": [[0, 76]],
+
+    "door": [[28, 86]]
   },
   "hitboxes": {
     "couch": [1, 6, 32, 10],
