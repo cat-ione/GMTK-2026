@@ -150,9 +150,9 @@ class Player(Sprite["Room"]):
         )
 
     def _resolve_collision(self, other: RectHitbox) -> None:
-        overlap_x = floor(min(self.hitbox.bottomright.x, other.bottomright.x)
+        overlap_x = (min(self.hitbox.bottomright.x, other.bottomright.x)
             - max(self.hitbox.topleft.x, other.topleft.x))
-        overlap_y = floor(min(self.hitbox.bottomright.y, other.bottomright.y)
+        overlap_y = (min(self.hitbox.bottomright.y, other.bottomright.y)
             - max(self.hitbox.topleft.y, other.topleft.y))
 
         # Push out along the axis with the smaller overlap
