@@ -123,8 +123,21 @@ class BedroomDoor2(Door):
     target_pos = (67, 55)
 
 class Fridge(InteractableFurniture):
+    update_group = UGroup.MAIN
+
+    def __init__(self, scene: Room, name: str, pos: VecLike, image: pygame.Surface, hitbox: list[int] | None) -> None:
+        super().__init__(scene, name, pos, image, hitbox)
+        self.has_chicken = True
+        self.open_timer = Timer(1)
+
+    def update(self) -> None:
+        if self.open_timer.done:
+            self.image = Image.get("fridge_closed")
+            self.open_timer.reset()
+
     def interact(self) -> None:
-        info("interacted with fridge")
+        self.image = Image.get("fridge_opened")
+        self.open_timer.reset()
 
 class Microwave(InteractableFurniture):
     def interact(self) -> None:

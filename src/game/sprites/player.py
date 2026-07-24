@@ -174,14 +174,13 @@ class Player(Sprite["Room"]):
         self.drawbox.set_pos(self.pos)
 
     def _select(self) -> None:
-        pos = self.drawbox.center
         best_score = None
         best = None
         for target in self.scene.interaction_targets:
-            distance = target.pos.distance_to(pos)
+            distance = target.pos.distance_to(self.pos)
             if distance > ITEM_RANGE: continue
             # vector to the target
-            facing = (target.pos - pos).normalize()
+            facing = (target.pos - self.pos).normalize()
             # find the vector that's the most "straight ahead"
             dot = self.cardinal_direction.dot(facing)
             # closer items get a more lenient angle tolerance

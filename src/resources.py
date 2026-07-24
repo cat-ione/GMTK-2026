@@ -21,6 +21,8 @@ def define_resources() -> None:
     Image("stack_of_plates_3", "rooms/living_room/stack_of_plates_3.png")
     Image("stack_of_plates_2", "rooms/living_room/stack_of_plates_2.png")
     Image("stack_of_plates_1", "rooms/living_room/stack_of_plates_1.png")
+    Image("fridge_opened", "rooms/living_room/fridge_opened.png")
+    Image("fridge_closed", "rooms/living_room/fridge.png")
 
     Image("hamster_side", "items/hamster_side.png")
     Image("hamster_standing", "items/hamster_standing.png")
