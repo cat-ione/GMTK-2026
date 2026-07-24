@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 
 class HamsterItem(Item):
     def __init__(self, scene: Room, pos: VecLike) -> None:
-        super().__init__(scene, pos, Image.get("hamster_front"))
+        super().__init__(scene, pos, Image.get("hamster_standing"))
 
     def drop(self) -> None:
         self.scene.remove_item(self)
@@ -42,7 +42,7 @@ class Hamster(Sprite["Room"]):
         self.detour_target = Vec(0, 0)
 
         self.scare_timer = LoopTimer(0.5)
-        self.bored_timer = LoopTimer(6)
+        self.bored_timer = LoopTimer(4)
 
         self.interaction_target = InteractionTarget(self.scene, self.pos, self)
         self.scene.interaction_targets.add(self.interaction_target)
@@ -62,8 +62,8 @@ class Hamster(Sprite["Room"]):
             self.image = Image.get("hamster_standing")
 
         if self.scare_timer.done:
-            if self.scene.player.pos.distance_to(self.pos) < 20:
-                self.go_to_random(90)
+            if self.scene.player.pos.distance_to(self.pos) < 34:
+                self.go_to_random(120)
         if self.bored_timer.done:
             self.go_to_random(60)
 
