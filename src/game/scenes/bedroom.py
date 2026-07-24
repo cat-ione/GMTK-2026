@@ -8,4 +8,4 @@ class Bedroom(Room):
     def __init__(self, game: Game) -> None:
         super().__init__(game, "bedroom")
 
-        self.set_boundary([(0, 29), (139, 29), (139, 139), (65, 139), (65, 86), (0, 86)])
+        self.set_boundary([(0, 29), (140, 140), (71, 85), (139, 85), (139, 139), (0, 139)])

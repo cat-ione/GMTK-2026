@@ -1,0 +1,25 @@
+{
+  "positions": {
+    "shelf": [[0, 16]],
+    "vanity_table": [[0, 58]],
+    "vanity_chair": [[8, 66]],
+    "cat_items": [[1, 92]],
+    "computer_desk": [[0, 124]],
+    "computer_desk_chair": [[21, 118]],
+    "trash_can": [[52, 130]],
+    "bed": [[99, 94]],
+    "nightstand": [[128, 83], [128, 114]],
+    "hamster_table": [[57, 66]],
+    "hamster_cage": [[58, 63]]
+  },
+  "hitboxes": {
+    "shelf": [0, 0, 15, 49],
+    "vanity_table": [0, 1, 8, 26],
+    "vanity_chair": [0, 7, 8, 6],
+    "computer_desk": [0, 4, 50, 12],
+    "cat_items": [0, 2, 12, 14],
+    "nightstand": [0, 5, 12, 14],
+    "bed": [0, 7, 40 ,25],
+    "hamster_table": [0, 4, 13, 16]
+  }
+}
