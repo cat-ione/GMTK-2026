@@ -168,7 +168,7 @@ class Player(Sprite["Room"]):
             # vector to the target
             facing = (target.pos - pos).normalize()
             # find the vector that's the most "straight ahead"
-            dot = self.ordinal_direction.dot(facing)
+            dot = self.cardinal_direction.dot(facing)
             if dot < 0.8: continue # not directly in front of player
             if dot > max_dot:
                 max_dot = dot
