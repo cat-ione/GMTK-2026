@@ -11,6 +11,9 @@ ITEM_RANGE = 25
 # angle tolerance for selecting an item, at close range vs at ITEM_RANGE
 ITEM_SELECT_DOT_NEAR = 0.3
 ITEM_SELECT_DOT_FAR = 0.8
+# how much being close counts towards priority, relative to being lined up
+# (angle contributes in [-1, 1], closeness in [0, 1] * this weight)
+ITEM_SELECT_DISTANCE_WEIGHT = 1.5
 
 class Player(Sprite["Room"]):
     update_group = UGroup.MAIN
@@ -172,8 +175,8 @@ class Player(Sprite["Room"]):
 
     def _select(self) -> None:
         pos = self.drawbox.center
-        max_dot = -1
-        closest = None
+        best_score = None
+        best = None
         for target in self.scene.interaction_targets:
             distance = target.pos.distance_to(pos)
             if distance > ITEM_RANGE: continue
@@ -185,10 +188,15 @@ class Player(Sprite["Room"]):
             t = distance / ITEM_RANGE
             min_dot = ITEM_SELECT_DOT_NEAR + (ITEM_SELECT_DOT_FAR - ITEM_SELECT_DOT_NEAR) * t
             if dot < min_dot: continue # not enough in front of player
-            if dot > max_dot:
-                max_dot = dot
-                closest = target
-        self.change_selection(closest)
+            # combine angle and closeness into one score, so a target that's
+            # very close but at a bad angle can outrank one that's further
+            # away but better lined up
+            closeness = 1 - distance / ITEM_RANGE
+            score = dot + closeness * ITEM_SELECT_DISTANCE_WEIGHT
+            if best_score is None or score > best_score:
+                best_score = score
+                best = target
+        self.change_selection(best)
 
     def change_selection(self, new: InteractionTarget | None) -> None:
         if self.selected is not None:
