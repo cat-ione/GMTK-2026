@@ -120,7 +120,7 @@ class Player(Sprite["Room"]):
         image = self.held_item.held_images[self.direction_text]
         offset = self.held_item_offsets[self.direction_text]
         anchor = self.held_item.held_anchors[self.direction_text]
-        anchored_blit(screen, image, self.drawbox.topleft + offset - self.scene.camera.pos, anchor)
+        anchored_blit(screen, image, (self.drawbox.topleft + offset - self.scene.camera.pos) // 1, anchor)
 
     def _move(self) -> None:
         self.vel = Vec(
