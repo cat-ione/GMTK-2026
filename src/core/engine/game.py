@@ -121,6 +121,8 @@ class Game:
         self.keys = pygame.key.get_pressed()
         self.mouse_pos = Vec(pygame.mouse.get_pos())
         self.mouse_pressed = pygame.mouse.get_pressed()
+        self.mouse_just_pressed = pygame.mouse.get_just_pressed()
+        self.mouse_just_released = pygame.mouse.get_just_released()
 
         if pygame.QUIT in self.events:
             raise AbortGame

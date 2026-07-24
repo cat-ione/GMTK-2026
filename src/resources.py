@@ -22,3 +22,9 @@ def define_resources() -> None:
     RoomData("living_room", "living_room.json")
     RoomData("bedroom", "bedroom.json")
     RoomData("bathroom", "bathroom.json")
+
+    Spritesheet("title_text_scroll", "text_scroll.png", 15)
+    Image("button_large", "button_large.png")
+    Image("button_medium", "button_medium.png")
+    Image("button_small", "button_small.png")
+    Image("titlescreen_bg", "titlescreen_bg.png")
