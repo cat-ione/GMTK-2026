@@ -1,7 +1,7 @@
 from src.core import *
 
 from .room import Room
-from src.game.sprites.furniture import StackOfPlates, BedroomDoor
+from src.game.sprites.furniture import StackOfPlates, BedroomDoor, Fridge, Microwave, RiceCooker
 from src.game.sprites.dust import Dust
 from src.game.sprites.player import Player
 from src.game.sprites.vacuum import Vacuum
@@ -16,7 +16,10 @@ class LivingRoom(Room):
         self.set_boundary([(0, 29), (212, 29), (212, 139), (138, 139), (138, 86), (0, 86)])
         self.set_interactable_furniture({
             "stack_of_plates_6": StackOfPlates,
-            "door": BedroomDoor
+            "door": BedroomDoor,
+            "fridge": Fridge,
+            "microwave": Microwave,
+            "rice_cooker": RiceCooker
         })
         self.load_furniture()
 

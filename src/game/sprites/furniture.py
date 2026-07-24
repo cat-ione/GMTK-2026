@@ -120,3 +120,19 @@ class BathroomDoor(Door):
 class BedroomDoor2(Door):
     room = "bedroom"
     target_pos = (67, 55)
+
+class Fridge(InteractableFurniture):
+    def interact(self) -> None:
+        info("interacted with fridge")
+
+class Microwave(InteractableFurniture):
+    def interact(self) -> None:
+        info("interacted with microwave")
+
+class RiceCooker(InteractableFurniture):
+    def interact(self) -> None:
+        info("interacted with rice cooker")
+
+class HamsterCage(InteractableFurniture):
+    def interact(self) -> None:
+        info("interacted with hamster cage")

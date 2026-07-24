@@ -1,7 +1,7 @@
 from src.core import *
 
 from .room import Room
-from src.game.sprites.furniture import LivingRoomDoor, BathroomDoor
+from src.game.sprites.furniture import LivingRoomDoor, BathroomDoor, HamsterCage
 
 class Bedroom(Room):
     def __init__(self, game: Game, game_data: GameData) -> None:
@@ -11,5 +11,6 @@ class Bedroom(Room):
         self.set_interactable_furniture({
             "door_living_room": LivingRoomDoor,
             "door_bathroom": BathroomDoor,
+            "hamster_cage": HamsterCage,
         })
         self.load_furniture()
