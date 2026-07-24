@@ -12,15 +12,11 @@ class HamsterItem(Item):
 
     def drop(self) -> None:
         self.scene.remove_item(self)
+        self.spawn_hamster()
+
+    def spawn_hamster(self) -> None:
         hamster = Hamster(self.scene, self.pos)
-
-        targets = [
-            furniture for furniture in self.scene.furnitures
-            if furniture.hitbox is not None and furniture.hitbox.size != Vec(0, 0)
-        ]
-        if targets:
-            hamster.go_to(choice(targets), 90)
-
+        hamster.go_to_random(90)
         self.scene.add(hamster)
 
 class Hamster(Sprite["Room"]):
@@ -36,6 +32,7 @@ class Hamster(Sprite["Room"]):
         self.hitbox = RectHitbox(self.pos, (6, 6), Anchor.CENTER)
 
         self.target_furniture = None
+        self.target_offset = Vec(0, 0)
         self.speed = 0
         # The cardinal direction currently being walked in
         self.direction = Vec(0, 0)
@@ -43,6 +40,8 @@ class Hamster(Sprite["Room"]):
         # the direction we're actually trying to get back to
         self.detouring = False
         self.detour_target = Vec(0, 0)
+
+        self.scare_timer = LoopTimer(0.5)
 
         self.interaction_target = InteractionTarget(self.scene, self.pos, self)
         self.scene.interaction_targets.add(self.interaction_target)
@@ -58,6 +57,12 @@ class Hamster(Sprite["Room"]):
             self.image = Image.get("hamster_side")
         elif self.vel.x > 0:
             self.image = pygame.transform.flip(Image.get("hamster_side"), True, False)
+        elif self.vel == Vec(0, 0):
+            self.image = Image.get("hamster_front")
+
+        if self.scare_timer.done:
+            if self.scene.player.pos.distance_to(self.pos) < 20:
+                self.go_to_random(90)
 
     def select(self) -> None:
         self.selected = True
@@ -78,6 +83,29 @@ class Hamster(Sprite["Room"]):
         self.speed = speed
         self.direction = Vec(0, 0)
         self.detouring = False
+        self.target_offset = self._random_side_offset(furniture)
+
+    def go_to_random(self, speed: float) -> None:
+        targets = [
+            furniture for furniture in self.scene.furnitures
+            if furniture.hitbox is not None and furniture.hitbox.size != Vec(0, 0)
+        ]
+        if targets:
+            self.go_to(choice(targets), speed)
+
+    def _random_side_offset(self, furniture: Furniture) -> Vec:
+        if furniture.hitbox is None:
+            return Vec(0, 0)
+
+        # Aim for the point where our own hitbox would sit flush against
+        # the furniture's, so we scooch right up to the edge
+        half = furniture.hitbox.size / 2 + self.hitbox.size / 2
+        return choice((
+            Vec(0, -half.y),
+            Vec(0, half.y),
+            Vec(-half.x, 0),
+            Vec(half.x, 0),
+        ))
 
     def draw(self, screen: pygame.Surface) -> None:
         draw_pos = self.screen_pos - Vec(self.image.size) / 2
@@ -87,13 +115,19 @@ class Hamster(Sprite["Room"]):
 
     def _move_towards_target(self) -> None:
         assert self.target_furniture is not None
+        furniture = self.target_furniture
 
-        target_pos = self.target_furniture.get_pos()
+        target_pos = furniture.get_pos() + self.target_offset
         delta = target_pos - self.pos
         step = self.speed * self.game.dt
 
-        if delta.length() <= step:
-            self.pos = target_pos
+        # Stop as soon as we touch the target's hitbox, rather than walking
+        # all the way to its center
+        touching = furniture.hitbox is not None and self.hitbox.collides(furniture.hitbox)
+
+        if touching or delta.length() <= step:
+            if not touching:
+                self.pos = target_pos
             self.vel = Vec(0, 0)
             self.target_furniture = None
             self.direction = Vec(0, 0)

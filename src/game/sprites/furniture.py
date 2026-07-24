@@ -93,6 +93,8 @@ class BedroomDoor(InteractableFurniture):
         new_scene = self.scene.game_data.bedroom
         self.scene.player.scene = new_scene
         self.scene.camera.scene = new_scene
+        if self.scene.player.held_item is not None:
+            self.scene.player.held_item.scene = new_scene
 
         rel_pos = self.scene.camera.pos - self.scene.player.pos
         self.scene.player.pos = Vec(36, 30)
@@ -105,6 +107,8 @@ class LivingRoomDoor(InteractableFurniture):
         new_scene = self.scene.game_data.living_room
         self.scene.player.scene = new_scene
         self.scene.camera.scene = new_scene
+        if self.scene.player.held_item is not None:
+            self.scene.player.held_item.scene = new_scene
 
         rel_pos = self.scene.camera.pos - self.scene.player.pos
         self.scene.player.pos = Vec(36, 82)
@@ -117,6 +121,8 @@ class BathroomDoor(InteractableFurniture):
         new_scene = self.scene.game_data.bathroom
         self.scene.player.scene = new_scene
         self.scene.camera.scene = new_scene
+        if self.scene.player.held_item is not None:
+            self.scene.player.held_item.scene = new_scene
 
         rel_pos = self.scene.camera.pos - self.scene.player.pos
         self.scene.player.pos = Vec(10, 68)
@@ -129,6 +135,8 @@ class BedroomDoor2(InteractableFurniture):
         new_scene = self.scene.game_data.bedroom
         self.scene.player.scene = new_scene
         self.scene.camera.scene = new_scene
+        if self.scene.player.held_item is not None:
+            self.scene.player.held_item.scene = new_scene
 
         rel_pos = self.scene.camera.pos - self.scene.player.pos
         self.scene.player.pos = Vec(67, 55)
