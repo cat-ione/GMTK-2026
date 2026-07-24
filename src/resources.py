@@ -1,6 +1,9 @@
 from src.core.util.resource import Image, Spritesheet, Sound, Font, RoomData
 
 def define_resources() -> None:
+    Spritesheet("player_idle_back", "player/idle_back.png", 2)
+    Spritesheet("player_idle_front", "player/idle_front.png", 2)
+    Spritesheet("player_idle_side", "player/idle_side.png", 2)
     Spritesheet("player_walk_back", "player/walk_back.png", 4)
     Spritesheet("player_walk_front", "player/walk_front.png", 4)
     Spritesheet("player_walk_side", "player/walk_side.png", 4)

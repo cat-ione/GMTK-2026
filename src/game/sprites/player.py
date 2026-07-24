@@ -204,12 +204,12 @@ class Player(Sprite["Room"]):
             self.held_item = None
 
     def _define_animations(self) -> None:
-        stand_up = Animation(Spritesheet.get("player_walk_back")[:1], -1)
-        stand_down = Animation(Spritesheet.get("player_walk_front")[:1], -1)
-        stand_left = Animation(Spritesheet.get("player_walk_side")[:1], -1)
-        stand_right = Animation(
-            [pygame.transform.flip(
-                Spritesheet.get("player_walk_side")[0], True, False)], -1)
+        idle_up = Animation(Spritesheet.get("player_idle_back"), 0.5)
+        idle_down = Animation(Spritesheet.get("player_idle_front"), 0.5)
+        idle_left = Animation(Spritesheet.get("player_idle_side"), 0.5)
+        idle_right = Animation(
+            [pygame.transform.flip(frame, True, False)
+                for frame in Spritesheet.get("player_idle_side")], 0.5)
 
         walk_up = Animation(Spritesheet.get("player_walk_back"), 0.15)
         walk_down = Animation(Spritesheet.get("player_walk_front"), 0.15)
@@ -218,10 +218,10 @@ class Player(Sprite["Room"]):
             [pygame.transform.flip(frame, True, False)
                 for frame in Spritesheet.get("player_walk_side")], 0.15)
 
-        stand_hold_up = Animation(Spritesheet.get("player_walk_hold_back")[:1], -1)
-        stand_hold_down = Animation(Spritesheet.get("player_walk_hold_front")[:1], -1)
-        stand_hold_left = Animation(Spritesheet.get("player_walk_hold_side")[:1], -1)
-        stand_hold_right = Animation(
+        idle_hold_up = Animation(Spritesheet.get("player_walk_hold_back")[:1], -1)
+        idle_hold_down = Animation(Spritesheet.get("player_walk_hold_front")[:1], -1)
+        idle_hold_left = Animation(Spritesheet.get("player_walk_hold_side")[:1], -1)
+        idle_hold_right = Animation(
             [pygame.transform.flip(
                 Spritesheet.get("player_walk_hold_side")[0], True, False)], -1)
 
@@ -233,23 +233,23 @@ class Player(Sprite["Room"]):
                 for frame in Spritesheet.get("player_walk_hold_side")], 0.15)
 
         self.animation = AnimationManager({
-            "stand_up": stand_up,
-            "stand_down": stand_down,
-            "stand_left": stand_left,
-            "stand_right": stand_right,
+            "idle_up": idle_up,
+            "idle_down": idle_down,
+            "idle_left": idle_left,
+            "idle_right": idle_right,
             "walk_up": walk_up,
             "walk_down": walk_down,
             "walk_left": walk_left,
             "walk_right": walk_right,
-            "stand_hold_up": stand_hold_up,
-            "stand_hold_down": stand_hold_down,
-            "stand_hold_left": stand_hold_left,
-            "stand_hold_right": stand_hold_right,
+            "idle_hold_up": idle_hold_up,
+            "idle_hold_down": idle_hold_down,
+            "idle_hold_left": idle_hold_left,
+            "idle_hold_right": idle_hold_right,
             "walk_hold_up": walk_hold_up,
             "walk_hold_down": walk_hold_down,
             "walk_hold_left": walk_hold_left,
             "walk_hold_right": walk_hold_right,
-        }, "stand_down")
+        }, "idle_down")
 
         self.anim_vec_mapping = {
             Vec(0, -1): "up",
@@ -294,7 +294,7 @@ class Player(Sprite["Room"]):
 
         holding_text = "_hold" if self.held_item is not None else ""
         if self.vel == Vec(0, 0):
-            self.animation.loop(f"stand{holding_text}_{self.direction_text}")
+            self.animation.loop(f"idle{holding_text}_{self.direction_text}")
         else:
             self.animation.loop(f"walk{holding_text}_{self.direction_text}")
 
