@@ -28,6 +28,13 @@ class Furniture(Sprite["Room"]):
             self.hitbox = None
         self.drawbox = RectHitbox(self.pos, self.image.size, Anchor.TOPLEFT)
 
+    def get_pos(self) -> Vec:
+        """Get hitbox position if has hitbox, otherwise just center pos"""
+        if self.hitbox is not None:
+            return self.hitbox.center
+        else:
+            return self.pos + Vec(self.image.size) / 2
+
     def draw(self, screen: pygame.Surface) -> None:
         screen.blit(self.image, self.screen_pos)
 
@@ -45,7 +52,7 @@ class InteractableFurniture(Furniture):
     ) -> None:
         super().__init__(scene, name, pos, image, hitbox)
 
-        pos = self.hitbox.center if self.hitbox is not None else self.pos + Vec(self.image.size) / 2
+        pos = self.get_pos()
         self.interaction_target = InteractionTarget(scene, pos, self)
         self.selected = False
         self.outline = self._get_outline()

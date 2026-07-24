@@ -18,6 +18,10 @@ class HamsterCutscene(Cutscene["LivingRoom"]):
         self.surprise = Surprise(self.scene, player.drawbox.topright - (4, 7))
         self.scene.add(self.surprise)
 
+        self.hamster = Hamster(self.scene, (36, 80))
+        self.scene.add(self.hamster)
+        self.hamster.go_to(self.scene.find_furniture("couch"), 100)
+
     def update(self) -> None:
         player = self.scene.player
 
@@ -30,9 +34,6 @@ class HamsterCutscene(Cutscene["LivingRoom"]):
             if self.timer.done:
                 self.phase = 1
                 self.timer.reset(5)
-                self.hamster = Hamster(self.scene, (36, 80))
-                self.scene.add(self.hamster)
-                self.hamster.go_to(self.scene.find_furniture("couch"), 2)
         elif self.phase == 1:
             # 1. Hamster run out from bedroom door to a hiding spot
             # 1.1. Simultaneously turn the player towards hamster

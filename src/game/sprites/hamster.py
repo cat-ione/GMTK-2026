@@ -4,6 +4,9 @@ if TYPE_CHECKING:
     from .furniture import Furniture
 
 class Hamster(Sprite["Room"]):
+    update_group = UGroup.MAIN
+    draw_group = DGroup.ROOM
+
     def __init__(self, scene: Room, pos: VecLike) -> None:
         super().__init__(scene)
 
@@ -12,15 +15,17 @@ class Hamster(Sprite["Room"]):
         self.image = Image.get("hamster_side")
 
         self.target_furniture = None
-        self.go_to_duration = 0
+        self.speed = 0
 
     def update(self) -> None:
         if self.target_furniture is not None:
-            # pathfind
+            direction = (self.target_furniture.get_pos() - self.pos).normalize()
+            self.vel = direction * self.speed
+        self.pos += self.vel * self.game.dt
 
-    def go_to(self, furniture: Furniture, duration: float) -> None:
+    def go_to(self, furniture: Furniture, speed: float) -> None:
         self.target_furniture = furniture
-        self.go_to_duration = duration
+        self.speed = speed
 
     def draw(self, screen: pygame.Surface) -> None:
         screen.blit(self.image, self.screen_pos)
