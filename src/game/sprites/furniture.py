@@ -8,11 +8,13 @@ class Furniture(Sprite["Room"]):
 
     def __init__(self,
         scene: Room,
+        name: str,
         pos: VecLike,
         image: pygame.Surface,
         hitbox: list[int] | None
     ) -> None:
         super().__init__(scene)
+        self.name = name
 
         self.pos = Vec(pos)
         self.image = image
@@ -36,11 +38,12 @@ class Furniture(Sprite["Room"]):
 class InteractableFurniture(Furniture):
     def __init__(self,
         scene: Room,
+        name: str,
         pos: VecLike,
         image: pygame.Surface,
         hitbox: list[int] | None
     ) -> None:
-        super().__init__(scene, pos, image, hitbox)
+        super().__init__(scene, name, pos, image, hitbox)
 
         pos = self.hitbox.center if self.hitbox is not None else self.pos + Vec(self.image.size) / 2
         self.interaction_target = InteractionTarget(scene, pos, self)
@@ -79,8 +82,8 @@ class InteractableFurniture(Furniture):
         pass
 
 class StackOfPlates(InteractableFurniture):
-    def __init__(self, scene: Room, pos: VecLike, image: pygame.Surface, hitbox: list[int] | None) -> None:
-        super().__init__(scene, pos, image, hitbox)
+    def __init__(self, scene: Room, name: str, pos: VecLike, image: pygame.Surface, hitbox: list[int] | None) -> None:
+        super().__init__(scene, name, pos, image, hitbox)
         self.remaining_plates = 6
 
     def interact(self) -> None:

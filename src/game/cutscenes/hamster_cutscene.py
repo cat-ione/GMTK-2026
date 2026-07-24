@@ -1,5 +1,6 @@
 from src.core import *
 from .cutscene import Cutscene
+from src.game.sprites.hamster import Hamster
 
 class HamsterCutscene(Cutscene["LivingRoom"]):
     def __init__(self, scene: LivingRoom) -> None:
@@ -27,8 +28,11 @@ class HamsterCutscene(Cutscene["LivingRoom"]):
             elif self.timer.elapsed // 0.2 == 1:
                 player.drawbox.pos.y = self.initial_drawbox.pos.y
             if self.timer.done:
-                self.timer.reset(5)
                 self.phase = 1
+                self.timer.reset(5)
+                self.hamster = Hamster(self.scene, (36, 80))
+                self.scene.add(self.hamster)
+                self.hamster.go_to(self.scene.find_furniture("couch"), 2)
         elif self.phase == 1:
             # 1. Hamster run out from bedroom door to a hiding spot
             # 1.1. Simultaneously turn the player towards hamster

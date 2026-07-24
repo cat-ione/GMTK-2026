@@ -37,9 +37,9 @@ class Room(Scene):
                     hitbox = self.data["hitboxes"][name]
                 if name in self.interactable_furniture:
                     _type = self.interactable_furniture[name]
-                    furniture = _type(self, pos, image, hitbox)
+                    furniture = _type(self, name, pos, image, hitbox)
                 else:
-                    furniture = Furniture(self, pos, image, hitbox)
+                    furniture = Furniture(self, name, pos, image, hitbox)
                 self.add_furniture(furniture)
 
     def update(self) -> None:
@@ -55,6 +55,12 @@ class Room(Scene):
     def start_cutscene(self, cutscene: Cutscene) -> None:
         self.cutscene = cutscene
         cutscene.start()
+
+    def find_furniture(self, name: str) -> Furniture:
+        for furniture in self.furnitures:
+            if furniture.name == name:
+                return furniture
+        raise ValueError(f"No furniture named {name}.")
 
     def objects_sort_key(self, item: tuple[int, Sprite]) -> float:
         sprite = item[1]
