@@ -7,6 +7,9 @@ from src.game.sprites.dust import Dust
 class Entrance(Room):
     def __init__(self, game: Game) -> None:
         super().__init__(game, "entrance")
+        self.load_furniture()
 
         self.set_boundary([(0, 29), (139, 29), (139, 139), (65, 139), (65, 86), (0, 86)])
-        self.load_furniture()
+
+        vacuum = Vacuum(self, (88, 30))
+        self.add_item(vacuum)

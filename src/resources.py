@@ -22,3 +22,4 @@ def define_resources() -> None:
     RoomData("living_room", "living_room.json")
     RoomData("entrance", "entrance.json")
     RoomData("bedroom", "bedroom.json")
+    RoomData("bathroom", "bathroom.json")

@@ -4,9 +4,9 @@ from .room import Room
 from src.game.sprites.item import Vacuum
 from src.game.sprites.dust import Dust
 
-class Bedroom(Room):
+class Bathroom(Room):
     def __init__(self, game: Game) -> None:
-        super().__init__(game, "bedroom")
+        super().__init__(game, "bathroom")
 
-        self.set_boundary([(0, 29), (70, 29), (70, 85), (139, 85), (139, 139), (0, 139)])
+        self.set_boundary([(71, 29), (139, 29), (139, 86), (71, 86)])
         self.load_furniture()

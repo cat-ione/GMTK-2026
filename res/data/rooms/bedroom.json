@@ -13,13 +13,14 @@
     "hamster_cage": [[58, 63]]
   },
   "hitboxes": {
-    "shelf": [0, 0, 15, 49],
+    "shelf": [0, 0, 19, 49],
     "vanity_table": [0, 1, 8, 26],
     "vanity_chair": [0, 7, 8, 6],
     "computer_desk": [0, 4, 50, 12],
     "cat_items": [0, 2, 12, 14],
     "nightstand": [0, 5, 12, 14],
     "bed": [0, 7, 40 ,25],
+    "trash_can": [0, 4, 5, 7],
     "hamster_table": [0, 4, 13, 16]
   }
 }
