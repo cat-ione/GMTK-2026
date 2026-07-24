@@ -1,5 +1,4 @@
 from src.core import *
-from math import exp
 
 FOLLOW_SPEED = 40
 LERP_RATE = 6

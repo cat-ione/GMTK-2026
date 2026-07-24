@@ -210,6 +210,10 @@ class Player(Sprite["Room"]):
         self.drop_item()
         self.held_item = new
 
+    def delete_item(self) -> None:
+        """Simply remove the item in the player's hand."""
+        self.held_item = None
+
     def pickup_item(self, new: Item) -> None:
         """Pick up an item from the ground"""
         if self.held_item is not None:

@@ -25,6 +25,7 @@
     "bed": [0, 7, 40 ,25],
     "trash_can": [0, 4, 5, 7],
     "hamster_table": [0, 4, 13, 16],
+    "hamster_cage": [5, 9, 0, 0],
 
     "door_bathroom": [15, 25, 0, 0]
   }

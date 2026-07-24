@@ -2,6 +2,7 @@ from src.core import *
 
 from .interaction_target import InteractionTarget
 from .item import Plate
+from .hamster import HamsterItem
 
 class Furniture(Sprite["Room"]):
     draw_group = DGroup.ROOM
@@ -135,4 +136,5 @@ class RiceCooker(InteractableFurniture):
 
 class HamsterCage(InteractableFurniture):
     def interact(self) -> None:
-        info("interacted with hamster cage")
+        if isinstance(self.scene.player.held_item, HamsterItem):
+            self.scene.player.delete_item()
