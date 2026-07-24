@@ -1,26 +1,32 @@
 {
   "positions": {
-    "couch": [[15, 26]],
-    "bonsai_1": [[1, 19]],
-    "bonsai_2": [[47, 17]],
+    "couch": [[88, 26]],
+    "bonsai_1": [[74, 19]],
+    "bonsai_2": [[120, 17]],
 
-    "kitchen_island": [[66, 49]],
-    "kitchen_island_chair": [[70, 58], [88, 58], [106, 58]],
-    "kitchen_counter_1": [[84, 18]],
-    "kitchen_counter_2": [[131, 22]],
-    "kitchen_shelves": [[84, 0]],
-    "kitchen_bonsai": [[102, 42]],
-    "kitchen_decoration": [[87, 0]],
-    "kitchen_cup": [[71, 47]],
-    "microwave": [[86, 18]],
-    "rice_cooker": [[102, 19]],
-    "trash_can": [[134, 63]],
-    "fridge": [[66, 0]],
-    "stack_of_plates_6": [[132, 24]],
+    "kitchen_island": [[139, 49]],
+    "kitchen_island_chair": [[143, 58], [161, 58], [179, 58]],
+    "kitchen_counter_1": [[157, 18]],
+    "kitchen_counter_2": [[204, 22]],
+    "kitchen_shelves": [[157, 0]],
+    "kitchen_bonsai": [[175, 42]],
+    "kitchen_decoration": [[160, 0]],
+    "kitchen_cup": [[144, 47]],
+    "microwave": [[159, 18]],
+    "rice_cooker": [[175, 19]],
+    "trash_can_1": [[207, 63]],
+    "fridge": [[139, 0]],
+    "stack_of_plates_6": [[205, 24]],
 
-    "dining_table": [[88, 91]],
-    "dining_chair_right": [[80, 92], [80, 104], [80, 116]],
-    "dining_chair_left": [[116, 92], [116, 104], [116, 116]]
+    "dining_table": [[161, 91]],
+    "dining_chair_right": [[153, 92], [153, 104], [153, 116]],
+    "dining_chair_left": [[189, 92], [189, 104], [189, 116]],
+
+    "shelf": [[0, 13], [0, 36]],
+    "shoe_rack": [[51, 15]],
+    "cactus": [[62, 70]],
+    "flower": [[5, 39]],
+    "trash_can_2": [[0, 76]]
   },
   "hitboxes": {
     "couch": [1, 6, 32, 10],
@@ -32,10 +38,15 @@
     "kitchen_counter_2": [0, 4, 9, 39],
     "kitchen_shelves": [0, 5, 0, 0],
     "kitchen_bonsai": [7, 14, 0, 0],
-    "trash_can": [0, 0, 6, 9],
+    "trash_can_1": [0, 0, 6, 9],
     "fridge": [0, 29, 18, 10],
     "dining_table": [0, 4, 30, 38],
     "dining_chair_right": [4, 11, 0, 0],
-    "dining_chair_left": [4, 11, 0, 0]
+    "dining_chair_left": [4, 11, 0, 0],
+
+    "shelf": [0, 0, 19, 41],
+    "shoe_rack": [0, 0, 17, 21],
+    "trash_can": [0, 0, 8, 8],
+    "cactus": [1, 8, 6, 6]
   }
 }

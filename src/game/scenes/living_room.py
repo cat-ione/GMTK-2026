@@ -9,7 +9,7 @@ class LivingRoom(Room):
     def __init__(self, game: Game) -> None:
         super().__init__(game, "living_room")
 
-        self.set_boundary([(0, 29), (139, 29), (139, 139), (65, 139), (65, 86), (0, 86)])
+        self.set_boundary([(0, 29), (212, 29), (212, 139), (138, 139), (138, 86), (0, 86)])
         self.set_interactable_furniture({
             "stack_of_plates_6": StackOfPlates,
         })

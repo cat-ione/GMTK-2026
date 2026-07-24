@@ -5,7 +5,6 @@
 # ]
 # ///
 
-from src.game.scenes.entrance import Entrance
 from src.game.scenes.living_room import LivingRoom
 from src.game.scenes.bedroom import Bedroom
 from src.game.scenes.bathroom import Bathroom
