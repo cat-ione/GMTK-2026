@@ -300,6 +300,21 @@ def dropshadow(surface: pygame.Surface, darkness: int) -> pygame.Surface:
         unsetcolor = (0, 0, 0),
     )
 
+def outline(surface: pygame.Surface, color: tuple[int, int, int]) -> pygame.Surface:
+    mask = pygame.mask.from_surface(surface)
+    mask_surf = mask.to_surface(
+        setcolor=color,
+        unsetcolor=(0, 0, 0)
+    )
+    mask_surf.set_colorkey((0, 0, 0))
+    surface = pygame.Surface(Vec(mask_surf.size) + (2, 2))
+    surface.blit(mask_surf, (0, 1))
+    surface.blit(mask_surf, (1, 0))
+    surface.blit(mask_surf, (1, 2))
+    surface.blit(mask_surf, (2, 1))
+    surface.set_colorkey((0, 0, 0))
+    return surface
+
 __all__ = [
     "VecLike",
     "pathof",
@@ -318,4 +333,5 @@ __all__ = [
     "rotate",
     "rotate_around",
     "dropshadow",
+    "outline",
 ]

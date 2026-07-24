@@ -8,11 +8,13 @@ class Furniture(Sprite["Room"]):
 
     def __init__(self,
         scene: Room,
+        name: str,
         pos: VecLike,
         image: pygame.Surface,
         hitbox: list[int] | None
     ) -> None:
         super().__init__(scene)
+        self.name = name
 
         self.pos = Vec(pos)
         self.image = image
@@ -26,6 +28,13 @@ class Furniture(Sprite["Room"]):
             self.hitbox = None
         self.drawbox = RectHitbox(self.pos, self.image.size, Anchor.TOPLEFT)
 
+    def get_pos(self) -> Vec:
+        """Get hitbox position if has hitbox, otherwise just center pos"""
+        if self.hitbox is not None:
+            return self.hitbox.center
+        else:
+            return self.pos + Vec(self.image.size) / 2
+
     def draw(self, screen: pygame.Surface) -> None:
         screen.blit(self.image, self.screen_pos)
 
@@ -36,37 +45,23 @@ class Furniture(Sprite["Room"]):
 class InteractableFurniture(Furniture):
     def __init__(self,
         scene: Room,
+        name: str,
         pos: VecLike,
         image: pygame.Surface,
         hitbox: list[int] | None
     ) -> None:
-        super().__init__(scene, pos, image, hitbox)
+        super().__init__(scene, name, pos, image, hitbox)
 
-        pos = self.hitbox.center if self.hitbox is not None else self.pos + Vec(self.image.size) / 2
+        pos = self.get_pos()
         self.interaction_target = InteractionTarget(scene, pos, self)
         self.selected = False
-        self.outline = self._get_outline()
+        self.outline = outline(self.image, (255, 255, 255))
 
     def select(self) -> None:
         self.selected = True
 
     def deselect(self) -> None:
         self.selected = False
-
-    def _get_outline(self) -> pygame.Surface:
-        mask = pygame.mask.from_surface(self.image)
-        mask_surf = mask.to_surface(
-            setcolor=(255, 255, 255),
-            unsetcolor=(0, 0, 0)
-        )
-        mask_surf.set_colorkey((0, 0, 0))
-        surface = pygame.Surface(Vec(mask_surf.size) + (2, 2))
-        surface.blit(mask_surf, (0, 1))
-        surface.blit(mask_surf, (1, 0))
-        surface.blit(mask_surf, (1, 2))
-        surface.blit(mask_surf, (2, 1))
-        surface.set_colorkey((0, 0, 0))
-        return surface
 
     def draw(self, screen: pygame.Surface) -> None:
         if self.selected:
@@ -79,8 +74,8 @@ class InteractableFurniture(Furniture):
         pass
 
 class StackOfPlates(InteractableFurniture):
-    def __init__(self, scene: Room, pos: VecLike, image: pygame.Surface, hitbox: list[int] | None) -> None:
-        super().__init__(scene, pos, image, hitbox)
+    def __init__(self, scene: Room, name: str, pos: VecLike, image: pygame.Surface, hitbox: list[int] | None) -> None:
+        super().__init__(scene, name, pos, image, hitbox)
         self.remaining_plates = 6
 
     def interact(self) -> None:
@@ -91,52 +86,37 @@ class StackOfPlates(InteractableFurniture):
             self.scene.remove_furniture(self)
         else:
             self.image = Image.get(f"stack_of_plates_{self.remaining_plates}")
-            self.outline = self._get_outline()
+            self.outline = outline(self.image, (255, 255, 255))
 
-class BedroomDoor(InteractableFurniture):
+class Door(InteractableFurniture):
+    room: str
+    target_pos: VecLike
+
     def interact(self) -> None:
-        new_scene = self.scene.game_data.bedroom
+        new_scene = getattr(self.scene.game_data, self.room)
         self.scene.player.scene = new_scene
         self.scene.camera.scene = new_scene
+        if self.scene.player.held_item is not None:
+            self.scene.player.held_item.scene = new_scene
 
         rel_pos = self.scene.camera.pos - self.scene.player.pos
-        self.scene.player.pos = Vec(36, 30)
+        self.scene.player.pos = Vec(self.target_pos)
         self.scene.camera.pos = self.scene.player.pos + rel_pos
 
         self.game.set_scene(new_scene)
 
-class LivingRoomDoor(InteractableFurniture):
-    def interact(self) -> None:
-        new_scene = self.scene.game_data.living_room
-        self.scene.player.scene = new_scene
-        self.scene.camera.scene = new_scene
+class BedroomDoor(Door):
+    room = "bedroom"
+    target_pos = (36, 30)
 
-        rel_pos = self.scene.camera.pos - self.scene.player.pos
-        self.scene.player.pos = Vec(36, 82)
-        self.scene.camera.pos = self.scene.player.pos + rel_pos
+class LivingRoomDoor(Door):
+    room = "living_room"
+    target_pos = (36, 82)
 
-        self.game.set_scene(new_scene)
+class BathroomDoor(Door):
+    room = "bathroom"
+    target_pos = (10, 68)
 
-class BathroomDoor(InteractableFurniture):
-    def interact(self) -> None:
-        new_scene = self.scene.game_data.bathroom
-        self.scene.player.scene = new_scene
-        self.scene.camera.scene = new_scene
-
-        rel_pos = self.scene.camera.pos - self.scene.player.pos
-        self.scene.player.pos = Vec(10, 68)
-        self.scene.camera.pos = self.scene.player.pos + rel_pos
-
-        self.game.set_scene(new_scene)
-
-class BedroomDoor2(InteractableFurniture):
-    def interact(self) -> None:
-        new_scene = self.scene.game_data.bedroom
-        self.scene.player.scene = new_scene
-        self.scene.camera.scene = new_scene
-
-        rel_pos = self.scene.camera.pos - self.scene.player.pos
-        self.scene.player.pos = Vec(67, 55)
-        self.scene.camera.pos = self.scene.player.pos + rel_pos
-
-        self.game.set_scene(new_scene)
+class BedroomDoor2(Door):
+    room = "bedroom"
+    target_pos = (67, 55)
