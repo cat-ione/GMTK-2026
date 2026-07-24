@@ -4,6 +4,7 @@ from src.game.sprites.item import Item
 from src.game.sprites.dust import Dust
 from src.game.sprites.furniture import Furniture, InteractableFurniture
 from src.game.sprites.interaction_target import InteractionTarget
+from src.game.cutscenes.cutscene import Cutscene
 
 class Room(Scene):
     def __init__(self, game: Game, game_data: GameData | None, name: str) -> None:
@@ -25,6 +26,8 @@ class Room(Scene):
         self.boundary: list[VecLike] = []
         self.interactable_furniture: dict[str, type[Furniture]] = {}
 
+        self.cutscene: Cutscene | None = None
+
     def load_furniture(self) -> None:
         for name, positions in self.data["positions"].items():
             for pos in positions:
@@ -43,6 +46,15 @@ class Room(Scene):
         self.sprite_manager.update()
 
         self.sprite_manager.d_groups[DGroup.ROOM].sort(self.objects_sort_key)
+
+        if self.cutscene is not None:
+            self.cutscene.update()
+
+        watch("cutscene", self.cutscene)
+
+    def start_cutscene(self, cutscene: Cutscene) -> None:
+        self.cutscene = cutscene
+        cutscene.start()
 
     def objects_sort_key(self, item: tuple[int, Sprite]) -> float:
         sprite = item[1]

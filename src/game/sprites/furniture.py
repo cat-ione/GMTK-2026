@@ -31,7 +31,7 @@ class Furniture(Sprite["Room"]):
 
     def draw_hitbox(self, screen: pygame.Surface) -> None:
         if self.hitbox is None: return
-        pygame.draw.rect(screen, (0, 255, 255), self.hitbox.get_rect(), 1)
+        pygame.draw.rect(screen, (0, 255, 255), self.hitbox.get_rect(-self.scene.camera.pos), 1)
 
 class InteractableFurniture(Furniture):
     def __init__(self,

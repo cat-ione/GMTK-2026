@@ -22,6 +22,8 @@ def define_resources() -> None:
     Image("stack_of_plates_2", "rooms/living_room/stack_of_plates_2.png")
     Image("stack_of_plates_1", "rooms/living_room/stack_of_plates_1.png")
 
+    Spritesheet("surprise", "surprise.png", 8)
+
     RoomData("living_room", "living_room.json")
     RoomData("bedroom", "bedroom.json")
     RoomData("bathroom", "bathroom.json")

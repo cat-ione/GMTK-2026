@@ -43,28 +43,10 @@ class Player(Sprite["Room"]):
         }
 
     def update(self) -> None:
-        self.vel = Vec(
-            self.game.keys[K_d] - self.game.keys[K_a],
-            self.game.keys[K_s] - self.game.keys[K_w],
-        ).normalize() * SPEED
-
-        # Boundary collisions
-        self.pos.x += self.vel.x * self.game.dt
-        self.hitbox.set_pos(self.pos)
-        if not self._within_boundary():
-            self.pos.x -= self.vel.x * self.game.dt
-            self.hitbox.set_pos(self.pos)
-        self.pos.y += self.vel.y * self.game.dt
-        self.hitbox.set_pos(self.pos)
-        if not self._within_boundary():
-            self.pos.y -= self.vel.y * self.game.dt
-            self.hitbox.set_pos(self.pos)
+        if self.scene.cutscene is None:
+            self._move()
 
         self.drawbox.set_pos(self.pos)
-        self.hitbox.set_pos(self.pos)
-
-        if self.vel != Vec(0, 0):
-            self.ordinal_direction = self.vel.normalize()
 
         for furniture in self.scene.furnitures:
             if furniture.hitbox is None: continue
@@ -75,7 +57,7 @@ class Player(Sprite["Room"]):
         self._update_animation()
 
         self._select()
-        if self.game.keydown == K_e:
+        if self.game.keydown == K_e and self.scene.cutscene is not None:
             # If selecting something, interact with it
             if self.selected is not None:
                 self.selected.interact()
@@ -117,8 +99,8 @@ class Player(Sprite["Room"]):
             self._draw_held_item(screen)
 
     def draw_hitbox(self, screen: pygame.Surface) -> None:
-        screen.set_at(self.pos, (255, 0, 0))
-        pygame.draw.rect(screen, (0, 255, 0), self.hitbox.get_rect(), 1)
+        screen.set_at(self.screen_pos, (255, 0, 0))
+        pygame.draw.rect(screen, (0, 255, 0), self.hitbox.get_rect(-self.scene.camera.pos), 1)
 
     def _draw_held_item(self, screen: pygame.Surface) -> None:
         if self.held_item is None: return
@@ -127,6 +109,29 @@ class Player(Sprite["Room"]):
         offset = self.held_item_offsets[self.direction_text]
         anchor = self.held_item.held_anchors[self.direction_text]
         anchored_blit(screen, image, self.drawbox.topleft + offset - self.scene.camera.pos, anchor)
+
+    def _move(self) -> None:
+        self.vel = Vec(
+            self.game.keys[K_d] - self.game.keys[K_a],
+            self.game.keys[K_s] - self.game.keys[K_w],
+        ).normalize() * SPEED
+
+        # Boundary collisions
+        self.pos.x += self.vel.x * self.game.dt
+        self.hitbox.set_pos(self.pos)
+        if not self._within_boundary():
+            self.pos.x -= self.vel.x * self.game.dt
+            self.hitbox.set_pos(self.pos)
+        self.pos.y += self.vel.y * self.game.dt
+        self.hitbox.set_pos(self.pos)
+        if not self._within_boundary():
+            self.pos.y -= self.vel.y * self.game.dt
+            self.hitbox.set_pos(self.pos)
+
+        if self.vel != Vec(0, 0):
+            self.ordinal_direction = self.vel.normalize()
+
+        self.hitbox.set_pos(self.pos)
 
     def _within_boundary(self) -> bool:
         corners = (
@@ -204,6 +209,13 @@ class Player(Sprite["Room"]):
             self.held_item = None
 
     def _define_animations(self) -> None:
+        still_up = Animation(Spritesheet.get("player_idle_back")[:1], -1)
+        still_down = Animation(Spritesheet.get("player_idle_front")[:1], -1)
+        still_left = Animation(Spritesheet.get("player_idle_side")[:1], -1)
+        still_right = Animation(
+            [pygame.transform.flip(
+                Spritesheet.get("player_idle_side")[0], True, False)], -1)
+
         idle_up = Animation(Spritesheet.get("player_idle_back"), 0.5)
         idle_down = Animation(Spritesheet.get("player_idle_front"), 0.5)
         idle_left = Animation(Spritesheet.get("player_idle_side"), 0.5)
@@ -233,6 +245,10 @@ class Player(Sprite["Room"]):
                 for frame in Spritesheet.get("player_walk_hold_side")], 0.15)
 
         self.animation = AnimationManager({
+            "still_up": still_up,
+            "still_down": still_down,
+            "still_left": still_left,
+            "still_right": still_right,
             "idle_up": idle_up,
             "idle_down": idle_down,
             "idle_left": idle_left,
