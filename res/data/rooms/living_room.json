@@ -36,6 +36,9 @@
     "fridge": [0, 29, 18, 10],
     "dining_table": [0, 4, 30, 38],
     "dining_chair_right": [4, 11, 0, 0],
-    "dining_chair_left": [4, 11, 0, 0]
+    "dining_chair_left": [4, 11, 0, 0],
+    "microwave": [0, 20, 0, 0],
+    "rice_cooker": [0, 20, 0, 0],
+    "kitchen_cup": [0, 20, 0, 0]
   }
 }
