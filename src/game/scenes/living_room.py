@@ -1,28 +1,28 @@
 from src.core import *
 
 from .room import Room
-from src.game.sprites.item import Vacuum
-from src.game.sprites.furniture import StackOfPlates
+from src.game.sprites.furniture import StackOfPlates, BedroomDoor
 from src.game.sprites.dust import Dust
+from src.game.sprites.player import Player
+from .game_data import GameData
 
 class LivingRoom(Room):
     def __init__(self, game: Game) -> None:
-        super().__init__(game, "living_room")
+        super().__init__(game, None, "living_room")
 
-        self.set_boundary([(0, 29), (139, 29), (139, 139), (65, 139), (65, 86), (0, 86)])
+        self.set_boundary([(0, 29), (212, 29), (212, 139), (138, 139), (138, 86), (0, 86)])
         self.set_interactable_furniture({
             "stack_of_plates_6": StackOfPlates,
+            "door": BedroomDoor
         })
         self.load_furniture()
 
-        # test_item = TestItem(self, (50, 50))
-        # self.add_item(test_item)
-        # test_item = TestItem(self, (40, 45))
-        # self.add_item(test_item)
-        vacuum = Vacuum(self, (60, 75))
-        self.add_item(vacuum)
-
         self._spawn_dust()
+
+        self.player = Player(self, (32, 42))
+        self.add(self.player)
+
+        self.game_data = GameData(game, self)
 
     def _spawn_dust(self) -> None:
         min_x = int(min(x for x, _ in self.boundary))
@@ -43,3 +43,6 @@ class LivingRoom(Room):
                 else:
                     valid = True
             self.add_dust(Dust(self, pos))
+
+    def go_to_bedroom(self) -> None:
+        self.game.set_scene(self.game_data.bedroom)

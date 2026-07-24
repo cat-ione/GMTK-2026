@@ -10,7 +10,10 @@
     "bed": [[99, 94]],
     "nightstand": [[128, 83], [128, 114]],
     "hamster_table": [[57, 66]],
-    "hamster_cage": [[58, 63]]
+    "hamster_cage": [[58, 63]],
+
+    "door_living_room": [[27, 4]],
+    "door_bathroom": [[71, 20]]
   },
   "hitboxes": {
     "shelf": [0, 0, 19, 49],
@@ -21,6 +24,8 @@
     "nightstand": [0, 5, 12, 14],
     "bed": [0, 7, 40 ,25],
     "trash_can": [0, 4, 5, 7],
-    "hamster_table": [0, 4, 13, 16]
+    "hamster_table": [0, 4, 13, 16],
+
+    "door_bathroom": [15, 25, 0, 0]
   }
 }

@@ -7,8 +7,13 @@ from src.game.sprites.furniture import Furniture, InteractableFurniture
 from src.game.sprites.interaction_target import InteractionTarget
 
 class Room(Scene):
-    def __init__(self, game: Game, name: str) -> None:
+    def __init__(self, game: Game, game_data: GameData | None, name: str) -> None:
         super().__init__(game)
+
+        if game_data is not None:
+            self.game_data = game_data
+            self.player = game_data.player
+            self.add(self.player)
 
         self.data = RoomData.get(name)
         self.furnitures: set[Furniture] = set()
@@ -18,9 +23,6 @@ class Room(Scene):
         self.dusts: set[Dust] = set()
         self.boundary: list[VecLike] = []
         self.interactable_furniture: dict[str, type[Furniture]] = {}
-
-        self.player = Player(self)
-        self.add(self.player)
 
     def load_furniture(self) -> None:
         for name, positions in self.data["positions"].items():

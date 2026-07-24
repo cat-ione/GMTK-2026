@@ -92,3 +92,27 @@ class StackOfPlates(InteractableFurniture):
         else:
             self.image = Image.get(f"stack_of_plates_{self.remaining_plates}")
             self.outline = self._get_outline()
+
+class BedroomDoor(InteractableFurniture):
+    def interact(self) -> None:
+        self.scene.player.pos = Vec(36, 30)
+        self.scene.player.scene = self.scene.game_data.bedroom
+        self.game.set_scene(self.scene.game_data.bedroom)
+
+class LivingRoomDoor(InteractableFurniture):
+    def interact(self) -> None:
+        self.scene.player.pos = Vec(36, 82)
+        self.scene.player.scene = self.scene.game_data.living_room
+        self.game.set_scene(self.scene.game_data.living_room)
+
+class BathroomDoor(InteractableFurniture):
+    def interact(self) -> None:
+        self.scene.player.pos = Vec(10, 68)
+        self.scene.player.scene = self.scene.game_data.bathroom
+        self.game.set_scene(self.scene.game_data.bathroom)
+
+class BedroomDoor2(InteractableFurniture):
+    def interact(self) -> None:
+        self.scene.player.pos = Vec(67, 55)
+        self.scene.player.scene = self.scene.game_data.bedroom
+        self.game.set_scene(self.scene.game_data.bedroom)
