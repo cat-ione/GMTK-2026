@@ -26,6 +26,8 @@ class Titlescreen(Scene):
 
     def update(self) -> None:
         self.text_scroll.update()
+        if self.text_scroll.done:
+            self.text_scroll.reset()
         self.sprite_manager.update()
 
     def draw(self, screen: pygame.Surface) -> None:
