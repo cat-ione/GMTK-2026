@@ -48,8 +48,11 @@ class Player(Sprite["Room"]):
             "down": Vec(10, 17),
         }
 
+        # Lock movement
+        self.locked = False
+
     def update(self) -> None:
-        if self.scene.cutscene is None:
+        if self.scene.cutscene is None and not self.locked:
             self._move()
 
         self.drawbox.set_pos(self.pos)

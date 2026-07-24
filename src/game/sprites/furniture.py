@@ -3,6 +3,7 @@ from src.core import *
 from .interaction_target import InteractionTarget
 from .item import Plate
 from .hamster import HamsterItem
+from .item import Chicken
 
 class Furniture(Sprite["Room"]):
     draw_group = DGroup.ROOM
@@ -127,21 +128,69 @@ class Fridge(InteractableFurniture):
 
     def __init__(self, scene: Room, name: str, pos: VecLike, image: pygame.Surface, hitbox: list[int] | None) -> None:
         super().__init__(scene, name, pos, image, hitbox)
-        self.has_chicken = True
-        self.open_timer = Timer(1)
+        self.chicken = Chicken(self.scene, pos)
+        self.open_timer = Timer(1, True)
+        self.freeze_timer = LoopTimer(6, True)
 
     def update(self) -> None:
         if self.open_timer.done:
             self.image = Image.get("fridge_closed")
             self.open_timer.reset()
+            self.open_timer.pause()
+            self.scene.player.locked = False
+
+            if self.chicken is not None:
+                self.scene.player.gain_item(self.chicken)
+                self.chicken = None
+            elif isinstance(self.scene.player.held_item, Chicken):
+                self.chicken = self.scene.player.held_item
+                self.scene.player.delete_item()
+                self.freeze_timer.reset()
+
+        if self.chicken is not None:
+            if self.freeze_timer.done:
+                if self.chicken.temperature > -18:
+                    self.chicken.temperature -= 1
+            watch("chicken_temp", self.chicken.temperature)
 
     def interact(self) -> None:
         self.image = Image.get("fridge_opened")
         self.open_timer.reset()
+        self.scene.player.locked = True
 
 class Microwave(InteractableFurniture):
+    update_group = UGroup.MAIN
+
+    def __init__(self, scene: Room, name: str, pos: VecLike, image: pygame.Surface, hitbox: list[int] | None) -> None:
+        super().__init__(scene, name, pos, image, hitbox)
+        self.chicken = None
+        self.open_timer = Timer(1, True)
+        self.heat_timer = LoopTimer(4, True)
+
+    def update(self) -> None:
+        if self.open_timer.done:
+            self.image = Image.get("microwave_closed")
+            self.open_timer.reset()
+            self.open_timer.pause()
+            self.scene.player.locked = False
+
+            if self.chicken is not None:
+                self.scene.player.gain_item(self.chicken)
+                self.chicken = None
+            elif isinstance(self.scene.player.held_item, Chicken):
+                self.chicken = self.scene.player.held_item
+                self.scene.player.delete_item()
+                self.heat_timer.reset()
+
+        if self.chicken is not None:
+            if self.heat_timer.done:
+                self.chicken.temperature += 1
+            watch("chicken_temp", self.chicken.temperature)
+
     def interact(self) -> None:
-        info("interacted with microwave")
+        self.image = Image.get("microwave_opened")
+        self.open_timer.reset()
+        self.scene.player.locked = True
 
 class RiceCooker(InteractableFurniture):
     def interact(self) -> None:

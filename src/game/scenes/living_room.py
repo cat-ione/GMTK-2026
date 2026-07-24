@@ -23,6 +23,7 @@ class LivingRoom(Room):
             "tablecloth": Tablecloth,
         })
         self.load_furniture()
+        self.microwave = self.find_furniture("microwave")
 
         self._spawn_dust()
 

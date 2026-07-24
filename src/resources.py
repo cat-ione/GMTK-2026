@@ -15,6 +15,8 @@ def define_resources() -> None:
     Image("vacuum_front", "items/vacuum_front.png")
     Image("vacuum_side", "items/vacuum_side.png")
     Image("plate", "items/plate.png")
+    Image("chicken", "items/chicken_frosted.png")
+
     Image("stack_of_plates_5", "rooms/living_room/stack_of_plates_5.png")
     Image("stack_of_plates_4", "rooms/living_room/stack_of_plates_4.png")
     Image("stack_of_plates_3", "rooms/living_room/stack_of_plates_3.png")
@@ -22,6 +24,8 @@ def define_resources() -> None:
     Image("stack_of_plates_1", "rooms/living_room/stack_of_plates_1.png")
     Image("fridge_opened", "rooms/living_room/fridge_opened.png")
     Image("fridge_closed", "rooms/living_room/fridge.png")
+    Image("microwave_opened", "rooms/living_room/microwave_opened.png")
+    Image("microwave_closed", "rooms/living_room/microwave.png")
 
     Image("hamster_side", "items/hamster_side.png")
     Image("hamster_standing", "items/hamster_standing.png")

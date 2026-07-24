@@ -14,3 +14,8 @@ class Bedroom(Room):
             "hamster_cage": HamsterCage,
         })
         self.load_furniture()
+
+    def update(self) -> None:
+        super().update()
+
+        self.game_data.living_room.microwave.update()

@@ -12,3 +12,8 @@ class Bathroom(Room):
             "door": BedroomDoor2,
         })
         self.load_furniture()
+
+    def update(self) -> None:
+        super().update()
+
+        self.game_data.living_room.microwave.update()
