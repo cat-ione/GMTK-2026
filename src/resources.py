@@ -1,6 +1,9 @@
 from src.core.util.resource import Image, Spritesheet, Sound, Font, RoomData
 
 def define_resources() -> None:
+    Spritesheet("player_idle_back", "player/idle_back.png", 2)
+    Spritesheet("player_idle_front", "player/idle_front.png", 2)
+    Spritesheet("player_idle_side", "player/idle_side.png", 2)
     Spritesheet("player_walk_back", "player/walk_back.png", 4)
     Spritesheet("player_walk_front", "player/walk_front.png", 4)
     Spritesheet("player_walk_side", "player/walk_side.png", 4)
@@ -18,6 +21,8 @@ def define_resources() -> None:
     Image("stack_of_plates_3", "rooms/living_room/stack_of_plates_3.png")
     Image("stack_of_plates_2", "rooms/living_room/stack_of_plates_2.png")
     Image("stack_of_plates_1", "rooms/living_room/stack_of_plates_1.png")
+
+    Spritesheet("surprise", "surprise.png", 8)
 
     RoomData("living_room", "living_room.json")
     RoomData("bedroom", "bedroom.json")

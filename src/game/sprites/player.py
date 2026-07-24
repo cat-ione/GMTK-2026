@@ -43,28 +43,10 @@ class Player(Sprite["Room"]):
         }
 
     def update(self) -> None:
-        self.vel = Vec(
-            self.game.keys[K_d] - self.game.keys[K_a],
-            self.game.keys[K_s] - self.game.keys[K_w],
-        ).normalize() * SPEED
-
-        # Boundary collisions
-        self.pos.x += self.vel.x * self.game.dt
-        self.hitbox.set_pos(self.pos)
-        if not self._within_boundary():
-            self.pos.x -= self.vel.x * self.game.dt
-            self.hitbox.set_pos(self.pos)
-        self.pos.y += self.vel.y * self.game.dt
-        self.hitbox.set_pos(self.pos)
-        if not self._within_boundary():
-            self.pos.y -= self.vel.y * self.game.dt
-            self.hitbox.set_pos(self.pos)
+        if self.scene.cutscene is None:
+            self._move()
 
         self.drawbox.set_pos(self.pos)
-        self.hitbox.set_pos(self.pos)
-
-        if self.vel != Vec(0, 0):
-            self.ordinal_direction = self.vel.normalize()
 
         for furniture in self.scene.furnitures:
             if furniture.hitbox is None: continue
@@ -75,7 +57,7 @@ class Player(Sprite["Room"]):
         self._update_animation()
 
         self._select()
-        if self.game.keydown == K_e:
+        if self.game.keydown == K_e and self.scene.cutscene is not None:
             # If selecting something, interact with it
             if self.selected is not None:
                 self.selected.interact()
@@ -104,21 +86,21 @@ class Player(Sprite["Room"]):
         if self.cardinal_direction.y != 0:
             shadow = pygame.Surface((12, 8), flags=pygame.SRCALPHA)
             pygame.draw.rect(shadow, (0, 0, 0, 40), (0, 0, 12, 8), border_radius=3)
-            anchored_blit(screen, shadow, self.pos, Anchor.CENTER.offset((0, -2)))
+            anchored_blit(screen, shadow, self.screen_pos, Anchor.CENTER.offset((0, -2)))
         else:
             shadow = pygame.Surface((10, 10), flags=pygame.SRCALPHA)
             pygame.draw.rect(shadow, (0, 0, 0, 40), (0, 0, 10, 10), border_radius=3)
-            anchored_blit(screen, shadow, self.pos, Anchor.CENTER.offset((0, -1)))
+            anchored_blit(screen, shadow, self.screen_pos, Anchor.CENTER.offset((0, -1)))
 
-        screen.blit(self.image, self.drawbox.get_rect())
+        screen.blit(self.image, self.drawbox.topleft - self.scene.camera.pos)
 
         # If facing down, draw the item in front of the player
         if self.ordinal_direction.y > 0:
             self._draw_held_item(screen)
 
     def draw_hitbox(self, screen: pygame.Surface) -> None:
-        screen.set_at(self.pos, (255, 0, 0))
-        pygame.draw.rect(screen, (0, 255, 0), self.hitbox.get_rect(), 1)
+        screen.set_at(self.screen_pos, (255, 0, 0))
+        pygame.draw.rect(screen, (0, 255, 0), self.hitbox.get_rect(-self.scene.camera.pos), 1)
 
     def _draw_held_item(self, screen: pygame.Surface) -> None:
         if self.held_item is None: return
@@ -126,7 +108,30 @@ class Player(Sprite["Room"]):
         image = self.held_item.held_images[self.direction_text]
         offset = self.held_item_offsets[self.direction_text]
         anchor = self.held_item.held_anchors[self.direction_text]
-        anchored_blit(screen, image, self.drawbox.topleft + offset, anchor)
+        anchored_blit(screen, image, self.drawbox.topleft + offset - self.scene.camera.pos, anchor)
+
+    def _move(self) -> None:
+        self.vel = Vec(
+            self.game.keys[K_d] - self.game.keys[K_a],
+            self.game.keys[K_s] - self.game.keys[K_w],
+        ).normalize() * SPEED
+
+        # Boundary collisions
+        self.pos.x += self.vel.x * self.game.dt
+        self.hitbox.set_pos(self.pos)
+        if not self._within_boundary():
+            self.pos.x -= self.vel.x * self.game.dt
+            self.hitbox.set_pos(self.pos)
+        self.pos.y += self.vel.y * self.game.dt
+        self.hitbox.set_pos(self.pos)
+        if not self._within_boundary():
+            self.pos.y -= self.vel.y * self.game.dt
+            self.hitbox.set_pos(self.pos)
+
+        if self.vel != Vec(0, 0):
+            self.ordinal_direction = self.vel.normalize()
+
+        self.hitbox.set_pos(self.pos)
 
     def _within_boundary(self) -> bool:
         corners = (
@@ -204,12 +209,19 @@ class Player(Sprite["Room"]):
             self.held_item = None
 
     def _define_animations(self) -> None:
-        stand_up = Animation(Spritesheet.get("player_walk_back")[:1], -1)
-        stand_down = Animation(Spritesheet.get("player_walk_front")[:1], -1)
-        stand_left = Animation(Spritesheet.get("player_walk_side")[:1], -1)
-        stand_right = Animation(
+        still_up = Animation(Spritesheet.get("player_idle_back")[:1], -1)
+        still_down = Animation(Spritesheet.get("player_idle_front")[:1], -1)
+        still_left = Animation(Spritesheet.get("player_idle_side")[:1], -1)
+        still_right = Animation(
             [pygame.transform.flip(
-                Spritesheet.get("player_walk_side")[0], True, False)], -1)
+                Spritesheet.get("player_idle_side")[0], True, False)], -1)
+
+        idle_up = Animation(Spritesheet.get("player_idle_back"), 0.5)
+        idle_down = Animation(Spritesheet.get("player_idle_front"), 0.5)
+        idle_left = Animation(Spritesheet.get("player_idle_side"), 0.5)
+        idle_right = Animation(
+            [pygame.transform.flip(frame, True, False)
+                for frame in Spritesheet.get("player_idle_side")], 0.5)
 
         walk_up = Animation(Spritesheet.get("player_walk_back"), 0.15)
         walk_down = Animation(Spritesheet.get("player_walk_front"), 0.15)
@@ -218,10 +230,10 @@ class Player(Sprite["Room"]):
             [pygame.transform.flip(frame, True, False)
                 for frame in Spritesheet.get("player_walk_side")], 0.15)
 
-        stand_hold_up = Animation(Spritesheet.get("player_walk_hold_back")[:1], -1)
-        stand_hold_down = Animation(Spritesheet.get("player_walk_hold_front")[:1], -1)
-        stand_hold_left = Animation(Spritesheet.get("player_walk_hold_side")[:1], -1)
-        stand_hold_right = Animation(
+        idle_hold_up = Animation(Spritesheet.get("player_walk_hold_back")[:1], -1)
+        idle_hold_down = Animation(Spritesheet.get("player_walk_hold_front")[:1], -1)
+        idle_hold_left = Animation(Spritesheet.get("player_walk_hold_side")[:1], -1)
+        idle_hold_right = Animation(
             [pygame.transform.flip(
                 Spritesheet.get("player_walk_hold_side")[0], True, False)], -1)
 
@@ -233,23 +245,27 @@ class Player(Sprite["Room"]):
                 for frame in Spritesheet.get("player_walk_hold_side")], 0.15)
 
         self.animation = AnimationManager({
-            "stand_up": stand_up,
-            "stand_down": stand_down,
-            "stand_left": stand_left,
-            "stand_right": stand_right,
+            "still_up": still_up,
+            "still_down": still_down,
+            "still_left": still_left,
+            "still_right": still_right,
+            "idle_up": idle_up,
+            "idle_down": idle_down,
+            "idle_left": idle_left,
+            "idle_right": idle_right,
             "walk_up": walk_up,
             "walk_down": walk_down,
             "walk_left": walk_left,
             "walk_right": walk_right,
-            "stand_hold_up": stand_hold_up,
-            "stand_hold_down": stand_hold_down,
-            "stand_hold_left": stand_hold_left,
-            "stand_hold_right": stand_hold_right,
+            "idle_hold_up": idle_hold_up,
+            "idle_hold_down": idle_hold_down,
+            "idle_hold_left": idle_hold_left,
+            "idle_hold_right": idle_hold_right,
             "walk_hold_up": walk_hold_up,
             "walk_hold_down": walk_hold_down,
             "walk_hold_left": walk_hold_left,
             "walk_hold_right": walk_hold_right,
-        }, "stand_down")
+        }, "idle_down")
 
         self.anim_vec_mapping = {
             Vec(0, -1): "up",
@@ -294,7 +310,7 @@ class Player(Sprite["Room"]):
 
         holding_text = "_hold" if self.held_item is not None else ""
         if self.vel == Vec(0, 0):
-            self.animation.loop(f"stand{holding_text}_{self.direction_text}")
+            self.animation.loop(f"idle{holding_text}_{self.direction_text}")
         else:
             self.animation.loop(f"walk{holding_text}_{self.direction_text}")
 

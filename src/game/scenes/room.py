@@ -1,10 +1,10 @@
 from src.core import *
 
-from src.game.sprites.player import Player
 from src.game.sprites.item import Item
 from src.game.sprites.dust import Dust
 from src.game.sprites.furniture import Furniture, InteractableFurniture
 from src.game.sprites.interaction_target import InteractionTarget
+from src.game.cutscenes.cutscene import Cutscene
 
 class Room(Scene):
     def __init__(self, game: Game, game_data: GameData | None, name: str) -> None:
@@ -14,6 +14,8 @@ class Room(Scene):
             self.game_data = game_data
             self.player = game_data.player
             self.add(self.player)
+            self.camera = game_data.camera
+            self.add(self.camera)
 
         self.data = RoomData.get(name)
         self.furnitures: set[Furniture] = set()
@@ -23,6 +25,8 @@ class Room(Scene):
         self.dusts: set[Dust] = set()
         self.boundary: list[VecLike] = []
         self.interactable_furniture: dict[str, type[Furniture]] = {}
+
+        self.cutscene: Cutscene | None = None
 
     def load_furniture(self) -> None:
         for name, positions in self.data["positions"].items():
@@ -43,6 +47,15 @@ class Room(Scene):
 
         self.sprite_manager.d_groups[DGroup.ROOM].sort(self.objects_sort_key)
 
+        if self.cutscene is not None:
+            self.cutscene.update()
+
+        watch("cutscene", self.cutscene)
+
+    def start_cutscene(self, cutscene: Cutscene) -> None:
+        self.cutscene = cutscene
+        cutscene.start()
+
     def objects_sort_key(self, item: tuple[int, Sprite]) -> float:
         sprite = item[1]
         if isinstance(sprite, Furniture):
@@ -56,7 +69,7 @@ class Room(Scene):
     def draw(self, screen: pygame.Surface) -> None:
         screen.fill(COLOR1)
 
-        screen.blit(self.data["background"])
+        screen.blit(self.data["background"], -self.camera.pos)
 
         self.sprite_manager.draw(screen)
 

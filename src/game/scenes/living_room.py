@@ -4,7 +4,10 @@ from .room import Room
 from src.game.sprites.furniture import StackOfPlates, BedroomDoor
 from src.game.sprites.dust import Dust
 from src.game.sprites.player import Player
+from src.game.sprites.vacuum import Vacuum
 from .game_data import GameData
+from src.game.sprites.camera import Camera
+from src.game.cutscenes.hamster_cutscene import HamsterCutscene
 
 class LivingRoom(Room):
     def __init__(self, game: Game) -> None:
@@ -19,10 +22,24 @@ class LivingRoom(Room):
 
         self._spawn_dust()
 
+        vacuum = Vacuum(self, (21, 30))
+        self.add_item(vacuum)
+
         self.player = Player(self, (105, 42))
         self.add(self.player)
+        self.camera = Camera(self)
+        self.add(self.camera)
+        self.camera.center_on(self.player.pos)
 
         self.game_data = GameData(game, self)
+
+        self.hamster_cutscene = HamsterCutscene(self)
+
+    def update(self) -> None:
+        super().update()
+
+        if self.game.keyup == pygame.K_SPACE:
+            self.start_cutscene(self.hamster_cutscene)
 
     def _spawn_dust(self) -> None:
         min_x = int(min(x for x, _ in self.boundary))

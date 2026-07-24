@@ -39,6 +39,10 @@ class Game:
         self.f3_combo_pressed = False
         self.show_hitboxes = False
 
+        self.mouse_pressed = pygame.mouse.get_pressed()
+        self.mouse_just_pressed = (False,) * len(self.mouse_pressed)
+        self.mouse_just_released = (False,) * len(self.mouse_pressed)
+
         define_resources()
         Resource.preload()
 
@@ -120,9 +124,12 @@ class Game:
 
         self.keys = pygame.key.get_pressed()
         self.mouse_pos = Vec(pygame.mouse.get_pos())
+        prev_mouse_pressed = self.mouse_pressed
         self.mouse_pressed = pygame.mouse.get_pressed()
-        self.mouse_just_pressed = pygame.mouse.get_just_pressed()
-        self.mouse_just_released = pygame.mouse.get_just_released()
+        self.mouse_just_pressed = tuple(curr and not prev
+            for curr, prev in zip(self.mouse_pressed, prev_mouse_pressed))
+        self.mouse_just_released = tuple(prev and not curr
+            for curr, prev in zip(self.mouse_pressed, prev_mouse_pressed))
 
         if pygame.QUIT in self.events:
             raise AbortGame

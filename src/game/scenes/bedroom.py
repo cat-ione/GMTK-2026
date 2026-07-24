@@ -1,8 +1,6 @@
 from src.core import *
 
 from .room import Room
-from src.game.sprites.item import Vacuum
-from src.game.sprites.dust import Dust
 from src.game.sprites.furniture import LivingRoomDoor, BathroomDoor
 
 class Bedroom(Room):
