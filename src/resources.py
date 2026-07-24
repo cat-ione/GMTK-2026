@@ -12,6 +12,11 @@ def define_resources() -> None:
     Image("vacuum_world", "items/vacuum_world.png")
     Image("vacuum_front", "items/vacuum_front.png")
     Image("vacuum_side", "items/vacuum_side.png")
-    # Image("plate", "items/plate.png")
+    Image("plate", "items/plate.png")
+    Image("stack_of_plates_5", "rooms/living_room/stack_of_plates_5.png")
+    Image("stack_of_plates_4", "rooms/living_room/stack_of_plates_4.png")
+    Image("stack_of_plates_3", "rooms/living_room/stack_of_plates_3.png")
+    Image("stack_of_plates_2", "rooms/living_room/stack_of_plates_2.png")
+    Image("stack_of_plates_1", "rooms/living_room/stack_of_plates_1.png")
 
     RoomData("living_room", "living_room.json")

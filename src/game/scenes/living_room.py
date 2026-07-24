@@ -2,6 +2,7 @@ from src.core import *
 
 from .room import Room
 from src.game.sprites.item import Vacuum
+from src.game.sprites.furniture import StackOfPlates
 from src.game.sprites.dust import Dust
 
 class LivingRoom(Room):
@@ -9,6 +10,10 @@ class LivingRoom(Room):
         super().__init__(game, "living_room")
 
         self.set_boundary([(0, 29), (139, 29), (139, 139), (65, 139), (65, 86), (0, 86)])
+        self.set_interactable_furniture({
+            "stack_of_plates_6": StackOfPlates,
+        })
+        self.load_furniture()
 
         # test_item = TestItem(self, (50, 50))
         # self.add_item(test_item)
@@ -17,6 +22,9 @@ class LivingRoom(Room):
         vacuum = Vacuum(self, (60, 75))
         self.add_item(vacuum)
 
+        self._spawn_dust()
+
+    def _spawn_dust(self) -> None:
         min_x = int(min(x for x, _ in self.boundary))
         max_x = int(max(x for x, _ in self.boundary))
         min_y = int(min(y for _, y in self.boundary))

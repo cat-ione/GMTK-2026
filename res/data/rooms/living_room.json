@@ -3,6 +3,7 @@
     "couch": [[15, 26]],
     "bonsai_1": [[1, 19]],
     "bonsai_2": [[47, 17]],
+
     "kitchen_island": [[66, 49]],
     "kitchen_island_chair": [[70, 58], [88, 58], [106, 58]],
     "kitchen_counter_1": [[84, 18]],
@@ -15,6 +16,8 @@
     "rice_cooker": [[102, 19]],
     "trash_can": [[134, 63]],
     "fridge": [[66, 0]],
+    "stack_of_plates_6": [[132, 24]],
+
     "dining_table": [[88, 91]],
     "dining_chair_right": [[80, 92], [80, 104], [80, 116]],
     "dining_chair_left": [[116, 92], [116, 104], [116, 116]]

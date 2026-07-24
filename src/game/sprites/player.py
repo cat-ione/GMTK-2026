@@ -4,9 +4,10 @@ from pygame.constants import K_a, K_d, K_w, K_s, K_e
 
 if TYPE_CHECKING:
     from .item import Item
+    from .interaction_target import InteractionTarget
 
 SPEED = 50 # px/s
-ITEM_RANGE = 15
+ITEM_RANGE = 25
 
 class Player(Sprite["Room"]):
     update_group = UGroup.MAIN
@@ -31,7 +32,7 @@ class Player(Sprite["Room"]):
             Anchor.BOTTOM.offset((0, -3)))
         self.hitbox = RectHitbox(self.pos, (6, 4), Anchor.CENTER.offset((0, -1)))
 
-        self.selected_item: Item | None = None
+        self.selected: InteractionTarget | None = None
         self.held_item: Item | None = None
         # How much to offset the held item relative to the topleft
         self.held_item_offsets = {
@@ -73,22 +74,14 @@ class Player(Sprite["Room"]):
 
         self._update_animation()
 
-        self._select_item()
+        self._select()
         if self.game.keydown == K_e:
-            # If selecting an item
-            if self.selected_item is not None:
-                # If selecting an item and also holding one, swap places
-                if self.held_item is not None:
-                    self.held_item.pos = self.selected_item.pos.copy()
-                    self.scene.add_item(self.held_item)
-                self.held_item = self.selected_item
-                self.scene.remove_item(self.selected_item)
-                self.selected_item = None
-            # If holding an item, drop it in front
+            # If selecting something, interact with it
+            if self.selected is not None:
+                self.selected.interact()
+            # If holding an item, drop it
             elif self.held_item is not None:
-                self.held_item.pos = self.pos + self.ordinal_direction * 8
-                self.scene.add_item(self.held_item)
-                self.held_item = None
+                self.drop_item()
 
         if self.held_item is not None:
             self.held_item.update_when_held()
@@ -165,19 +158,49 @@ class Player(Sprite["Room"]):
         self.hitbox.set_pos(self.pos)
         self.drawbox.set_pos(self.pos)
 
-    def _select_item(self) -> None:
+    def _select(self) -> None:
         pos = self.drawbox.center
         max_dot = -1
-        closest_item = None
-        for item in self.scene.items:
-            if item.pos.distance_to(pos) > ITEM_RANGE + item.image.width: continue
-            item_facing = (item.pos - pos).normalize()
-            dot = self.ordinal_direction.dot(item_facing)
-            if dot < 0.7: continue # not directly in front of player
+        closest = None
+        for target in self.scene.interaction_targets:
+            if target.pos.distance_to(pos) > ITEM_RANGE: continue
+            # vector to the target
+            facing = (target.pos - pos).normalize()
+            # find the vector that's the most "straight ahead"
+            dot = self.ordinal_direction.dot(facing)
+            if dot < 0.8: continue # not directly in front of player
             if dot > max_dot:
                 max_dot = dot
-                closest_item = item
-        self.selected_item = closest_item
+                closest = target
+        self.change_selection(closest)
+
+    def change_selection(self, new: InteractionTarget | None) -> None:
+        if self.selected is not None:
+            self.selected.deselect()
+        self.selected = new
+        if self.selected is not None:
+            self.selected.select()
+
+    def gain_item(self, new: Item) -> None:
+        """Giving an item to the player out of thin air."""
+        self.drop_item()
+        self.held_item = new
+
+    def pickup_item(self, new: Item) -> None:
+        """Pick up an item from the ground"""
+        if self.held_item is not None:
+            self.held_item.set_pos(new.pos)
+            self.scene.add_item(self.held_item)
+        self.held_item = new
+        self.scene.remove_item(new)
+        self.change_selection(None)
+
+    def drop_item(self) -> None:
+        """Drop the currently held item."""
+        if self.held_item is not None:
+            self.held_item.set_pos(self.pos + self.ordinal_direction * 8)
+            self.scene.add_item(self.held_item)
+            self.held_item = None
 
     def _define_animations(self) -> None:
         stand_up = Animation(Spritesheet.get("player_walk_back")[:1], -1)

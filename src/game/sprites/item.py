@@ -1,11 +1,13 @@
 from src.core import *
 
-class Item(Sprite["LivingRoom"]):
+from .interaction_target import InteractionTarget
+
+class Item(Sprite["Room"]):
     update_group = UGroup.MAIN
     draw_group = DGroup.ROOM
 
     def __init__(self,
-        scene: LivingRoom,
+        scene: Room,
         pos: VecLike,
         world_image: pygame.Surface,
         held_image_front: pygame.Surface | None = None,
@@ -30,17 +32,33 @@ class Item(Sprite["LivingRoom"]):
 
         self.outline = self._get_outline()
 
+        self.interaction_target = InteractionTarget(scene, self.pos, self)
+        self.selected = False
+
     def update(self) -> None:
         pass
 
+    def select(self) -> None:
+        self.selected = True
+
+    def deselect(self) -> None:
+        self.selected = False
+
+    def interact(self) -> None:
+        self.scene.player.pickup_item(self)
+
     def update_when_held(self) -> None:
         pass
+
+    def set_pos(self, new: VecLike) -> None:
+        self.pos = Vec(new)
+        self.interaction_target.pos = Vec(new)
 
     def draw(self, screen: pygame.Surface) -> None:
         draw_pos = self.pos - Vec(self.image.size) / 2
 
         # Draw outline behind the actual sprite
-        if self.scene.player.selected_item is self:
+        if self.selected:
             screen.blit(self.outline, draw_pos - (1, 1))
 
         screen.blit(self.image, draw_pos)
@@ -120,11 +138,11 @@ class Item(Sprite["LivingRoom"]):
         }
 
 class TestItem(Item):
-    def __init__(self, scene: LivingRoom, pos: VecLike) -> None:
+    def __init__(self, scene: Room, pos: VecLike) -> None:
         super().__init__(scene, pos, Image.get("test_item"))
 
 class Vacuum(Item):
-    def __init__(self, scene: LivingRoom, pos: VecLike) -> None:
+    def __init__(self, scene: Room, pos: VecLike) -> None:
         super().__init__(
             scene, pos,
             Image.get("vacuum_world"),
@@ -147,3 +165,10 @@ class Vacuum(Item):
             pos = player.pos + self.offsets[player.direction_text]
             if pos.distance_to(dust.pos) < 4:
                 self.scene.remove_dust(dust)
+
+class Plate(Item):
+    def __init__(self, scene: Room, pos: VecLike) -> None:
+        super().__init__(
+            scene, pos,
+            Image.get("plate"),
+        )

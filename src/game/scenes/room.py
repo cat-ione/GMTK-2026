@@ -3,7 +3,8 @@ from src.core import *
 from src.game.sprites.player import Player
 from src.game.sprites.item import Item
 from src.game.sprites.dust import Dust
-from src.game.sprites.furniture import Furniture
+from src.game.sprites.furniture import Furniture, InteractableFurniture
+from src.game.sprites.interaction_target import InteractionTarget
 
 class Room(Scene):
     def __init__(self, game: Game, name: str) -> None:
@@ -11,20 +12,29 @@ class Room(Scene):
 
         self.data = RoomData.get(name)
         self.furnitures: set[Furniture] = set()
+
+        self.interaction_targets: set[InteractionTarget] = set()
+        self.items: set[Item] = set()
+        self.dusts: set[Dust] = set()
+        self.boundary: list[VecLike] = []
+        self.interactable_furniture: dict[str, type[Furniture]] = {}
+
+        self.player = Player(self)
+        self.add(self.player)
+
+    def load_furniture(self) -> None:
         for name, positions in self.data["positions"].items():
             for pos in positions:
                 image = self.data["images"][name]
                 hitbox = None
                 if name in self.data["hitboxes"]:
                     hitbox = self.data["hitboxes"][name]
-                furniture = Furniture(self, pos, image, hitbox)
+                if name in self.interactable_furniture:
+                    _type = self.interactable_furniture[name]
+                    furniture = _type(self, pos, image, hitbox)
+                else:
+                    furniture = Furniture(self, pos, image, hitbox)
                 self.add_furniture(furniture)
-
-        self.items: set[Item] = set()
-        self.dusts: set[Dust] = set()
-
-        self.player = Player(self)
-        self.add(self.player)
 
     def update(self) -> None:
         self.sprite_manager.update()
@@ -48,6 +58,9 @@ class Room(Scene):
 
         self.sprite_manager.draw(screen)
 
+    def set_interactable_furniture(self, d: dict[str, type[Furniture]]) -> None:
+        self.interactable_furniture = d
+
     def set_boundary(self, boundary: list[VecLike]) -> None:
         self.boundary = boundary
 
@@ -61,10 +74,12 @@ class Room(Scene):
     def add_item(self, item: Item) -> None:
         self.items.add(item)
         self.add(item)
+        self.interaction_targets.add(item.interaction_target)
 
     def remove_item(self, item: Item) -> None:
         self.items.remove(item)
         self.remove(item)
+        self.interaction_targets.remove(item.interaction_target)
 
     def add_dust(self, dust: Dust) -> None:
         self.dusts.add(dust)
@@ -77,7 +92,11 @@ class Room(Scene):
     def add_furniture(self, furniture: Furniture) -> None:
         self.furnitures.add(furniture)
         self.add(furniture)
+        if isinstance(furniture, InteractableFurniture):
+            self.interaction_targets.add(furniture.interaction_target)
 
     def remove_furniture(self, furniture: Furniture) -> None:
         self.furnitures.remove(furniture)
         self.remove(furniture)
+        if isinstance(furniture, InteractableFurniture):
+            self.interaction_targets.remove(furniture.interaction_target)
