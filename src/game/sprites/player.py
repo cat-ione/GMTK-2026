@@ -8,6 +8,9 @@ if TYPE_CHECKING:
 
 SPEED = 50 # px/s
 ITEM_RANGE = 25
+# angle tolerance for selecting an item, at close range vs at ITEM_RANGE
+ITEM_SELECT_DOT_NEAR = 0.3
+ITEM_SELECT_DOT_FAR = 0.8
 
 class Player(Sprite["Room"]):
     update_group = UGroup.MAIN
@@ -58,7 +61,8 @@ class Player(Sprite["Room"]):
             self._update_animation()
         self.animation.update()
 
-        self._select()
+        if self.scene.cutscene is None:
+            self._select()
         if self.game.keydown == K_e and self.scene.cutscene is None:
             # If selecting something, interact with it
             if self.selected is not None:
@@ -171,12 +175,16 @@ class Player(Sprite["Room"]):
         max_dot = -1
         closest = None
         for target in self.scene.interaction_targets:
-            if target.pos.distance_to(pos) > ITEM_RANGE: continue
+            distance = target.pos.distance_to(pos)
+            if distance > ITEM_RANGE: continue
             # vector to the target
             facing = (target.pos - pos).normalize()
             # find the vector that's the most "straight ahead"
             dot = self.cardinal_direction.dot(facing)
-            if dot < 0.8: continue # not directly in front of player
+            # closer items get a more lenient angle tolerance
+            t = distance / ITEM_RANGE
+            min_dot = ITEM_SELECT_DOT_NEAR + (ITEM_SELECT_DOT_FAR - ITEM_SELECT_DOT_NEAR) * t
+            if dot < min_dot: continue # not enough in front of player
             if dot > max_dot:
                 max_dot = dot
                 closest = target
