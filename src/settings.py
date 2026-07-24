@@ -37,6 +37,7 @@ OVERLAY_ALPHA = 128
 
 class DGroup(Enum):
     BACKGROUND = auto()
+    DUST = auto()
     ROOM = auto()
     OVERLAY = auto()
     HUD = auto()
