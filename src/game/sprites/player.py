@@ -54,10 +54,12 @@ class Player(Sprite["Room"]):
             if self.hitbox.collides(furniture.hitbox):
                 self._resolve_collision(furniture.hitbox)
 
-        self._update_animation()
+        if self.scene.cutscene is None:
+            self._update_animation()
+        self.animation.update()
 
         self._select()
-        if self.game.keydown == K_e and self.scene.cutscene is not None:
+        if self.game.keydown == K_e and self.scene.cutscene is None:
             # If selecting something, interact with it
             if self.selected is not None:
                 self.selected.interact()
@@ -206,6 +208,7 @@ class Player(Sprite["Room"]):
         if self.held_item is not None:
             self.held_item.set_pos(self.pos + self.ordinal_direction * 8)
             self.scene.add_item(self.held_item)
+            self.held_item.drop()
             self.held_item = None
 
     def _define_animations(self) -> None:
@@ -313,5 +316,3 @@ class Player(Sprite["Room"]):
             self.animation.loop(f"idle{holding_text}_{self.direction_text}")
         else:
             self.animation.loop(f"walk{holding_text}_{self.direction_text}")
-
-        self.animation.update()

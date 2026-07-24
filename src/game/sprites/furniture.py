@@ -55,28 +55,13 @@ class InteractableFurniture(Furniture):
         pos = self.get_pos()
         self.interaction_target = InteractionTarget(scene, pos, self)
         self.selected = False
-        self.outline = self._get_outline()
+        self.outline = outline(self.image, (255, 255, 255))
 
     def select(self) -> None:
         self.selected = True
 
     def deselect(self) -> None:
         self.selected = False
-
-    def _get_outline(self) -> pygame.Surface:
-        mask = pygame.mask.from_surface(self.image)
-        mask_surf = mask.to_surface(
-            setcolor=(255, 255, 255),
-            unsetcolor=(0, 0, 0)
-        )
-        mask_surf.set_colorkey((0, 0, 0))
-        surface = pygame.Surface(Vec(mask_surf.size) + (2, 2))
-        surface.blit(mask_surf, (0, 1))
-        surface.blit(mask_surf, (1, 0))
-        surface.blit(mask_surf, (1, 2))
-        surface.blit(mask_surf, (2, 1))
-        surface.set_colorkey((0, 0, 0))
-        return surface
 
     def draw(self, screen: pygame.Surface) -> None:
         if self.selected:
@@ -101,7 +86,7 @@ class StackOfPlates(InteractableFurniture):
             self.scene.remove_furniture(self)
         else:
             self.image = Image.get(f"stack_of_plates_{self.remaining_plates}")
-            self.outline = self._get_outline()
+            self.outline = outline(self.image, (255, 255, 255))
 
 class BedroomDoor(InteractableFurniture):
     def interact(self) -> None:

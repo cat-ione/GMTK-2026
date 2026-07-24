@@ -30,7 +30,7 @@ class Item(Sprite["Room"]):
         )
         self.image = world_image
 
-        self.outline = self._get_outline()
+        self.outline = outline(self.image, (255, 255, 255))
 
         self.interaction_target = InteractionTarget(scene, self.pos, self)
         self.selected = False
@@ -48,6 +48,11 @@ class Item(Sprite["Room"]):
         self.scene.player.pickup_item(self)
 
     def update_when_held(self) -> None:
+        # Hook
+        pass
+
+    def drop(self) -> None:
+        # Hook
         pass
 
     def set_pos(self, new: VecLike) -> None:
@@ -65,21 +70,6 @@ class Item(Sprite["Room"]):
 
     def draw_hitbox(self, screen: pygame.Surface) -> None:
         screen.set_at(self.pos, (255, 0, 0))
-
-    def _get_outline(self) -> pygame.Surface:
-        mask = pygame.mask.from_surface(self.image)
-        mask_surf = mask.to_surface(
-            setcolor=(255, 255, 255),
-            unsetcolor=(0, 0, 0)
-        )
-        mask_surf.set_colorkey((0, 0, 0))
-        surface = pygame.Surface(Vec(mask_surf.size) + (2, 2))
-        surface.blit(mask_surf, (0, 1))
-        surface.blit(mask_surf, (1, 0))
-        surface.blit(mask_surf, (1, 2))
-        surface.blit(mask_surf, (2, 1))
-        surface.set_colorkey((0, 0, 0))
-        return surface
 
     def _process_images_and_anchors(self,
         world_image: pygame.Surface,

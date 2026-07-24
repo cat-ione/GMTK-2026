@@ -19,8 +19,9 @@ class HamsterCutscene(Cutscene["LivingRoom"]):
         self.scene.add(self.surprise)
 
         self.hamster = Hamster(self.scene, (36, 80))
+        # self.hamster = Hamster(self.scene, (202, 133))
         self.scene.add(self.hamster)
-        self.hamster.go_to(self.scene.find_furniture("couch"), 100)
+        self.hamster.go_to(self.scene.find_furniture("couch"), 90)
 
     def update(self) -> None:
         player = self.scene.player
