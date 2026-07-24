@@ -58,7 +58,7 @@ class Hamster(Sprite["Room"]):
         elif self.vel.x > 0:
             self.image = pygame.transform.flip(Image.get("hamster_side"), True, False)
         elif self.vel == Vec(0, 0):
-            self.image = Image.get("hamster_front")
+            self.image = Image.get("hamster_standing")
 
         if self.scare_timer.done:
             if self.scene.player.pos.distance_to(self.pos) < 20:

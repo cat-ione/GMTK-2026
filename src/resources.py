@@ -23,7 +23,7 @@ def define_resources() -> None:
     Image("stack_of_plates_1", "rooms/living_room/stack_of_plates_1.png")
 
     Image("hamster_side", "items/hamster_side.png")
-    Image("hamster_front", "items/hamster_front.png")
+    Image("hamster_standing", "items/hamster_standing.png")
 
     Spritesheet("surprise", "surprise.png", 8)
 
