@@ -33,12 +33,15 @@ class LivingRoom(Room):
 
         self.game_data = GameData(game, self)
 
+        self.hamster_cs_timer = Timer(8)
         self.hamster_cutscene = HamsterCutscene(self)
 
     def update(self) -> None:
         super().update()
 
-        if self.game.keyup == pygame.K_SPACE:
+        if self.hamster_cs_timer.done:
+            self.hamster_cs_timer.reset()
+            self.hamster_cs_timer.pause()
             self.start_cutscene(self.hamster_cutscene)
 
     def _spawn_dust(self) -> None:

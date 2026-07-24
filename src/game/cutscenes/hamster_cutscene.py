@@ -7,7 +7,7 @@ class HamsterCutscene(Cutscene["LivingRoom"]):
         super().__init__(scene)
 
         self.phase = 0
-        self.timer = Timer(4, True)
+        self.timer = Timer(3.5, True)
 
     def start(self) -> None:
         self.timer.resume()
@@ -19,9 +19,10 @@ class HamsterCutscene(Cutscene["LivingRoom"]):
         self.scene.add(self.surprise)
 
         self.hamster = Hamster(self.scene, (36, 80))
-        # self.hamster = Hamster(self.scene, (202, 133))
         self.scene.add(self.hamster)
         self.hamster.go_to(self.scene.find_furniture("couch"), 90)
+
+        self.scene.camera.lerp_to_centered((110, 80))
 
     def update(self) -> None:
         player = self.scene.player
@@ -36,11 +37,7 @@ class HamsterCutscene(Cutscene["LivingRoom"]):
                 self.phase = 1
                 self.timer.reset(5)
         elif self.phase == 1:
-            # 1. Hamster run out from bedroom door to a hiding spot
-            # 1.1. Simultaneously turn the player towards hamster
-            # 2. Speech bubble appear: "My hamsters!"
-            # 3. New item on todo: "Find all hamsters"
-            # 4. Cutscene end
+            self.scene.camera.lerp_to_centered_once(player.pos)
             self.scene.cutscene = None
 
 class Surprise(Sprite["Room"]):
