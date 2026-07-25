@@ -92,7 +92,7 @@ class Room(Scene):
     def draw(self, screen: pygame.Surface) -> None:
         screen.fill(COLOR1)
 
-        screen.blit(self.data["background"], -self.camera.pos)
+        screen.blit(self.data["background"], -self.camera.pos // 1)
 
         self.sprite_manager.draw(screen)
 
