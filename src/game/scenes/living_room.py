@@ -44,7 +44,7 @@ class LivingRoom(Room):
 
         self.game_data = GameData(game, self)
 
-        self.hamster_cs_timer = Timer(2)
+        self.hamster_cs_timer = Timer(8)
         self.hamster_cutscene = HamsterCutscene(self)
 
     def update(self) -> None:
