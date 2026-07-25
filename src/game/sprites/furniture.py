@@ -224,6 +224,8 @@ class Tablecloth(InteractableFurniture):
         elif self.scene.player.held_item is not None:
             self.item = self.scene.player.held_item
             self.scene.player.drop_item(self.get_pos())
+            if isinstance(self.item, Plate):
+                self.item.on_table = True
 
     def has_plate(self) -> bool:
         return isinstance(self.item, Plate)

@@ -131,6 +131,15 @@ class Item(Sprite["Room"]):
 class Plate(Item):
     def __init__(self, scene: Room, pos: VecLike) -> None:
         super().__init__(scene, pos, Image.get("plate"))
+        self.on_table = False
+
+    def select(self) -> None:
+        if self.on_table: return
+        self.selected = True
+
+    def deselect(self) -> None:
+        if self.on_table: return
+        self.selected = False
 
 class Chicken(Item):
     def __init__(self, scene: Room, pos: VecLike) -> None:
