@@ -17,8 +17,9 @@ class SpeechBubble(Sprite):
 
     def generate_image(self) -> pygame.Surface:
         lines = self.font.render_wrapped(self.text, self.wrap)
+        width = max(line.width for line in lines)
         height = sum((line.height + 1 for line in lines)) - 1
-        image = pygame.Surface((self.wrap + 6, height + 6), flags=pygame.SRCALPHA)
+        image = pygame.Surface((width + 6, height + 6), flags=pygame.SRCALPHA)
         pygame.draw.rect(image, COLOR4, ((0, 0), image.size), border_radius=3)
         pygame.draw.rect(image, COLOR1, ((0, 0), image.size), 1, 3)
         for i, line in enumerate(lines):
