@@ -5,6 +5,7 @@ from src.game.sprites.dust import Dust
 from src.game.sprites.furniture import Furniture, InteractableFurniture
 from src.game.sprites.interaction_target import InteractionTarget
 from src.game.cutscenes.cutscene import Cutscene
+from .summary import Summary
 
 class Room(Scene):
     def __init__(self, game: Game, game_data: GameData | None, name: str) -> None:
@@ -61,7 +62,11 @@ class Room(Scene):
                 self.clipboard.slide_out()
                 self.clipboard_visible = False
 
-        if self.game_data.hamsters_captured == 12:
+        if self.game.keydown == pygame.K_RETURN:
+            summary = Summary(self.game, self.game_data)
+            self.game.set_scene(summary)
+
+        if self.game_data.scores["hamsters"] == self.game_data.max_scores["hamsters"]:
             self.clipboard.cross_out("hamsters")
 
         watch("cutscene", self.cutscene)

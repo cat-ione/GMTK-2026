@@ -11,4 +11,19 @@ class GameData:
         self.bedroom = Bedroom(game, self)
         self.bathroom = Bathroom(game, self)
 
-        self.hamsters_captured = 0
+        self.scores = {
+            "chicken": 0,
+            "plates": 0,
+            "rice": 0,
+            "vacuum": 0,
+            "bathtub": 0,
+            "hamsters": 0,
+        }
+        self.max_scores = {
+            "chicken": 40,
+            "plates": 30, # 5 points per plate
+            "rice": 40,
+            "vacuum": 40,
+            "bathtub": 40,
+            "hamsters": 48, # 4 points per hamster
+        }

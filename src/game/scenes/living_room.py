@@ -27,8 +27,9 @@ class LivingRoom(Room):
         })
         self.load_furniture()
 
-        self.microwave = self.find_furniture("microwave")
-        self.fridge = self.find_furniture("fridge")
+        self.microwave = cast(Microwave, self.find_furniture("microwave"))
+        self.fridge = cast(Fridge, self.find_furniture("fridge"))
+        self.chicken = cast(Chicken, self.fridge.chicken)
         self.tablecloths = cast(list[Tablecloth], self.find_all_furniture("tablecloth"))
 
         self._spawn_dust()

@@ -47,3 +47,8 @@ def define_resources() -> None:
     Image("button_small", "button_small.png")
     Image("titlescreen_bg", "titlescreen_bg.png")
     Spritesheet("call_animation_mom", "call_animation_mom.png", 8, scale=2)
+    Image("ending_background", "ending_background.png")
+    Image("ending_border", "ending_border.png")
+    Image("ending_characters_1", "ending_characters_1.png")
+    Image("ending_characters_2", "ending_characters_2.png")
+    Image("ending_characters_3", "ending_characters_3.png")

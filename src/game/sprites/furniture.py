@@ -222,4 +222,4 @@ class HamsterCage(InteractableFurniture):
     def interact(self) -> None:
         if isinstance(self.scene.player.held_item, HamsterItem):
             self.scene.player.delete_item()
-            self.scene.game_data.hamsters_captured += 1
+            self.scene.game_data.scores["hamsters"] += 4
