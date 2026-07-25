@@ -17,13 +17,13 @@ class Summary(Scene):
         hamsters_captured = game_data.scores["hamsters"] // 4
         total_hamsters = game_data.max_scores["hamsters"] // 4
         plates = game_data.scores["plates"] // 5
-        dust_percentage = int(len(game_data.living_room.dusts) / 200 * 100)
+        dust_percentage = int((1 - len(game_data.living_room.dusts) / 200) * 100)
         chicken_temp = game_data.living_room.chicken.temperature
         self.text = [
             "Chicken:",
             f"   {chicken_temp}C / 22C",
             f"Bathtub:",
-            f"   0 / 36C",
+            f"   0C / 36C",
             f"Plates: {plates} / 6",
             f"Rice: 0 / 0",
             f"Vacuum: {dust_percentage}%",
