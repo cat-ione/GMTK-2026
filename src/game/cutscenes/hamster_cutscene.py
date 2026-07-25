@@ -28,6 +28,8 @@ class HamsterCutscene(Cutscene["LivingRoom"]):
         self.scene.camera.lerp_to_centered((70, 40))
 
     def update(self) -> None:
+        self.skip_if_pressed()
+
         player = self.scene.player
 
         if self.phase == 0:

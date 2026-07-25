@@ -16,6 +16,8 @@ class OpeningCutscene(Cutscene["LivingRoom"]):
         self.timer.reset()
 
     def update(self) -> None:
+        self.skip_if_pressed()
+
         player = self.scene.player
 
         if self.phase == 0:
@@ -56,3 +58,6 @@ class OpeningCutscene(Cutscene["LivingRoom"]):
                 self.scene.player.disable_collision = False
                 self.scene.player.pos.y += 2
                 self.scene.cutscene = None
+
+    def cleanup(self) -> None:
+        self.scene.player.disable_collision = False
