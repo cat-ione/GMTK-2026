@@ -9,6 +9,7 @@ from .game_data import GameData
 from src.game.sprites.camera import Camera
 from src.game.cutscenes.hamster_cutscene import HamsterCutscene
 from src.game.sprites.clipboard import Clipboard
+from src.game.sprites.item import Chicken
 
 class LivingRoom(Room):
     def __init__(self, game: Game) -> None:
@@ -50,7 +51,10 @@ class LivingRoom(Room):
     def update(self) -> None:
         super().update()
 
-        if self.hamster_cs_timer.done and 70 < self.player.pos.x < 130 and 43 < self.player.pos.y < 75:
+        if self.hamster_cs_timer.done \
+            and 70 < self.player.pos.x < 130 \
+            and 43 < self.player.pos.y < 75 \
+            and not isinstance(self.player.held_item, Chicken):
             self.hamster_cs_timer.reset()
             self.hamster_cs_timer.pause()
             self.start_cutscene(self.hamster_cutscene)

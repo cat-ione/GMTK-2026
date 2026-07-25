@@ -1,6 +1,8 @@
 from src.core import *
 
 from pygame.constants import K_a, K_d, K_w, K_s, K_e
+from .item import Chicken
+from .furniture import Microwave, Fridge
 
 if TYPE_CHECKING:
     from .item import Item
@@ -75,12 +77,17 @@ class Player(Sprite["Room"]):
         if self.scene.cutscene is None:
             self._select()
         if self.game.keydown == K_e and self.scene.cutscene is None:
-            # If selecting something, interact with it
-            if self.selected is not None:
-                self.selected.interact()
-            # If holding an item, drop it
-            elif self.held_item is not None:
-                self.drop_item()
+            # Disallow all interactions when holding a chicken except microwave and fridge
+            holding_chicken = isinstance(self.held_item, Chicken)
+            is_microwave = self.selected is not None and isinstance(self.selected.owner, Microwave)
+            is_fridge = self.selected is not None and isinstance(self.selected.owner, Fridge)
+            if is_microwave or is_fridge or not holding_chicken:
+                # If selecting something, interact with it
+                if self.selected is not None:
+                    self.selected.interact()
+                # If holding an item, drop it
+                elif self.held_item is not None:
+                    self.drop_item()
 
         if self.held_item is not None:
             self.held_item.update_when_held()
