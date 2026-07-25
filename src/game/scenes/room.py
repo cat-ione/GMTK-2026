@@ -96,7 +96,7 @@ class Room(Scene):
 
         self.sprite_manager.draw(screen)
 
-        if not self.clipboard_visible:
+        if not self.clipboard_visible and self.cutscene is None:
             img = Image.get("clipboard_icon")
             screen.blit(img, (4, HEIGHT - img.height - 4))
 
