@@ -12,10 +12,10 @@ class OpeningCutscene(Cutscene["LivingRoom"]):
         self.timer = Timer(6, True)
 
         self.dialogue = [
-            ("mom", "This is some testing text that is rather long and will hopefully be wrapped multiple times?"),
-            ("daughter", "This is some testing text that is rather long and will hopefully be wrapped multiple times?"),
-            ("mom", "This is some testing text that is rather long and will hopefully be wrapped multiple times?"),
-            ("daughter", "This is some testing text that is rather long and will hopefully be wrapped multiple times?"),
+            ("mom", "Hi Honey! Im heading home now, have you finished all chores I told you to do? [space]"),
+            ("daughter", "Y-yep... I'm just finishing up the last bit of cleaning... [space]"),
+            ("mom", "Alright, just dont forget anything, see you soon! [space]"),
+            ("daughter", "I won't mom, I promise... [space]"),
         ]
         self.dialogue_index = -1
         self.current_dialogue = None
