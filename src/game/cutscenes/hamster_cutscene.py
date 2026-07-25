@@ -13,6 +13,8 @@ class HamsterCutscene(Cutscene["LivingRoom"]):
         self.awe_timer = Timer(2, True)
 
     def start(self) -> None:
+        self.scene.clipboard.slide_out()
+
         self.jump_timer.resume()
 
         player = self.scene.player
@@ -68,5 +70,8 @@ class HamsterCutscene(Cutscene["LivingRoom"]):
                     living_room.add(hamster)
                     hamster.go_to_random(90)
 
+                if self.scene.game_data.first_play:
+                    self.scene.game_data.bedroom.on_hamster_cutscene = True
+                self.scene.clipboard.unhide("hamsters")
                 door = cast(BedroomDoor, self.scene.find_furniture("door"))
                 door.interact()

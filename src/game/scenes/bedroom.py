@@ -15,9 +15,15 @@ class Bedroom(Room):
         })
         self.load_furniture()
 
+        self.on_hamster_cutscene = False
+
     def update(self) -> None:
         super().update()
 
         self.game_data.living_room.microwave.update()
         self.game_data.living_room.fridge.update()
         self.game_data.bathroom.bathtub.update()
+
+        if self.on_hamster_cutscene:
+            self.player.say("Oh my goodness! All my hamsters escaped. I have to round them up into their cage!")
+            self.on_hamster_cutscene = False

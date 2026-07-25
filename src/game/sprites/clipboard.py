@@ -21,6 +21,7 @@ class Clipboard(Sprite["Room"]):
             "hamsters": "Return hamsters",
         }
         self.done: set[str] = set()
+        self.hidden: set[str] = {"hamsters"}
         self._generate_image()
 
         self.animation_timer = Timer(0.3)
@@ -32,6 +33,7 @@ class Clipboard(Sprite["Room"]):
     def _generate_image(self) -> None:
         self.image = Image.get("clipboard").copy()
         for i, (name, text) in enumerate(self.items.items()):
+            if name in self.hidden: continue
             text_surf = self.font.render(text)
             self.image.blit(text_surf, (START_X, START_Y + i * 14))
             if name in self.done:
@@ -61,6 +63,10 @@ class Clipboard(Sprite["Room"]):
         self.scene.player.locked = False
         self.appearing = False
         self.animation_timer.reset()
+
+    def unhide(self, name: str) -> None:
+        self.hidden.remove(name)
+        self._generate_image()
 
     def update(self) -> None:
         if self.animation_timer.done:
