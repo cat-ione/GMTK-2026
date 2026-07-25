@@ -10,3 +10,5 @@ class GameData:
         self.living_room = living_room
         self.bedroom = Bedroom(game, self)
         self.bathroom = Bathroom(game, self)
+
+        self.hamsters_captured = 0

@@ -61,6 +61,9 @@ class Room(Scene):
                 self.clipboard.slide_out()
                 self.clipboard_visible = False
 
+        if self.game_data.hamsters_captured == 12:
+            self.clipboard.cross_out("hamsters")
+
         watch("cutscene", self.cutscene)
 
     def start_cutscene(self, cutscene: Cutscene) -> None:

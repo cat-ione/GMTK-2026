@@ -100,6 +100,7 @@ class Door(InteractableFurniture):
         self.scene.camera.scene = new_scene
         if self.scene.player.held_item is not None:
             self.scene.player.held_item.scene = new_scene
+        self.scene.clipboard.scene = new_scene
 
         rel_pos = self.scene.camera.pos - self.scene.player.pos
         self.scene.player.pos = Vec(self.target_pos)
@@ -217,3 +218,4 @@ class HamsterCage(InteractableFurniture):
     def interact(self) -> None:
         if isinstance(self.scene.player.held_item, HamsterItem):
             self.scene.player.delete_item()
+            self.scene.game_data.hamsters_captured += 1

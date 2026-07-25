@@ -23,7 +23,7 @@ class Clipboard(Sprite["Room"]):
         self.done: set[str] = set()
         self._generate_image()
 
-        self.animation_timer = Timer(0.5)
+        self.animation_timer = Timer(0.3)
         self.appearing = True
         self.in_pos = Vec(SIZE) / 2 - Vec(self.image.size) / 2
         self.out_pos = self.in_pos + (0, 150)

@@ -44,13 +44,13 @@ class LivingRoom(Room):
 
         self.game_data = GameData(game, self)
 
-        self.hamster_cs_timer = Timer(8)
+        self.hamster_cs_timer = Timer(2)
         self.hamster_cutscene = HamsterCutscene(self)
 
     def update(self) -> None:
         super().update()
 
-        if self.hamster_cs_timer.done:
+        if self.hamster_cs_timer.done and 70 < self.player.pos.x < 130 and 43 < self.player.pos.y < 75:
             self.hamster_cs_timer.reset()
             self.hamster_cs_timer.pause()
             self.start_cutscene(self.hamster_cutscene)

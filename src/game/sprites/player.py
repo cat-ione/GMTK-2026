@@ -23,6 +23,7 @@ class Player(Sprite["Room"]):
         super().__init__(scene)
 
         self.pos = Vec(pos)
+        self.speed = SPEED
 
         # Direction the player was most recently walking towards
         # (used for calculating the item to select) (8-directional)
@@ -50,10 +51,14 @@ class Player(Sprite["Room"]):
 
         # Lock movement
         self.locked = False
+        self.keys = {K_a: False, K_d: False, K_w: False, K_s: False}
 
     def update(self) -> None:
         if self.scene.cutscene is None and not self.locked:
-            self._move()
+            self.keys = {key: self.game.keys[key] for key in self.keys}
+        else:
+            self.keys = {K_a: False, K_d: False, K_w: False, K_s: False}
+        self._move()
 
         self.drawbox.set_pos(self.pos)
 
@@ -124,9 +129,9 @@ class Player(Sprite["Room"]):
 
     def _move(self) -> None:
         self.vel = Vec(
-            self.game.keys[K_d] - self.game.keys[K_a],
-            self.game.keys[K_s] - self.game.keys[K_w],
-        ).normalize() * SPEED
+            self.keys[K_d] - self.keys[K_a],
+            self.keys[K_s] - self.keys[K_w],
+        ).normalize() * self.speed
 
         # Boundary collisions
         self.pos.x += self.vel.x * self.game.dt
@@ -309,21 +314,21 @@ class Player(Sprite["Room"]):
 
     def _update_animation(self) -> None:
         # This is fucking horrible
-        if self.game.keys[K_a] and K_a not in self.key_queue:
+        if self.keys[K_a] and K_a not in self.key_queue:
             self.key_queue.append(K_a)
-        elif not self.game.keys[K_a] and K_a in self.key_queue:
+        elif not self.keys[K_a] and K_a in self.key_queue:
             self.key_queue.remove(K_a)
-        if self.game.keys[K_d] and K_d not in self.key_queue:
+        if self.keys[K_d] and K_d not in self.key_queue:
             self.key_queue.append(K_d)
-        elif not self.game.keys[K_d] and K_d in self.key_queue:
+        elif not self.keys[K_d] and K_d in self.key_queue:
             self.key_queue.remove(K_d)
-        if self.game.keys[K_w] and K_w not in self.key_queue:
+        if self.keys[K_w] and K_w not in self.key_queue:
             self.key_queue.append(K_w)
-        elif not self.game.keys[K_w] and K_w in self.key_queue:
+        elif not self.keys[K_w] and K_w in self.key_queue:
             self.key_queue.remove(K_w)
-        if self.game.keys[K_s] and K_s not in self.key_queue:
+        if self.keys[K_s] and K_s not in self.key_queue:
             self.key_queue.append(K_s)
-        elif not self.game.keys[K_s] and K_s in self.key_queue:
+        elif not self.keys[K_s] and K_s in self.key_queue:
             self.key_queue.remove(K_s)
 
         # If the direction is one of the four cardinal directions
