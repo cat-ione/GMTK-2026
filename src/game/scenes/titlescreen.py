@@ -9,20 +9,20 @@ class Titlescreen(Scene):
 
         self.text_scroll = Animation(Spritesheet.get("title_text_scroll"), 0.3)
 
-        self.add_button((116, 49), Image.get("button_medium"), lambda: 0)
-        self.add_button((145, 49), Image.get("button_medium"), lambda: 0)
+        self.add_button((116, 49), Image.get("button_medium"), " ", lambda: 0)
+        self.add_button((145, 49), Image.get("button_medium"), " ", lambda: 0)
 
-        self.add_button((116, 65), Image.get("button_small"), lambda: 0)
-        self.add_button((135, 65), Image.get("button_small"), lambda: 0)
-        self.add_button((154, 65), Image.get("button_small"), lambda: 0)
-        self.add_button((116, 81), Image.get("button_small"), lambda: 0)
-        self.add_button((135, 81), Image.get("button_small"), lambda: 0)
-        self.add_button((154, 81), Image.get("button_small"), lambda: 0)
-        self.add_button((116, 97), Image.get("button_small"), lambda: 0)
-        self.add_button((135, 97), Image.get("button_small"), lambda: 0)
-        self.add_button((154, 97), Image.get("button_small"), lambda: 0)
+        self.add_button((116, 65), Image.get("button_small"), " ", lambda: 0)
+        self.add_button((135, 65), Image.get("button_small"), " ", lambda: 0)
+        self.add_button((154, 65), Image.get("button_small"), " ", lambda: 0)
+        self.add_button((116, 81), Image.get("button_small"), " ", lambda: 0)
+        self.add_button((135, 81), Image.get("button_small"), " ", lambda: 0)
+        self.add_button((154, 81), Image.get("button_small"), " ", lambda: 0)
+        self.add_button((116, 97), Image.get("button_small"), " ", lambda: 0)
+        self.add_button((135, 97), Image.get("button_small"), " ", lambda: 0)
+        self.add_button((154, 97), Image.get("button_small"), " ", lambda: 0)
 
-        self.add_button((116, 113), Image.get("button_large"), self.start_game)
+        self.add_button((116, 113), Image.get("button_large"), "Start", self.start_game)
 
     def update(self) -> None:
         self.text_scroll.update()
@@ -39,6 +39,6 @@ class Titlescreen(Scene):
         living_room = LivingRoom(self.game)
         self.game.set_scene(living_room)
 
-    def add_button(self, pos: VecLike, image: pygame.Surface, func: Callable) -> None:
-        button = Button(self, pos, image, func)
+    def add_button(self, pos: VecLike, image: pygame.Surface, text: str, func: Callable) -> None:
+        button = Button(self, pos, image, text, func)
         self.add(button)
