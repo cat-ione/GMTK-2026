@@ -59,6 +59,9 @@ class LivingRoom(Room):
 
         # Tutorial specific vars
         self.have_done_plate = False
+        self.have_done_chicken = False # pulling out of the fridge
+        self.have_done_chicken_2 = False # putting into the microwave
+        self.have_done_chicken_3 = False # pulling out of microwave
 
     def update(self) -> None:
         super().update()
@@ -78,8 +81,8 @@ class LivingRoom(Room):
 
         if all((tablecloth.has_plate() for tablecloth in self.tablecloths)):
             self.clipboard.cross_out("plates")
-            if not self.have_done_plate:
-                self.player.say("Whew! Let me check my notes to see what else I have to do...")
+            if not self.have_done_plate and self.game_data.first_play and not self.have_done_chicken:
+                self.player.say("Whew! That was quick... Time to defrost the chicken in the fridge!")
                 self.have_done_plate = True
         else:
             self.clipboard.uncross("plates")
@@ -89,7 +92,7 @@ class LivingRoom(Room):
         self.game_data.game_time = time.time() - self.game_data.start_time
         if self.game_data.first_play:
             if int(self.game_data.game_time) == 1:
-                self.player.say("Lets set the dining table with plates first!")
+                self.player.say("We only have a few minutes! Lets get going by setting the dining table with plates first!")
 
     def _spawn_dust(self) -> None:
         min_x = int(min(x for x, _ in self.boundary))

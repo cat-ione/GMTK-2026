@@ -106,6 +106,8 @@ class Door(InteractableFurniture):
         if self.scene.player.held_item is not None:
             self.scene.player.held_item.scene = new_scene
         self.scene.clipboard.scene = new_scene
+        if self.scene.player.speech_bubble is not None:
+            self.scene.remove(self.scene.player.speech_bubble)
 
         rel_pos = self.scene.camera.pos - self.scene.player.pos
         self.scene.player.pos = Vec(self.target_pos)
@@ -155,6 +157,10 @@ class Fridge(InteractableFurniture):
                 self.chicken.remove_thermometer()
                 self.freeze_timer.reset()
 
+            if self.scene.game_data.first_play and not self.scene.have_done_chicken: # type: ignore
+                self.scene.player.say("Into the microwave it goes!")
+                self.scene.have_done_chicken = True # type: ignore
+
         if self.chicken is not None:
             if self.freeze_timer.done:
                 if self.chicken.temperature > -18:
@@ -187,12 +193,21 @@ class Microwave(InteractableFurniture):
             if self.chicken is not None:
                 self.scene.player.gain_item(self.chicken)
                 self.chicken.spawn_thermometer()
+                if self.scene.game_data.first_play and not self.scene.have_done_chicken_3: # type: ignore
+                    if self.chicken.temperature < 22:
+                        self.scene.player.say("Still cold... better put it back in.")
+                    else:
+                        self.scene.player.say("Too warm! Let's throw it back into the freezer to cool it down.")
+                        self.scene.have_done_chicken_3 = True # type: ignore
                 self.chicken = None
             elif isinstance(self.scene.player.held_item, Chicken):
                 self.chicken = self.scene.player.held_item
                 self.scene.player.delete_item()
                 self.chicken.remove_thermometer()
                 self.heat_timer.reset()
+                if self.scene.game_data.first_play and not self.scene.have_done_chicken_2: # type: ignore
+                    self.scene.player.say("Gotta make sure I don't over-defrost it... I should check on it soon.")
+                    self.scene.have_done_chicken_2 = True # type: ignore
 
         if self.chicken is not None:
             if self.heat_timer.done:
