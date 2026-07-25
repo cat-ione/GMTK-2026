@@ -31,7 +31,7 @@ def define_resources() -> None:
     Image("hamster_standing", "items/hamster_standing.png")
 
     Spritesheet("surprise", "surprise.png", 8)
-    Image("clipboard_icon", "clipboard_icon.png")
+    Image("clipboard_icon", "clipboard_icon_letter.png")
     Image("clipboard", "clipboard_large_lined.png")
 
     RoomData("living_room", "living_room.json")
