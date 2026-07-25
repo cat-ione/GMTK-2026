@@ -98,7 +98,7 @@ class Room(Scene):
 
         if not self.clipboard_visible:
             img = Image.get("clipboard_icon")
-            screen.blit(img, (WIDTH - img.width - 4, 4))
+            screen.blit(img, (4, HEIGHT - img.height - 4))
 
     def set_interactable_furniture(self, d: dict[str, type[Furniture]]) -> None:
         self.interactable_furniture = d

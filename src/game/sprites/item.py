@@ -1,6 +1,7 @@
 from src.core import *
 
 from .interaction_target import InteractionTarget
+from .thermometer import Thermometer
 
 class Item(Sprite["Room"]):
     update_group = UGroup.MAIN
@@ -135,3 +136,10 @@ class Chicken(Item):
     def __init__(self, scene: Room, pos: VecLike) -> None:
         super().__init__(scene, pos, Image.get("chicken"))
         self.temperature = -18
+
+    def spawn_thermometer(self) -> None:
+        self.thermometer = Thermometer(self.scene, self.temperature, 22)
+        self.scene.add(self.thermometer)
+
+    def remove_thermometer(self) -> None:
+        self.scene.remove(self.thermometer)

@@ -142,10 +142,12 @@ class Fridge(InteractableFurniture):
 
             if self.chicken is not None:
                 self.scene.player.gain_item(self.chicken)
+                self.chicken.spawn_thermometer()
                 self.chicken = None
             elif isinstance(self.scene.player.held_item, Chicken):
                 self.chicken = self.scene.player.held_item
                 self.scene.player.delete_item()
+                self.chicken.remove_thermometer()
                 self.freeze_timer.reset()
 
         if self.chicken is not None:
@@ -177,10 +179,12 @@ class Microwave(InteractableFurniture):
 
             if self.chicken is not None:
                 self.scene.player.gain_item(self.chicken)
+                self.chicken.spawn_thermometer()
                 self.chicken = None
             elif isinstance(self.scene.player.held_item, Chicken):
                 self.chicken = self.scene.player.held_item
                 self.scene.player.delete_item()
+                self.chicken.remove_thermometer()
                 self.heat_timer.reset()
 
         if self.chicken is not None:
