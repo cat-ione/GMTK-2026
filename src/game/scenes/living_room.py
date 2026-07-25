@@ -8,6 +8,7 @@ from src.game.sprites.vacuum import Vacuum
 from .game_data import GameData
 from src.game.sprites.camera import Camera
 from src.game.cutscenes.hamster_cutscene import HamsterCutscene
+from src.game.cutscenes.opening_cutscene import OpeningCutscene
 from src.game.sprites.clipboard import Clipboard
 from src.game.sprites.item import Chicken
 
@@ -35,7 +36,7 @@ class LivingRoom(Room):
         vacuum = Vacuum(self, (21, 30))
         self.add_item(vacuum)
 
-        self.player = Player(self, (105, 42))
+        self.player = Player(self, (98, 37))
         self.add(self.player)
         self.camera = Camera(self)
         self.add(self.camera)
@@ -45,7 +46,14 @@ class LivingRoom(Room):
 
         self.game_data = GameData(game, self)
 
-        self.hamster_cs_timer = Timer(8)
+        self.fade_opacity = 255
+        self.fading = True
+        self.fade_overlay = pygame.Surface(SIZE)
+        self.opening_cutscene = OpeningCutscene(self)
+        self.zooming = False
+        self.start_cutscene(self.opening_cutscene)
+
+        self.hamster_cs_timer = Timer(8, True)
         self.hamster_cutscene = HamsterCutscene(self)
 
     def update(self) -> None:
@@ -91,3 +99,52 @@ class LivingRoom(Room):
 
     def go_to_bedroom(self) -> None:
         self.game.set_scene(self.game_data.bedroom)
+
+    def draw(self, screen: pygame.Surface) -> None:
+        super().draw(screen)
+
+        if self.zooming:
+            ss = pygame.transform.scale_by(self._screenshot, self._scale)
+            screen.blit(ss, self._pos)
+            self._call_animation.update()
+            if self._call_animation.done:
+                self._call_animation.reset()
+            screen.blit(self._call_animation.frame, self._anim_pos)
+            pygame.draw.rect(screen, (0, 0, 0), (0, 0, WIDTH, 8))
+            pygame.draw.rect(screen, (0, 0, 0), (0, HEIGHT - 8, WIDTH, 8))
+
+        self.fade_overlay.set_alpha(int(self.fade_opacity))
+        screen.blit(self.fade_overlay)
+        if self.fading and self.fade_opacity > 0:
+            self.fade_opacity -= 0.6
+
+    def fade_in(self) -> None:
+        self.fade_opacity = 255
+        self.fading = True
+
+    def start_zoom_in(self) -> None:
+        self.zooming = True
+        self._screenshot = pygame.Surface(SIZE)
+        self._screenshot.blit(self.game.px_screen)
+        self._scale = 1
+        self._pos = Vec(0, 0)
+        self._call_animation = Animation(Spritesheet.get("call_animation_mom"), 0.1)
+        self._anim_pos = Vec(WIDTH, 8)
+
+    def zoom_in(self, pos: Vec, scale: int, progress: float) -> None:
+        p1 = tween.easeOutElastic(progress, 0.6, 0.3)
+        self._pos = -pos * self._scale * p1
+        self._scale = 1 + (scale - 1) * p1
+        p2 = tween.easeInBounce(1 - min(1, progress * 3))
+        self._anim_pos.x = (WIDTH / 2 + 10) + (WIDTH / 2 - 10) * p2
+
+    def zoom_out(self, pos: Vec, scale: int, progress: float) -> None:
+        p1 = tween.easeInOutQuint(progress)
+        self._pos = -pos * self._scale * p1
+        self._scale = 1 + (scale - 1) * p1
+        p2 = tween.easeInOutQuint(1 - progress)
+        self._anim_pos.x = (WIDTH / 2 + 10) + (WIDTH / 2 - 10) * p2
+
+    def end_zoom_out(self) -> None:
+        self.zooming = False
+        self.hamster_cs_timer.resume()

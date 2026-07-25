@@ -54,6 +54,7 @@ class Player(Sprite["Room"]):
         # Lock movement
         self.locked = False
         self.keys = {K_a: False, K_d: False, K_w: False, K_s: False}
+        self.disable_collision = False
 
     def update(self) -> None:
         if self.scene.cutscene is None and not self.locked:
@@ -62,13 +63,14 @@ class Player(Sprite["Room"]):
             self.keys = {K_a: False, K_d: False, K_w: False, K_s: False}
         self._move()
 
-        self.drawbox.set_pos(self.pos)
+        if not self.disable_collision:
+            for furniture in self.scene.furnitures:
+                if furniture.hitbox is None: continue
+                if furniture.hitbox.size == Vec(0, 0): continue
+                if self.hitbox.collides(furniture.hitbox):
+                    self._resolve_collision(furniture.hitbox)
 
-        for furniture in self.scene.furnitures:
-            if furniture.hitbox is None: continue
-            if furniture.hitbox.size == Vec(0, 0): continue
-            if self.hitbox.collides(furniture.hitbox):
-                self._resolve_collision(furniture.hitbox)
+        self.drawbox.set_pos(self.pos)
 
         if self.scene.cutscene is None:
             self._update_animation()
@@ -107,14 +109,15 @@ class Player(Sprite["Room"]):
 
         self.image = self.animation.frame
 
-        if self.cardinal_direction.y != 0:
-            shadow = pygame.Surface((12, 8), flags=pygame.SRCALPHA)
-            pygame.draw.rect(shadow, (0, 0, 0, 40), (0, 0, 12, 8), border_radius=3)
-            anchored_blit(screen, shadow, self.screen_pos, Anchor.CENTER.offset((0, -2)))
-        else:
-            shadow = pygame.Surface((10, 10), flags=pygame.SRCALPHA)
-            pygame.draw.rect(shadow, (0, 0, 0, 40), (0, 0, 10, 10), border_radius=3)
-            anchored_blit(screen, shadow, self.screen_pos, Anchor.CENTER.offset((0, -1)))
+        if self.animation.current_name != "sleeping":
+            if self.cardinal_direction.y != 0:
+                shadow = pygame.Surface((12, 8), flags=pygame.SRCALPHA)
+                pygame.draw.rect(shadow, (0, 0, 0, 40), (0, 0, 12, 8), border_radius=3)
+                anchored_blit(screen, shadow, self.screen_pos, Anchor.CENTER.offset((0, -2)))
+            else:
+                shadow = pygame.Surface((10, 10), flags=pygame.SRCALPHA)
+                pygame.draw.rect(shadow, (0, 0, 0, 40), (0, 0, 10, 10), border_radius=3)
+                anchored_blit(screen, shadow, self.screen_pos, Anchor.CENTER.offset((0, -1)))
 
         screen.blit(self.image, self.drawbox.topleft - self.scene.camera.pos)
 
@@ -283,6 +286,10 @@ class Player(Sprite["Room"]):
             [pygame.transform.flip(frame, True, False)
                 for frame in Spritesheet.get("player_walk_hold_side")], 0.15)
 
+        sleeping = Animation(Spritesheet.get("player_sleeping"), 0.25)
+        phone_1 = Animation(Spritesheet.get("player_phone")[:1], 4)
+        phone_2 = Animation(Spritesheet.get("player_phone")[1:], -1)
+
         self.animation = AnimationManager({
             "still_up": still_up,
             "still_down": still_down,
@@ -304,6 +311,9 @@ class Player(Sprite["Room"]):
             "walk_hold_down": walk_hold_down,
             "walk_hold_left": walk_hold_left,
             "walk_hold_right": walk_hold_right,
+            "sleeping": sleeping,
+            "phone_1": phone_1,
+            "phone_2": phone_2,
         }, "idle_down")
 
         self.anim_vec_mapping = {

@@ -10,6 +10,8 @@ def define_resources() -> None:
     Spritesheet("player_walk_hold_front", "player/walk_hold_front.png", 4)
     Spritesheet("player_walk_hold_back", "player/walk_hold_back.png", 4)
     Spritesheet("player_walk_hold_side", "player/walk_hold_side.png", 4)
+    Spritesheet("player_sleeping", "player/sleeping.png", 4)
+    Spritesheet("player_phone", "player/phone_call.png", 2)
 
     Image("vacuum_world", "items/vacuum_world.png")
     Image("vacuum_front", "items/vacuum_front.png")
@@ -43,3 +45,4 @@ def define_resources() -> None:
     Image("button_medium", "button_medium.png")
     Image("button_small", "button_small.png")
     Image("titlescreen_bg", "titlescreen_bg.png")
+    Spritesheet("call_animation_mom", "call_animation_mom.png", 8, scale=2)

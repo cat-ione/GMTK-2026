@@ -2,6 +2,7 @@ from src.core import *
 from .cutscene import Cutscene
 from src.game.sprites.hamster import Hamster
 from src.game.sprites.furniture import BedroomDoor
+from src.game.sprites.surprise import Surprise
 
 class HamsterCutscene(Cutscene["LivingRoom"]):
     def __init__(self, scene: LivingRoom) -> None:
@@ -67,20 +68,3 @@ class HamsterCutscene(Cutscene["LivingRoom"]):
 
                 door = cast(BedroomDoor, self.scene.find_furniture("door"))
                 door.interact()
-
-class Surprise(Sprite["Room"]):
-    update_group = UGroup.MAIN
-    draw_group = DGroup.OVERLAY
-
-    def __init__(self, scene: Room, pos: VecLike) -> None:
-        super().__init__(scene)
-        self.pos = Vec(pos)
-        self.animation = Animation(Spritesheet.get("surprise"), 0.4)
-
-    def update(self) -> None:
-        self.animation.update()
-        if self.animation.done:
-            self.scene.remove(self)
-
-    def draw(self, screen: pygame.Surface) -> None:
-        screen.blit(self.animation.frame, self.screen_pos)

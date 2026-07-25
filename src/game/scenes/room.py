@@ -46,12 +46,12 @@ class Room(Scene):
                 self.add_furniture(furniture)
 
     def update(self) -> None:
+        if self.cutscene is not None:
+            self.cutscene.update()
+
         self.sprite_manager.update()
 
         self.sprite_manager.d_groups[DGroup.ROOM].sort(self.objects_sort_key)
-
-        if self.cutscene is not None:
-            self.cutscene.update()
 
         if self.game.keydown == pygame.K_c:
             if not self.clipboard_visible:
