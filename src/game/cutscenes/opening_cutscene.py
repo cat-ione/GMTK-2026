@@ -61,3 +61,4 @@ class OpeningCutscene(Cutscene["LivingRoom"]):
 
     def cleanup(self) -> None:
         self.scene.player.disable_collision = False
+        self.scene.hamster_cs_timer.resume()
