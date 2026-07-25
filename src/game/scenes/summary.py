@@ -19,18 +19,20 @@ class Summary(Scene):
         plates = game_data.scores["plates"] // 5
         dust_percentage = int((1 - len(game_data.living_room.dusts) / 200) * 100)
         chicken_temp = game_data.living_room.chicken.temperature
+        bath_full = game_data.bathroom.bathtub.full
+        bath_temp = round(game_data.bathroom.bathtub.current_temp)
         self.text = [
             "Chicken:",
-            f"   {chicken_temp}C / 22C",
-            f"Bathtub:",
-            f"   0C / 36C",
-            f"Plates: {plates} / 6",
-            f"Rice: 0 / 0",
+            f"   {chicken_temp}C/22C",
+            "Bathtub:",
+            f"   {bath_temp}C/36C" if bath_full else "   not filled!",
+            f"Plates: {plates}/6",
+            f"Rice: 0/0",
             f"Vacuum: {dust_percentage}%",
-            f"Hamsters: {hamsters_captured} / {total_hamsters}",
+            f"Hamsters: {hamsters_captured}/{total_hamsters}",
             " ",
             f"Final score:",
-            f"   {self.total_score} / {self.max_total_score}"
+            f"   {self.total_score}/{self.max_total_score}"
         ]
 
         if self.total_score < self.max_total_score * 0.6:

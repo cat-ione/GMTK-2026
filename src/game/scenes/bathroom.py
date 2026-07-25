@@ -13,7 +13,7 @@ class Bathroom(Room):
             "bathtub": Bathtub,
         })
         self.load_furniture()
-        self.bathtub = self.find_furniture("bathtub")
+        self.bathtub = cast(Bathtub, self.find_furniture("bathtub"))
 
     def update(self) -> None:
         super().update()

@@ -156,6 +156,8 @@ class Fridge(InteractableFurniture):
             if self.freeze_timer.done:
                 if self.chicken.temperature > -18:
                     self.chicken.temperature -= 1
+                    perc = 1 - abs(self.chicken.temperature - 22) / 40
+                    self.scene.game_data.scores["chicken"] = int(perc * self.scene.game_data.max_scores["chicken"])
             watch("chicken_temp", self.chicken.temperature)
 
     def interact(self) -> None:
@@ -191,7 +193,10 @@ class Microwave(InteractableFurniture):
 
         if self.chicken is not None:
             if self.heat_timer.done:
-                self.chicken.temperature += 1
+                if self.chicken.temperature < 40:
+                    self.chicken.temperature += 1
+                    perc = 1 - abs(self.chicken.temperature - 22) / 40
+                    self.scene.game_data.scores["chicken"] = int(perc * self.scene.game_data.max_scores["chicken"])
             watch("chicken_temp", self.chicken.temperature)
 
     def interact(self) -> None:
@@ -253,6 +258,8 @@ class Bathtub(InteractableFurniture):
                 self.image = Image.get("bathtub")
                 self.full = True
                 self.animation = None
+                perc = 1 - abs(self.current_temp - 36) / 26
+                self.scene.game_data.scores["bathtub"] = int(perc * self.scene.game_data.max_scores["bathtub"])
 
         if self.animation is not None:
             self.animation.update()
