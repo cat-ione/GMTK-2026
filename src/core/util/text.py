@@ -115,6 +115,33 @@ class Font:
             x += self.advance(char) + self.gap
         return pygame.transform.scale_by(surface, self.scale)
 
+    def _width(self, text: str) -> int:
+        if not text: return 0
+        return (sum(self.advance(c) + self.gap for c in text) - self.gap) * self.scale
+
+    def render_wrapped(self, text: str, max_length: int) -> list[pygame.Surface]:
+        """Produce a list of surfaces with the given text wrapped at spaces.
+
+        Args:
+            text: The text to render.
+            max_length: The maximum width, in pixels, of each rendered line.
+
+        Returns:
+            A list of surfaces, one per line, each no wider than max_length.
+        """
+        lines = []
+        current = ""
+        for word in text.split(" "):
+            candidate = word if not current else f"{current} {word}"
+            if not current or self._width(candidate) <= max_length:
+                current = candidate
+            else:
+                lines.append(current)
+                current = word
+        if current:
+            lines.append(current)
+        return [self.render(line) for line in lines]
+
     @property
     def height(self) -> int:
         """The actual rendered height of the font after scaling."""

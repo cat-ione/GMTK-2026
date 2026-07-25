@@ -104,8 +104,6 @@ class LivingRoom(Room):
         self.game.set_scene(self.game_data.bedroom)
 
     def draw(self, screen: pygame.Surface) -> None:
-        super().draw(screen)
-
         if self.zooming:
             ss = pygame.transform.scale_by(self._screenshot, self._scale)
             screen.blit(ss, self._pos)
@@ -115,6 +113,10 @@ class LivingRoom(Room):
             screen.blit(self._call_animation.frame, self._anim_pos)
             pygame.draw.rect(screen, (0, 0, 0), (0, 0, WIDTH, 8))
             pygame.draw.rect(screen, (0, 0, 0), (0, HEIGHT - 8, WIDTH, 8))
+
+            self.sprite_manager.d_groups[DGroup.HUD].draw(screen)
+        else:
+            super().draw(screen)
 
         self.fade_overlay.set_alpha(int(self.fade_opacity))
         screen.blit(self.fade_overlay)

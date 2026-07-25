@@ -2,6 +2,7 @@ from src.core import *
 
 from .cutscene import Cutscene
 from src.game.sprites.surprise import Surprise
+from src.game.sprites.speech_bubble import SpeechBubble
 
 class OpeningCutscene(Cutscene["LivingRoom"]):
     def __init__(self, scene: LivingRoom) -> None:
@@ -9,6 +10,15 @@ class OpeningCutscene(Cutscene["LivingRoom"]):
 
         self.phase = 0
         self.timer = Timer(6, True)
+
+        self.dialogue = [
+            ("mom", "This is some testing text that is rather long and will hopefully be wrapped multiple times?"),
+            ("daughter", "This is some testing text that is rather long and will hopefully be wrapped multiple times?"),
+            ("mom", "This is some testing text that is rather long and will hopefully be wrapped multiple times?"),
+            ("daughter", "This is some testing text that is rather long and will hopefully be wrapped multiple times?"),
+        ]
+        self.dialogue_index = -1
+        self.current_dialogue = None
 
     def start(self) -> None:
         self.scene.player.disable_collision = True
@@ -39,13 +49,15 @@ class OpeningCutscene(Cutscene["LivingRoom"]):
         elif self.phase == 3:
             self.scene.zoom_in(Vec(72, 20), 2, self.timer.progress)
             if self.timer.done:
-                self.timer.reset(3)
+                self.timer.reset(0)
+                self.next_dialogue()
                 self.phase = 4
         elif self.phase == 4:
-            # Dialogue and stuffs
-            if self.timer.done:
-                self.timer.reset(2.5)
-                self.phase = 5
+            if self.game.keyup in {pygame.K_SPACE, pygame.K_RETURN, pygame.K_e}:
+                self.next_dialogue()
+                if self.dialogue_index >= len(self.dialogue):
+                    self.timer.reset(2.5)
+                    self.phase = 5
         elif self.phase == 5:
             self.scene.zoom_out(Vec(72, 20), 2, self.timer.progress_remaining)
             if self.timer.done:
@@ -58,6 +70,18 @@ class OpeningCutscene(Cutscene["LivingRoom"]):
                 self.scene.player.disable_collision = False
                 self.scene.player.pos.y += 2
                 self.scene.cutscene = None
+
+    def next_dialogue(self) -> None:
+        if self.current_dialogue is not None:
+            self.scene.remove(self.current_dialogue)
+        self.dialogue_index += 1
+        if self.dialogue_index >= len(self.dialogue): return
+        person, text = self.dialogue[self.dialogue_index]
+        pos = (125, 50) if person == "mom" else (53, 83)
+        anchor = Anchor.BOTTOMRIGHT if person == "mom" else Anchor.TOPLEFT
+        bubble = SpeechBubble(self.scene, pos, text, 110, anchor)
+        self.scene.add(bubble)
+        self.current_dialogue = bubble
 
     def cleanup(self) -> None:
         self.scene.player.disable_collision = False
