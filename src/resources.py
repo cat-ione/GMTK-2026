@@ -28,6 +28,10 @@ def define_resources() -> None:
     Image("fridge_closed", "rooms/living_room/fridge.png")
     Image("microwave_opened", "rooms/living_room/microwave_opened.png")
     Image("microwave_closed", "rooms/living_room/microwave.png")
+    Spritesheet("bathtub_shallow", "bathtub_shallow.png", 3)
+    Spritesheet("bathtub_medium", "bathtub_medium.png", 3)
+    Spritesheet("bathtub_full", "bathtub_full.png", 3)
+    Image("bathtub", "rooms/bathroom/bathtub.png")
 
     Image("hamster_side", "items/hamster_side.png")
     Image("hamster_standing", "items/hamster_standing.png")
@@ -36,6 +40,9 @@ def define_resources() -> None:
     Image("clipboard_icon", "clipboard_icon_letter.png")
     Image("clipboard", "clipboard_large_lined.png")
     Image("thermometer", "thermometer.png")
+    Image("bathtub_handle_base", "bathtub_handle_base.png")
+    Image("thermometer_icons", "thermometer_icons.png")
+    Image("bathtub_indicator", "bathtub_indicator.png")
 
     RoomData("living_room", "living_room.json")
     RoomData("bedroom", "bedroom.json")

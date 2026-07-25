@@ -20,3 +20,4 @@ class Bedroom(Room):
 
         self.game_data.living_room.microwave.update()
         self.game_data.living_room.fridge.update()
+        self.game_data.bathroom.bathtub.update()

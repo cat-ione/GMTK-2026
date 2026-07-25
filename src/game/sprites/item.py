@@ -138,7 +138,9 @@ class Chicken(Item):
         self.temperature = -18
 
     def spawn_thermometer(self) -> None:
-        self.thermometer = Thermometer(self.scene, self.temperature, 22)
+        img = Image.get("thermometer")
+        self.thermometer = Thermometer(self.scene,
+            (WIDTH - img.width - 4, HEIGHT - img.height - 4), self.temperature, 22)
         self.scene.add(self.thermometer)
 
     def remove_thermometer(self) -> None:

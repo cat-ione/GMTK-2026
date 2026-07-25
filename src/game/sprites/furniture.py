@@ -4,6 +4,8 @@ from .interaction_target import InteractionTarget
 from .item import Plate
 from .hamster import HamsterItem
 from .item import Chicken
+from .thermometer import Thermometer, ThermometerIcons
+from .bathtub_handle import BathtubHandle
 
 class Furniture(Sprite["Room"]):
     draw_group = DGroup.ROOM
@@ -223,3 +225,87 @@ class HamsterCage(InteractableFurniture):
         if isinstance(self.scene.player.held_item, HamsterItem):
             self.scene.player.delete_item()
             self.scene.game_data.scores["hamsters"] += 4
+
+class Bathtub(InteractableFurniture):
+    update_group = UGroup.MAIN
+
+    def __init__(self, scene: Room, name: str, pos: VecLike, image: pygame.Surface, hitbox: list[int] | None) -> None:
+        super().__init__(scene, name, pos, image, hitbox)
+        self.current_temp = 18
+        self.new_temp = 18
+        self.fullness = 0
+        self.on = False
+        self.full = False
+        self.fill_timer = LoopTimer(2.4)
+        self.locked = False
+        self.animation = None
+
+    def update(self) -> None:
+        if self.fill_timer.done and self.on and not self.full:
+            _sum = self.current_temp * self.fullness + self.new_temp
+            self.fullness += 1
+            self.current_temp = _sum / self.fullness
+            if self.fullness == 33:
+                self.animation = Animation(Spritesheet.get("bathtub_medium"), 0.1)
+            elif self.fullness == 67:
+                self.animation = Animation(Spritesheet.get("bathtub_full"), 0.1)
+            elif self.fullness == 100:
+                self.image = Image.get("bathtub")
+                self.full = True
+                self.animation = None
+
+        if self.animation is not None:
+            self.animation.update()
+            if self.animation.done:
+                self.animation.reset()
+            self.image = self.animation.frame
+
+        watch("bath_fullness", self.fullness)
+        watch("bath_current_temp", self.current_temp)
+        watch("bath_new_temp", self.new_temp)
+
+    def draw(self, screen: pygame.Surface) -> None:
+        super().draw(screen)
+
+        screen.blit(Image.get("bathtub_indicator"), self.screen_pos + (11, 53))
+        h = int(self.fullness / 100 * 6)
+        pygame.draw.rect(screen, COLOR3, (self.screen_pos + (12, 60 - h), (1, h)))
+
+    def select(self) -> None:
+        super().select()
+        self.spawn_thermometer()
+
+    def deselect(self) -> None:
+        super().deselect()
+        self.remove_thermometer()
+
+    def interact(self) -> None:
+        if not self.locked:
+            self.scene.player.locked = True
+            self.handle = BathtubHandle(self.scene, self.pos + (13, 5))
+            self.scene.add(self.handle)
+            self.locked = True
+        else:
+            if self.game.keydown == pygame.K_e:
+                # Range from 10 to 62, 36 in the middle
+                self.new_temp = round(10 + self.handle.progress * 52)
+            self.scene.player.locked = False
+            self.scene.remove(self.handle)
+            if self.fullness == 0: # Only change animation on first interaction
+                self.animation = Animation(Spritesheet.get("bathtub_shallow"), 0.1)
+            self.on = True
+            self.locked = False
+
+    def spawn_thermometer(self) -> None:
+        img = Image.get("thermometer")
+        self.current_thermometer = Thermometer(self.scene, (WIDTH - img.width - 4, HEIGHT - img.height - 4), self.current_temp, 36)
+        self.scene.add(self.current_thermometer)
+        self.new_thermometer = Thermometer(self.scene, (WIDTH - img.width * 2 - 4, HEIGHT - img.height - 4), self.new_temp, 36)
+        self.scene.add(self.new_thermometer)
+        self.icons = ThermometerIcons(self.scene)
+        self.scene.add(self.icons)
+
+    def remove_thermometer(self) -> None:
+        self.scene.remove(self.current_thermometer)
+        self.scene.remove(self.new_thermometer)
+        self.scene.remove(self.icons)

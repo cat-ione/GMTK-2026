@@ -5,11 +5,10 @@ from math import tanh
 class Thermometer(Sprite["Room"]):
     draw_group = DGroup.HUD
 
-    def __init__(self, scene: Room, temp: int, center_temp: float, spread: float = 1) -> None:
+    def __init__(self, scene: Room, pos: VecLike, temp: float, center_temp: float, spread: float = 1) -> None:
         super().__init__(scene)
 
-        img = Image.get("thermometer")
-        self.pos = Vec(WIDTH - img.width - 4, HEIGHT - img.height - 4)
+        self.pos = Vec(pos)
 
         self.temperature = temp
         self.center_temp = center_temp
@@ -35,3 +34,9 @@ class Thermometer(Sprite["Room"]):
     def draw(self, screen: pygame.Surface) -> None:
         self.generate_image()
         screen.blit(self.image, self.pos)
+
+class ThermometerIcons(Sprite["Room"]):
+    draw_group = DGroup.HUD
+
+    def draw(self, screen: pygame.Surface) -> None:
+        screen.blit(Image.get("thermometer_icons"), (146, 82))

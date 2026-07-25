@@ -78,6 +78,8 @@ class LivingRoom(Room):
         else:
             self.clipboard.uncross("plates")
 
+        self.game_data.bathroom.bathtub.update()
+
     def _spawn_dust(self) -> None:
         min_x = int(min(x for x, _ in self.boundary))
         max_x = int(max(x for x, _ in self.boundary))

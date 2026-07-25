@@ -1,7 +1,7 @@
 from src.core import *
 
 from .room import Room
-from src.game.sprites.furniture import BedroomDoor2
+from src.game.sprites.furniture import BedroomDoor2, Bathtub
 
 class Bathroom(Room):
     def __init__(self, game: Game, game_data: GameData) -> None:
@@ -10,8 +10,10 @@ class Bathroom(Room):
         self.set_boundary([(6, 29), (72, 29), (72, 86), (6, 86)])
         self.set_interactable_furniture({
             "door": BedroomDoor2,
+            "bathtub": Bathtub,
         })
         self.load_furniture()
+        self.bathtub = self.find_furniture("bathtub")
 
     def update(self) -> None:
         super().update()
