@@ -12,10 +12,10 @@ class OpeningCutscene(Cutscene["LivingRoom"]):
         self.timer = Timer(6, True)
 
         self.dialogue = [
-            ("mom", "Hi Honey! Im heading home now, have you finished all chores I told you to do? [space]"),
-            ("daughter", "Y-yep... I'm just finishing up the last bit of cleaning... [space]"),
-            ("mom", "Alright, just dont forget anything, see you soon! [space]"),
-            ("daughter", "I won't mom, I promise... [space]"),
+            ("mom", "Hi Honey! Im heading home now, have you finished all chores I told you to do?"),
+            ("daughter", "Y-yep... I'm just finishing up the last bit of cleaning..."),
+            ("mom", "Alright, just dont forget anything, see you soon!"),
+            ("daughter", "I won't mom, I promise..."),
         ]
         self.dialogue_index = -1
         self.current_dialogue = None
@@ -53,7 +53,7 @@ class OpeningCutscene(Cutscene["LivingRoom"]):
                 self.next_dialogue()
                 self.phase = 4
         elif self.phase == 4:
-            if self.game.keyup in {pygame.K_SPACE, pygame.K_RETURN, pygame.K_e}:
+            if self.game.keyup in {pygame.K_SPACE, pygame.K_RETURN, pygame.K_e} or any(self.game.mouse_just_pressed):
                 self.next_dialogue()
                 if self.dialogue_index >= len(self.dialogue):
                     self.timer.reset(2.5)
