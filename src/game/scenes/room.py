@@ -53,7 +53,7 @@ class Room(Scene):
 
         self.sprite_manager.d_groups[DGroup.ROOM].sort(self.objects_sort_key)
 
-        if self.game.keydown == pygame.K_c:
+        if self.game.keydown == pygame.K_c and self.cutscene is None:
             if not self.clipboard_visible:
                 self.clipboard.slide_in()
                 self.clipboard_visible = True
