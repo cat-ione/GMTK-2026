@@ -14,7 +14,7 @@ class Clipboard(Sprite["Room"]):
 
         self.items = {
             "chicken": "Defrost chicken",
-            "plates": "Prepare table",
+            "plates": "Set table",
             "rice": "Cook rice",
             "vacuum": "Vacuum rooms",
             "bathtub": "Prepare bathtub",

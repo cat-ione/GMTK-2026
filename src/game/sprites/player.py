@@ -3,6 +3,7 @@ from src.core import *
 from pygame.constants import K_a, K_d, K_w, K_s, K_e
 from .item import Chicken
 from .furniture import Microwave, Fridge
+from .speech_bubble import GameSpeechBubble
 
 if TYPE_CHECKING:
     from .item import Item
@@ -56,6 +57,9 @@ class Player(Sprite["Room"]):
         self.keys = {K_a: False, K_d: False, K_w: False, K_s: False}
         self.disable_collision = False
 
+        self.speech_bubble = None
+        self.speech_timer = Timer(0)
+
     def update(self) -> None:
         if self.scene.cutscene is None and not self.locked:
             self.keys = {key: self.game.keys[key] for key in self.keys}
@@ -93,6 +97,12 @@ class Player(Sprite["Room"]):
 
         if self.held_item is not None:
             self.held_item.update_when_held()
+
+        if self.speech_bubble is not None:
+            self.speech_bubble.pos = self.pos - (0, 25)
+            if self.speech_timer.done:
+                self.scene.remove(self.speech_bubble)
+                self.speech_bubble = None
 
         watch("pos", self.pos)
         watch("vel", self.vel)
@@ -249,6 +259,12 @@ class Player(Sprite["Room"]):
             self.scene.add_item(self.held_item)
             self.held_item.drop()
             self.held_item = None
+
+    def say(self, text: str) -> None:
+        if self.speech_bubble is not None: return
+        self.speech_bubble = GameSpeechBubble(self.scene, self.pos - (0, 25), text, 80, Anchor.BOTTOM)
+        self.scene.add(self.speech_bubble)
+        self.speech_timer.reset(3 + len(text.split()) * 0.25)
 
     def _define_animations(self) -> None:
         still_up = Animation(Spritesheet.get("player_idle_back")[:1], -1)

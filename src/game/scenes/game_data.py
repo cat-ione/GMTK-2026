@@ -11,6 +11,10 @@ class GameData:
         self.bedroom = Bedroom(game, self)
         self.bathroom = Bathroom(game, self)
 
+        self.first_play = True
+        self.start_time = 0.0
+        self.game_time = 0.0
+
         self.scores = {
             "chicken": 0,
             "plates": 0,

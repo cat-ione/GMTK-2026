@@ -25,6 +25,12 @@ class SpeechBubble(Sprite):
         for i, line in enumerate(lines):
             image.blit(line, (3, 3 + i * 6))
 
+        if self.anchor == Anchor.BOTTOM:
+            expanded = pygame.Surface(Vec(image.size) + (0, 4), flags=pygame.SRCALPHA)
+            expanded.blit(image)
+            expanded.blit(Image.get("speech_bubble_side"), (image.width / 2 - 2, image.height - 1))
+            return expanded
+
         expanded = pygame.Surface(Vec(image.size) + (3, 3), flags=pygame.SRCALPHA)
         main_offset = ((1, 1) - self.anchor.value) * 3
         expanded.blit(image, main_offset)
@@ -39,3 +45,7 @@ class SpeechBubble(Sprite):
 
     def draw(self, screen: pygame.Surface) -> None:
         anchored_blit(screen, self.image, self.pos, self.anchor)
+
+class GameSpeechBubble(SpeechBubble):
+    def draw(self, screen: pygame.Surface) -> None:
+        anchored_blit(screen, self.image, self.screen_pos, self.anchor)

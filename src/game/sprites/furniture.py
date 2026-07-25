@@ -73,6 +73,9 @@ class InteractableFurniture(Furniture):
 
         super().draw(screen)
 
+        if self.scene.game_data.first_play and self.selected:
+            screen.blit(Image.get("key_hint_e"), self.screen_pos + (self.image.width - 3, -5))
+
     def interact(self) -> None:
         # Implement in subclass
         pass

@@ -54,8 +54,11 @@ class LivingRoom(Room):
         self.zooming = False
         self.start_cutscene(self.opening_cutscene)
 
-        self.hamster_cs_timer = Timer(8, True)
+        self.hamster_cs_timer = Timer(30, True)
         self.hamster_cutscene = HamsterCutscene(self)
+
+        # Tutorial specific vars
+        self.have_done_plate = False
 
     def update(self) -> None:
         super().update()
@@ -75,10 +78,18 @@ class LivingRoom(Room):
 
         if all((tablecloth.has_plate() for tablecloth in self.tablecloths)):
             self.clipboard.cross_out("plates")
+            if not self.have_done_plate:
+                self.player.say("Whew! Let me check my notes to see what else I have to do...")
+                self.have_done_plate = True
         else:
             self.clipboard.uncross("plates")
 
         self.game_data.bathroom.bathtub.update()
+
+        self.game_data.game_time = time.time() - self.game_data.start_time
+        if self.game_data.first_play:
+            if int(self.game_data.game_time) == 1:
+                self.player.say("Lets set the dining table with plates first!")
 
     def _spawn_dust(self) -> None:
         min_x = int(min(x for x, _ in self.boundary))
