@@ -70,6 +70,16 @@ class SpeechBubble(Sprite):
             if self.voice is not None and self.revealed_chars % 2 == 0:
                 Sound.get(f"{self.voice}_{randint(1, 8)}").play()
 
+    def keep_in_window(self) -> None:
+        camera = getattr(self.scene, "camera", None)
+        camera_pos = camera.pos if camera is not None else Vec(0, 0)
+
+        offset = self.anchor.apply_to(self.image.size)
+        topleft = self.pos - camera_pos - offset
+        topleft.x = min(max(topleft.x, 0), WIDTH - self.image.width)
+        topleft.y = min(max(topleft.y, 0), HEIGHT - self.image.height)
+        self.pos = topleft + offset + camera_pos
+
     def draw(self, screen: pygame.Surface) -> None:
         anchored_blit(screen, self.image, self.pos, self.anchor)
 

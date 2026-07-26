@@ -100,6 +100,7 @@ class Player(Sprite["Room"]):
 
         if self.speech_bubble is not None:
             self.speech_bubble.pos = self.pos - (0, 25)
+            self.speech_bubble.keep_in_window()
             if self.speech_timer.done:
                 self.scene.remove(self.speech_bubble)
                 self.speech_bubble = None
