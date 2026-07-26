@@ -69,3 +69,5 @@ def define_resources() -> None:
     Image("door_icon", "door_icon.png")
     Image("mom_slider", "mom_slider_bar.png")
     Image("mom_slider_knob", "mom_slider_icon.png")
+
+    Sound("background_music", "background_music.wav")

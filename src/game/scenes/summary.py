@@ -9,6 +9,8 @@ class Summary(Scene):
     def __init__(self, game: Game, game_data: GameData) -> None:
         super().__init__(game)
 
+        pygame.mixer.music.fadeout(2500)
+
         self.font = Font("font_small", 1, COLOR1)
 
         self.scores = game_data.scores
