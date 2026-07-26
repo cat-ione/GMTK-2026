@@ -11,6 +11,8 @@ Art by lumilk.
 
 Music and SFX by both.
 
+Color palette: [Curiosities](https://lospec.com/palette-list/curiosities) by [sukinapan​](https://lospec.com/sukinapan)
+
 All assets original.
 
 ## Links
