@@ -42,6 +42,9 @@ class Player(Sprite["Room"]):
             Anchor.BOTTOM.offset((0, -3)))
         self.hitbox = RectHitbox(self.pos, (6, 4), Anchor.CENTER.offset((0, -1)))
 
+        self.shadow = PlayerShadow(self.scene)
+        self.scene.add(self.shadow)
+
         self.selected: InteractionTarget | None = None
         self.held_item: Item | None = None
         # How much to offset the held item relative to the topleft
@@ -119,16 +122,6 @@ class Player(Sprite["Room"]):
             self._draw_held_item(screen)
 
         self.image = self.animation.frame
-
-        if self.animation.current_name != "sleeping":
-            if self.cardinal_direction.y != 0:
-                shadow = pygame.Surface((12, 8), flags=pygame.SRCALPHA)
-                pygame.draw.rect(shadow, (0, 0, 0, 40), (0, 0, 12, 8), border_radius=3)
-                anchored_blit(screen, shadow, self.screen_pos, Anchor.CENTER.offset((0, -2)))
-            else:
-                shadow = pygame.Surface((10, 10), flags=pygame.SRCALPHA)
-                pygame.draw.rect(shadow, (0, 0, 0, 40), (0, 0, 10, 10), border_radius=3)
-                anchored_blit(screen, shadow, self.screen_pos, Anchor.CENTER.offset((0, -1)))
 
         screen.blit(self.image, self.drawbox.topleft - self.scene.camera.pos)
 
@@ -381,3 +374,20 @@ class Player(Sprite["Room"]):
             self.animation.loop(f"idle{holding_text}_{self.direction_text}")
         else:
             self.animation.loop(f"walk{holding_text}_{self.direction_text}")
+
+class PlayerShadow(Sprite["Room"]):
+    draw_group = DGroup.SHADOW
+
+    def __init__(self, scene: Room) -> None:
+        super().__init__(scene)
+
+    def draw(self, screen: pygame.Surface) -> None:
+        if self.scene.player.animation.current_name != "sleeping":
+            if self.scene.player.cardinal_direction.y != 0:
+                shadow = pygame.Surface((12, 8), flags=pygame.SRCALPHA)
+                pygame.draw.rect(shadow, (0, 0, 0, 40), (0, 0, 12, 8), border_radius=3)
+                anchored_blit(screen, shadow, self.scene.player.screen_pos, Anchor.CENTER.offset((0, -2)))
+            else:
+                shadow = pygame.Surface((10, 10), flags=pygame.SRCALPHA)
+                pygame.draw.rect(shadow, (0, 0, 0, 40), (0, 0, 10, 10), border_radius=3)
+                anchored_blit(screen, shadow, self.scene.player.screen_pos, Anchor.CENTER.offset((0, -1)))
