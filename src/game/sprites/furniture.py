@@ -350,12 +350,12 @@ class Bathtub(InteractableFurniture):
             self.stop_timer.reset()
             self.locked = False
             if self.scene.game_data.first_play and self.scene.first_bath_interaction_2: # type: ignore
-                if self.new_temp == 36:
-                    self.scene.player.say("WOW! I never get this right first try, amazing!", Anchor.BOTTOMRIGHT)
+                if self.new_temp > 36:
+                    self.scene.player.say("WOW! First try! I will come back later to fill it up more since the faucet stops after 30 seconds.", Anchor.BOTTOMRIGHT)
                 elif self.new_temp > 36:
-                    self.scene.player.say("Too hot. I can come back later to add some cold water, water mixes afterall.", Anchor.BOTTOMRIGHT)
+                    self.scene.player.say("Too hot. I can come back later to add some cold water when the faucet stops in 30 seconds.", Anchor.BOTTOMRIGHT)
                 elif self.new_temp < 36:
-                    self.scene.player.say("Too cold. I can come back later to add some hot water, water mixes afterall.", Anchor.BOTTOMRIGHT)
+                    self.scene.player.say("Too cold. I can come back later to add some hot water when the faucet stops in 30 seconds.", Anchor.BOTTOMRIGHT)
                 self.scene.first_bath_interaction_2 = False # type: ignore
 
     def spawn_thermometer(self) -> None:

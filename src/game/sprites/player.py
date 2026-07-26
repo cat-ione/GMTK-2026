@@ -263,7 +263,7 @@ class Player(Sprite["Room"]):
     def say(self, text: str, anchor: Anchor = Anchor.BOTTOM) -> GameSpeechBubble:
         if self.speech_bubble is not None:
             self.scene.remove(self.speech_bubble)
-        self.speech_bubble = GameSpeechBubble(self.scene, self.pos - (0, 25), text, 80, anchor)
+        self.speech_bubble = GameSpeechBubble(self.scene, self.pos - (0, 25), text, 90, anchor)
         self.scene.add(self.speech_bubble)
         self.speech_timer.reset(3 + len(text.split()) * 0.3)
         return self.speech_bubble
