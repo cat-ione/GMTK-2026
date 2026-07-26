@@ -1,5 +1,7 @@
 from src.core import *
 
+from src.game.sprites.button import Button
+
 START_X = 33
 START_Y = 31
 
@@ -41,8 +43,20 @@ class Summary(Scene):
         else:
             self.mood = 3
 
+        self.timer = Timer(2.5)
+
     def update(self) -> None:
         self.sprite_manager.update()
+
+        if self.timer.done:
+            self.timer.reset()
+            self.timer.pause()
+            button = Button(self, (70, HEIGHT - 35), Image.get("button_medium"), "Back", self.back_to_title)
+            self.add(button)
+
+    def back_to_title(self) -> None:
+        from .titlescreen import Titlescreen
+        self.game.set_scene(Titlescreen(self.game))
 
     def draw(self, screen: pygame.Surface) -> None:
         screen.blit(Image.get("ending_background"))
