@@ -127,6 +127,10 @@ class BathroomDoor(Door):
     room = "bathroom"
     target_pos = (10, 68)
 
+    def draw(self, screen: pygame.Surface) -> None:
+        super().draw(screen)
+        screen.blit(Image.get("door_icon"), self.screen_pos + (7, 3))
+
 class BedroomDoor2(Door):
     room = "bedroom"
     target_pos = (67, 55)

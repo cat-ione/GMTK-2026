@@ -27,6 +27,6 @@
     "hamster_table": [0, 4, 13, 16],
     "hamster_cage": [5, 9, 0, 0],
 
-    "door_bathroom": [15, 25, 0, 0]
+    "door_bathroom": [3, 25, 0, 0]
   }
 }
