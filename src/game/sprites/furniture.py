@@ -126,13 +126,28 @@ class LivingRoomDoor(Door):
     room = "living_room"
     target_pos = (36, 82)
 
+    def interact(self) -> None:
+        Sound.get("water").set_volume(0)
+        super().interact()
+
 class BathroomDoor(Door):
+    update_group = UGroup.MAIN
+
     room = "bathroom"
     target_pos = (10, 68)
+
+    def update(self) -> None:
+        dist = self.scene.player.pos.distance_to(self.get_pos())
+        if dist < 65:
+            Sound.get("water").set_volume((1 - dist / 65) * 0.7)
 
     def draw(self, screen: pygame.Surface) -> None:
         super().draw(screen)
         screen.blit(Image.get("door_icon"), self.screen_pos + (7, 3))
+
+    def interact(self) -> None:
+        Sound.get("water").set_volume(1)
+        super().interact()
 
 class BedroomDoor2(Door):
     room = "bedroom"
@@ -304,6 +319,7 @@ class Bathtub(InteractableFurniture):
                 self.image = Image.get("bathtub_full")
                 self.on = False
                 self.full = True
+                Sound.get("water").stop()
                 self.animation = None
                 perc = 1 - abs(self.current_temp - 36) / 26
                 self.scene.game_data.scores["bathtub"] = int(perc * self.scene.game_data.max_scores["bathtub"])
@@ -368,6 +384,7 @@ class Bathtub(InteractableFurniture):
             elif self.fullness < 100:
                 self.animation = Animation(Spritesheet.get("bathtub_full"), 0.1)
             self.on = True
+            Sound.get("water").play()
             self.stop_timer.reset()
             self.locked = False
             if self.scene.game_data.first_play and self.scene.first_bath_interaction_2: # type: ignore
