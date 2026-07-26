@@ -26,7 +26,7 @@ class Titlescreen(Scene):
         self.add_button((135, 97), Image.get("button_small"), " ", lambda: 0, Sound.get("beep"))
         self.add_button((154, 97), Image.get("button_small"), " ", lambda: 0, Sound.get("beep"))
 
-        self.add_button((116, 113), Image.get("button_large"), "Start", self.start_game, Sound.get("triple_beep"))
+        self.add_button((116, 113), Image.get("button_large"), "Start", self.start_game)
 
         self.fade_timer = Timer(2, True)
         self.fading = False
@@ -56,6 +56,7 @@ class Titlescreen(Scene):
         if self.fading: return
         self.fade_timer.reset()
         self.fading = True
+        Sound.get("microwave_open_title").play()
         pygame.mixer.music.fadeout(2000)
 
     def add_button(self, pos: VecLike, image: pygame.Surface, text: str, func: Callable, sound: pygame.Sound | None = None) -> None:

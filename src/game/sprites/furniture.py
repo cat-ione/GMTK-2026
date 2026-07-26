@@ -195,14 +195,17 @@ class Microwave(InteractableFurniture):
         self.chicken = None
         self.open_timer = Timer(1, True)
         self.heat_timer = LoopTimer(4, True)
+        self.open = False
         self.sound_playing = False
 
     def update(self) -> None:
         if self.open_timer.done:
             self.image = Image.get("microwave_closed")
+            Sound.get("microwave_close").play()
             self.open_timer.reset()
             self.open_timer.pause()
             self.scene.player.locked = False
+            self.open = False
 
             if self.chicken is not None:
                 self.scene.player.gain_item(self.chicken)
@@ -241,6 +244,9 @@ class Microwave(InteractableFurniture):
     def interact(self) -> None:
         self.image = Image.get("microwave_opened")
         self.open_timer.reset()
+        if not self.open:
+            Sound.get("microwave_open").play()
+        self.open = True
         self.scene.player.locked = True
 
 class Tablecloth(InteractableFurniture):
