@@ -333,6 +333,7 @@ class Bathtub(InteractableFurniture):
                 self.image = Image.get("bathtub_medium")
             else:
                 self.image = Image.get("bathtub_full")
+            Sound.get("water").stop()
 
         if self.animation is not None:
             self.animation.update()
