@@ -8,7 +8,7 @@ class Titlescreen(Scene):
         super().__init__(game)
         self.first_play = first_play
 
-        pygame.mixer.music.load("res/sounds/microwave.wav")
+        pygame.mixer.music.load("res/sounds/microwave.ogg")
         pygame.mixer.music.play(loops=-1, fade_ms=2500)
 
         self.text_scroll = Animation(Spritesheet.get("title_text_scroll"), 0.3)

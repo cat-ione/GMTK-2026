@@ -6,6 +6,7 @@ from src.game.sprites.furniture import Furniture, InteractableFurniture
 from src.game.sprites.interaction_target import InteractionTarget
 from src.game.cutscenes.cutscene import Cutscene
 from .summary import Summary
+from src.game.cutscenes.ending_cutscene import EndingCutscene
 
 class Room(Scene):
     def __init__(self, game: Game, game_data: GameData | None, name: str) -> None:
@@ -36,6 +37,11 @@ class Room(Scene):
         self.flash_clipboard_bright = True
 
         self.cutscene: Cutscene | None = None
+
+        self.fade_timer = Timer(4, True)
+        self._fading = False
+        self.fade_surf = pygame.Surface(SIZE)
+        self.fade_surf.fill((0, 0, 0))
 
     def load_furniture(self) -> None:
         for name, positions in self.data["positions"].items():
@@ -69,13 +75,22 @@ class Room(Scene):
 
         if __debug__:
             if self.game.keydown == pygame.K_RETURN:
-                summary = Summary(self.game, self.game_data)
-                self.game.set_scene(summary)
+                self.start_cutscene(EndingCutscene(self))
 
         if self.game_data.scores["hamsters"] == self.game_data.max_scores["hamsters"]:
             self.clipboard.cross_out("hamsters")
 
+        if self._fading and self.fade_timer.done:
+            summary = Summary(self.game, self.game_data)
+            self.game.set_scene(summary)
+
         watch("cutscene", self.cutscene)
+
+    def fadeout(self) -> None:
+        if self._fading: return
+        self.fade_timer.reset()
+        self._fading = True
+        pygame.mixer.music.fadeout(2000)
 
     def start_cutscene(self, cutscene: Cutscene) -> None:
         self.cutscene = cutscene
@@ -116,6 +131,11 @@ class Room(Scene):
                 if self.flash_clipboard_bright:
                     screen.blit(outline(img, (255, 255, 255)), pos - (1, 1))
             screen.blit(img, pos)
+
+        if self._fading:
+            info(self.fade_timer.progress)
+            self.fade_surf.set_alpha(int(self.fade_timer.progress * 255))
+            screen.blit(self.fade_surf)
 
     def set_interactable_furniture(self, d: dict[str, type[Furniture]]) -> None:
         self.interactable_furniture = d

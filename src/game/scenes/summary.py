@@ -46,10 +46,10 @@ class Summary(Scene):
             self.mood = 3
 
         if self.mood == 1 or self.mood == 2:
-            pygame.mixer.music.load("res/sounds/sad.mp3")
+            pygame.mixer.music.load("res/sounds/sad.ogg")
             pygame.mixer.music.play(loops=-1, fade_ms=2500)
         else:
-            pygame.mixer.music.load("res/sounds/happy.mp3")
+            pygame.mixer.music.load("res/sounds/happy.ogg")
             pygame.mixer.music.play(loops=-1, fade_ms=2500)
 
         self.timer = Timer(2.5)

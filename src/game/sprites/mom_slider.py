@@ -1,6 +1,7 @@
 from src.core import *
 
 from src.game.scenes.summary import Summary
+from src.game.cutscenes.ending_cutscene import EndingCutscene
 
 class MomSlider(Sprite["Room"]):
     update_group = UGroup.HUD
@@ -18,8 +19,7 @@ class MomSlider(Sprite["Room"]):
         if self.animation.done:
             self.animation.reset()
         if self.timer.done:
-            summary = Summary(self.game, self.scene.game_data)
-            self.game.set_scene(summary)
+            self.scene.start_cutscene(EndingCutscene(self.scene))
 
     def start(self) -> None:
         self.timer.resume()
