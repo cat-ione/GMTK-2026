@@ -9,7 +9,7 @@ class MomSlider(Sprite["Room"]):
 
     def __init__(self, scene: Room) -> None:
         super().__init__(scene)
-        self.timer = Timer(300, True)
+        self.timer = Timer(10, True)
         self.animation = Animation(Spritesheet.get("mom_slider"), 0.15)
         self.flash_timer = LoopTimer(0.3)
         self.flashing_white = False

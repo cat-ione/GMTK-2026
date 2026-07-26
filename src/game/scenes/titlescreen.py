@@ -8,8 +8,7 @@ class Titlescreen(Scene):
         super().__init__(game)
         self.first_play = first_play
 
-        pygame.mixer.music.load("res/sounds/microwave.ogg")
-        pygame.mixer.music.play(loops=-1, fade_ms=2500)
+        self.load_music_fade_in("res/sounds/microwave.ogg", 2500)
 
         self.text_scroll = Animation(Spritesheet.get("title_text_scroll"), 0.3)
 
@@ -57,7 +56,7 @@ class Titlescreen(Scene):
         self.fade_timer.reset()
         self.fading = True
         Sound.get("microwave_open_title").play()
-        pygame.mixer.music.fadeout(2000)
+        self.fade_music_out(2000)
 
     def add_button(self, pos: VecLike, image: pygame.Surface, text: str, func: Callable, sound: pygame.Sound | None = None) -> None:
         button = Button(self, pos, image, text, func, sound)

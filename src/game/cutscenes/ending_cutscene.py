@@ -33,10 +33,12 @@ class EndingCutscene(Cutscene):
                     self.scene.add(bubble)
 
                 Sound.get("knock").play()
-                pygame.mixer.music.fadeout(6000)
+                self.scene.fade_music_out(6000)
 
                 self.timer.reset(3)
                 self.phase = 1
         elif self.phase == 1:
             if self.timer.done:
+                Sound.get("microwave").stop()
+                Sound.get("water").stop()
                 self.scene.fadeout()

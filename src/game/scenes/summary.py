@@ -9,7 +9,7 @@ class Summary(Scene):
     def __init__(self, game: Game, game_data: GameData) -> None:
         super().__init__(game)
 
-        pygame.mixer.music.fadeout(2500)
+        self.fade_music_out(2500)
         self.font = Font("font_small", 1, COLOR1)
 
         self.scores = game_data.scores
@@ -46,11 +46,9 @@ class Summary(Scene):
             self.mood = 3
 
         if self.mood == 1 or self.mood == 2:
-            pygame.mixer.music.load("res/sounds/sad.ogg")
-            pygame.mixer.music.play(loops=-1, fade_ms=2500)
+            self.load_music_fade_in("res/sounds/sad.ogg", 2500)
         else:
-            pygame.mixer.music.load("res/sounds/happy.ogg")
-            pygame.mixer.music.play(loops=-1, fade_ms=2500)
+            self.load_music_fade_in("res/sounds/happy.ogg", 2500)
 
         self.timer = Timer(2.5)
 
@@ -64,7 +62,7 @@ class Summary(Scene):
             self.add(button)
 
     def back_to_title(self) -> None:
-        pygame.mixer.music.fadeout(2500)
+        self.fade_music_out(2500)
         from .titlescreen import Titlescreen
         self.game.set_scene(Titlescreen(self.game, False))
 

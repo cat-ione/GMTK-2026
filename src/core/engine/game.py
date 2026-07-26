@@ -61,6 +61,7 @@ class Game:
                 self.dt = clock.tick(FPS) / 1000
                 self.fps = clock.get_fps()
                 self.frame_count += 1
+                Scene.update_music_fade()
                 if __debug__:
                     Watcher.step()
 

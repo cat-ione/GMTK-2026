@@ -92,6 +92,7 @@ class Room(Scene):
         self._fading = True
 
     def start_cutscene(self, cutscene: Cutscene) -> None:
+        if self.cutscene is not None: return
         self.cutscene = cutscene
         cutscene.start()
 

@@ -75,8 +75,7 @@ class OpeningCutscene(Cutscene["LivingRoom"]):
                 self.scene.cutscene = None
                 self.scene.game_data.start_time = time.time()
                 self.scene.mom_slider.start()
-                pygame.mixer.music.load("res/sounds/background_music.ogg")
-                pygame.mixer.music.play(loops=-1, fade_ms=1000)
+                self.scene.load_music_fade_in("res/sounds/background_music.ogg", 1000)
 
     def next_dialogue(self) -> None:
         if self.current_dialogue is not None:
