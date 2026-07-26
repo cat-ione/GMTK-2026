@@ -26,4 +26,5 @@ class Bedroom(Room):
 
         if self.on_hamster_cutscene:
             self.player.say("Oh my goodness! All my hamsters escaped. I have to round them up into their cage!")
+            self.flash_clipboard = True
             self.on_hamster_cutscene = False

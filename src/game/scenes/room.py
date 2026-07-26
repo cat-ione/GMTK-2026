@@ -29,6 +29,9 @@ class Room(Scene):
         self.interactable_furniture: dict[str, type[Furniture]] = {}
 
         self.clipboard_visible = False
+        self.flash_clipboard = False
+        self.flash_clipboard_timer = LoopTimer(0.5)
+        self.flash_clipboard_bright = True
 
         self.cutscene: Cutscene | None = None
 
@@ -103,7 +106,13 @@ class Room(Scene):
 
         if not self.clipboard_visible and self.cutscene is None:
             img = Image.get("clipboard_icon")
-            screen.blit(img, (WIDTH - img.width - 4, 4))
+            pos = Vec(WIDTH - img.width - 4, 4)
+            if self.flash_clipboard:
+                if self.flash_clipboard_timer.done:
+                    self.flash_clipboard_bright = not self.flash_clipboard_bright
+                if self.flash_clipboard_bright:
+                    screen.blit(outline(img, (255, 255, 255)), pos - (1, 1))
+            screen.blit(img, pos)
 
     def set_interactable_furniture(self, d: dict[str, type[Furniture]]) -> None:
         self.interactable_furniture = d

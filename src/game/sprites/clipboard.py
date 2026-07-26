@@ -58,6 +58,7 @@ class Clipboard(Sprite["Room"]):
         self.scene.add(self)
         self.appearing = True
         self.animation_timer.reset()
+        self.scene.flash_clipboard = False
 
     def slide_out(self) -> None:
         self.scene.player.locked = False
