@@ -53,6 +53,7 @@ class Titlescreen(Scene):
             screen.blit(self.fade_surf)
 
     def start_game(self) -> None:
+        if self.fading: return
         self.fade_timer.reset()
         self.fading = True
         pygame.mixer.music.fadeout(2000)
