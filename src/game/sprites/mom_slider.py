@@ -12,7 +12,6 @@ class MomSlider(Sprite["Room"]):
 
     def update(self) -> None:
         if self.timer.done:
-            self.scene.game_data.first_play = False
             summary = Summary(self.game, self.scene.game_data)
             self.game.set_scene(summary)
 
