@@ -106,6 +106,7 @@ class Door(InteractableFurniture):
         if self.scene.player.held_item is not None:
             self.scene.player.held_item.scene = new_scene
         self.scene.clipboard.scene = new_scene
+        self.scene.mom_slider.scene = new_scene
         if self.scene.player.speech_bubble is not None:
             self.scene.remove(self.scene.player.speech_bubble)
             new_scene.add(self.scene.player.speech_bubble)
