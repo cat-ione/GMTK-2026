@@ -54,11 +54,12 @@ class OpeningCutscene(Cutscene["LivingRoom"]):
                 self.next_dialogue()
                 self.phase = 4
         elif self.phase == 4:
-            if self.game.keyup in {pygame.K_SPACE, pygame.K_RETURN, pygame.K_e} or any(self.game.mouse_just_pressed):
-                self.next_dialogue()
-                if self.dialogue_index >= len(self.dialogue):
-                    self.timer.reset(2.5)
-                    self.phase = 5
+            if self.current_dialogue is not None and self.current_dialogue.done:
+                if self.game.keyup in {pygame.K_SPACE, pygame.K_RETURN, pygame.K_e} or any(self.game.mouse_just_pressed):
+                    self.next_dialogue()
+                    if self.dialogue_index >= len(self.dialogue):
+                        self.timer.reset(2.5)
+                        self.phase = 5
         elif self.phase == 5:
             self.scene.zoom_out(Vec(72, 20), 2, self.timer.progress_remaining)
             if self.timer.done:
@@ -84,7 +85,8 @@ class OpeningCutscene(Cutscene["LivingRoom"]):
         person, text = self.dialogue[self.dialogue_index]
         pos = (125, 50) if person == "mom" else (53, 83)
         anchor = Anchor.BOTTOMRIGHT if person == "mom" else Anchor.TOPLEFT
-        bubble = SpeechBubble(self.scene, pos, text, 110, anchor)
+        voice = "voice_2" if person == "mom" else "voice_1"
+        bubble = SpeechBubble(self.scene, pos, text, 110, anchor, True, 0.03, voice)
         self.scene.add(bubble)
         self.current_dialogue = bubble
 

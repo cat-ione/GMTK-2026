@@ -119,15 +119,15 @@ class Font:
         if not text: return 0
         return (sum(self.advance(c) + self.gap for c in text) - self.gap) * self.scale
 
-    def render_wrapped(self, text: str, max_length: int) -> list[pygame.Surface]:
-        """Produce a list of surfaces with the given text wrapped at spaces.
+    def wrap_text(self, text: str, max_length: int) -> list[str]:
+        """Split text into lines wrapped at spaces to fit within a max width.
 
         Args:
-            text: The text to render.
-            max_length: The maximum width, in pixels, of each rendered line.
+            text: The text to wrap.
+            max_length: The maximum width, in pixels, of each line.
 
         Returns:
-            A list of surfaces, one per line, each no wider than max_length.
+            A list of strings, one per line, each no wider than max_length.
         """
         lines = []
         current = ""
@@ -140,7 +140,19 @@ class Font:
                 current = word
         if current:
             lines.append(current)
-        return [self.render(line) for line in lines]
+        return lines
+
+    def render_wrapped(self, text: str, max_length: int) -> list[pygame.Surface]:
+        """Produce a list of surfaces with the given text wrapped at spaces.
+
+        Args:
+            text: The text to render.
+            max_length: The maximum width, in pixels, of each rendered line.
+
+        Returns:
+            A list of surfaces, one per line, each no wider than max_length.
+        """
+        return [self.render(line) for line in self.wrap_text(text, max_length)]
 
     @property
     def height(self) -> int:

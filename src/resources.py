@@ -71,3 +71,7 @@ def define_resources() -> None:
     Image("mom_slider_knob", "mom_slider_icon.png")
 
     Sound("ringtone", "ringtone.wav")
+    for i in range(1, 9):
+        Sound(f"voice_1_{i}", f"voice_1_{i}.wav")
+    for i in range(1, 9):
+        Sound(f"voice_2_{i}", f"voice_2_{i}.wav")
