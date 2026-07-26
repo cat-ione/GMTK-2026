@@ -130,6 +130,10 @@ class Room(Scene):
                     self.flash_clipboard_bright = not self.flash_clipboard_bright
                 if self.flash_clipboard_bright:
                     screen.blit(outline(img, (255, 255, 255)), pos - (1, 1))
+                    screen.blit(outline(img, (255, 255, 255)), pos - (1, 1) + (1, 0))
+                    screen.blit(outline(img, (255, 255, 255)), pos - (1, 1) + (0, 1))
+                    screen.blit(outline(img, (255, 255, 255)), pos - (1, 1) + (-1, 0))
+                    screen.blit(outline(img, (255, 255, 255)), pos - (1, 1) + (0, -1))
             screen.blit(img, pos)
 
         if self._fading:
