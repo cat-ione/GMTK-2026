@@ -8,6 +8,9 @@ class Titlescreen(Scene):
         super().__init__(game)
         self.first_play = first_play
 
+        pygame.mixer.music.load("res/sounds/microwave.wav")
+        pygame.mixer.music.play(loops=-1, fade_ms=2500)
+
         self.text_scroll = Animation(Spritesheet.get("title_text_scroll"), 0.3)
 
         self.add_button((116, 49), Image.get("button_medium"), " ", lambda: 0)
@@ -37,6 +40,7 @@ class Titlescreen(Scene):
         self.sprite_manager.draw(screen)
 
     def start_game(self) -> None:
+        pygame.mixer.music.fadeout(300)
         living_room = LivingRoom(self.game, self.first_play)
         self.game.set_scene(living_room)
 
