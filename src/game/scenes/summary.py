@@ -14,6 +14,7 @@ class Summary(Scene):
 
         self.scores = game_data.scores
         self.max_scores = game_data.max_scores
+        info(self.scores)
         self.total_score = sum(self.scores.values())
         self.max_total_score = sum(self.max_scores.values())
 

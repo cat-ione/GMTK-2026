@@ -77,6 +77,7 @@ class LivingRoom(Room):
             self.hamster_cs_timer.pause()
             self.start_cutscene(self.hamster_cutscene)
 
+        self.game_data.scores["vacuum"] = int((1 - len(self.dusts) / 200) * self.game_data.max_scores["vacuum"])
         if len(self.dusts) == 0:
             self.clipboard.cross_out("vacuum")
         else:
