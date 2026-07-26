@@ -70,13 +70,13 @@ def define_resources() -> None:
     Spritesheet("mom_slider", "mom_slider_bar.png", 8)
     Image("mom_slider_knob", "mom_slider_icon.png")
 
-    Sound("ringtone", "ringtone.wav")
+    Sound("ringtone", "ringtone.ogg")
     for i in range(1, 9):
-        Sound(f"voice_1_{i}", f"voice_1_{i}.wav")
+        Sound(f"voice_1_{i}", f"voice_1_{i}.ogg")
     for i in range(1, 9):
-        Sound(f"voice_2_{i}", f"voice_2_{i}.wav")
-    Sound("microwave", "microwave_loud.wav")
-    Sound("fridge_open", "fridge_open.wav")
-    Sound("fridge_close", "fridge_close.wav")
-    Sound("beep", "beep.wav")
-    Sound("triple_beep", "triple_beep.wav")
+        Sound(f"voice_2_{i}", f"voice_2_{i}.ogg")
+    Sound("microwave", "microwave_loud.ogg")
+    Sound("fridge_open", "fridge_open.ogg")
+    Sound("fridge_close", "fridge_close.ogg")
+    Sound("beep", "beep.ogg")
+    Sound("triple_beep", "triple_beep.ogg")
