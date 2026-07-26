@@ -18,9 +18,9 @@ class BathtubHandle(Sprite["Room"]):
         if self.timer.done:
             self.increasing = not self.increasing
         if self.increasing:
-            self.progress = tween.easeInOutCubic(self.timer.progress)
+            self.progress = tween.easeInOutSine(self.timer.progress)
         else:
-            self.progress = tween.easeInOutCubic(self.timer.progress_remaining)
+            self.progress = tween.easeInOutSine(self.timer.progress_remaining)
 
     def draw(self, screen: pygame.Surface) -> None:
         anchored_blit(screen, self.image, self.screen_pos, Anchor.CENTER)

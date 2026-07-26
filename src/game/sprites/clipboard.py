@@ -17,7 +17,7 @@ class Clipboard(Sprite["Room"]):
             "plates": "Set table",
             "rice": "Cook rice",
             "vacuum": "Vacuum rooms",
-            "bathtub": "Prepare bathtub",
+            "bathtub": "Prepare bath",
             "hamsters": "Return hamsters",
         }
         self.done: set[str] = set()

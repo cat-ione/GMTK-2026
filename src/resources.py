@@ -32,6 +32,9 @@ def define_resources() -> None:
     Spritesheet("bathtub_medium", "bathtub_medium.png", 3)
     Spritesheet("bathtub_full", "bathtub_full.png", 3)
     Image("bathtub", "rooms/bathroom/bathtub.png")
+    Image("bathtub_shallow", "bathtub_shallow_still.png")
+    Image("bathtub_medium", "bathtub_medium_still.png")
+    Image("bathtub_full", "bathtub_full_still.png")
 
     Image("hamster_side", "items/hamster_side.png")
     Image("hamster_standing", "items/hamster_standing.png")

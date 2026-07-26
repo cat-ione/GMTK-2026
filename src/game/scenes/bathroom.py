@@ -15,8 +15,17 @@ class Bathroom(Room):
         self.load_furniture()
         self.bathtub = cast(Bathtub, self.find_furniture("bathtub"))
 
+        # Tutorial stuffs
+        self.first_time_here = True
+        self.first_bath_interaction = True
+        self.first_bath_interaction_2 = True
+
     def update(self) -> None:
         super().update()
 
         self.game_data.living_room.microwave.update()
         self.game_data.living_room.fridge.update()
+
+        if self.game_data.first_play and self.first_time_here:
+            self.bubble = self.player.say("Mom likes her bath temperature to be perfect, I better get this just right...", Anchor.BOTTOMRIGHT)
+            self.first_time_here = False

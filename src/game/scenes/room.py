@@ -18,6 +18,8 @@ class Room(Scene):
             self.camera = game_data.camera
             self.add(self.camera)
             self.clipboard = game_data.clipboard
+            self.mom_slider = game_data.mom_slider
+            self.add(self.mom_slider)
 
         self.data = RoomData.get(name)
         self.furnitures: set[Furniture] = set()

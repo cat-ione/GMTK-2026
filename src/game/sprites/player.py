@@ -260,12 +260,13 @@ class Player(Sprite["Room"]):
             self.held_item.drop()
             self.held_item = None
 
-    def say(self, text: str) -> None:
+    def say(self, text: str, anchor: Anchor = Anchor.BOTTOM) -> GameSpeechBubble:
         if self.speech_bubble is not None:
             self.scene.remove(self.speech_bubble)
-        self.speech_bubble = GameSpeechBubble(self.scene, self.pos - (0, 25), text, 80, Anchor.BOTTOM)
+        self.speech_bubble = GameSpeechBubble(self.scene, self.pos - (0, 25), text, 80, anchor)
         self.scene.add(self.speech_bubble)
         self.speech_timer.reset(3 + len(text.split()) * 0.3)
+        return self.speech_bubble
 
     def _define_animations(self) -> None:
         still_up = Animation(Spritesheet.get("player_idle_back")[:1], -1)

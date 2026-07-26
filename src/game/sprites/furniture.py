@@ -265,7 +265,8 @@ class Bathtub(InteractableFurniture):
         self.fullness = 0
         self.on = False
         self.full = False
-        self.fill_timer = LoopTimer(2.4)
+        self.fill_timer = LoopTimer(1.5)
+        self.stop_timer = Timer(30, True)
         self.locked = False
         self.animation = None
 
@@ -279,11 +280,22 @@ class Bathtub(InteractableFurniture):
             elif self.fullness == 67:
                 self.animation = Animation(Spritesheet.get("bathtub_full"), 0.1)
             elif self.fullness == 100:
-                self.image = Image.get("bathtub")
+                self.image = Image.get("bathtub_full")
+                self.on = False
                 self.full = True
                 self.animation = None
                 perc = 1 - abs(self.current_temp - 36) / 26
                 self.scene.game_data.scores["bathtub"] = int(perc * self.scene.game_data.max_scores["bathtub"])
+
+        if self.stop_timer.done:
+            self.on = False
+            self.animation = None
+            if self.fullness < 33:
+                self.image = Image.get("bathtub_shallow")
+            elif self.fullness < 67:
+                self.image = Image.get("bathtub_medium")
+            else:
+                self.image = Image.get("bathtub_full")
 
         if self.animation is not None:
             self.animation.update()
@@ -312,20 +324,39 @@ class Bathtub(InteractableFurniture):
 
     def interact(self) -> None:
         if not self.locked:
-            self.scene.player.locked = True
-            self.handle = BathtubHandle(self.scene, self.pos + (13, 5))
-            self.scene.add(self.handle)
-            self.locked = True
+            if self.full:
+                self.scene.player.say("It's full!")
+            if not self.on and not self.full:
+                self.scene.player.locked = True
+                self.handle = BathtubHandle(self.scene, self.pos + (13, 5))
+                self.scene.add(self.handle)
+                self.locked = True
+                if self.scene.game_data.first_play and self.scene.first_bath_interaction: # type: ignore
+                    self.scene.player.say("Now... gotta get this funky faucet to just the right temperature.", Anchor.BOTTOMRIGHT)
+                    self.scene.first_bath_interaction = False # type: ignore
         else:
             if self.game.keydown == pygame.K_e:
                 # Range from 10 to 62, 36 in the middle
                 self.new_temp = round(10 + self.handle.progress * 52)
             self.scene.player.locked = False
             self.scene.remove(self.handle)
-            if self.fullness == 0: # Only change animation on first interaction
+            if self.fullness < 33:
                 self.animation = Animation(Spritesheet.get("bathtub_shallow"), 0.1)
+            elif self.fullness < 67:
+                self.animation = Animation(Spritesheet.get("bathtub_medium"), 0.1)
+            elif self.fullness < 100:
+                self.animation = Animation(Spritesheet.get("bathtub_full"), 0.1)
             self.on = True
+            self.stop_timer.reset()
             self.locked = False
+            if self.scene.game_data.first_play and self.scene.first_bath_interaction_2: # type: ignore
+                if self.new_temp == 36:
+                    self.scene.player.say("WOW! I never get this right first try, amazing!", Anchor.BOTTOMRIGHT)
+                elif self.new_temp > 36:
+                    self.scene.player.say("Too hot. I can come back later to add some cold water, water mixes afterall.", Anchor.BOTTOMRIGHT)
+                elif self.new_temp < 36:
+                    self.scene.player.say("Too cold. I can come back later to add some hot water, water mixes afterall.", Anchor.BOTTOMRIGHT)
+                self.scene.first_bath_interaction_2 = False # type: ignore
 
     def spawn_thermometer(self) -> None:
         img = Image.get("thermometer")
