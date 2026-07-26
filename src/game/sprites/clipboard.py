@@ -46,6 +46,7 @@ class Clipboard(Sprite["Room"]):
         if item in self.done: return
         self.done.add(item)
         self._generate_image()
+        self.scene.flash_clipboard = True
 
     def uncross(self, item: str) -> None:
         if item not in self.done: return
