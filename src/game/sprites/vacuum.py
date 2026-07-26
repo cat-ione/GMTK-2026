@@ -24,5 +24,5 @@ class Vacuum(Item):
         player = self.scene.player
         for dust in self.scene.dusts.copy():
             pos = player.pos + self.offsets[player.direction_text]
-            if pos.distance_to(dust.pos) < 4:
+            if pos.distance_to(dust.pos) < 5:
                 self.scene.remove_dust(dust)
