@@ -12,9 +12,10 @@ class OpeningCutscene(Cutscene["LivingRoom"]):
         self.timer = Timer(6, True)
 
         self.dialogue = [
-            ("mom", "Hi Honey! Im heading home now, have you finished all chores I told you to do?"),
+            ("mom", "Hi Honey! I'm heading home now, remember, the guests are coming over tonight!"),
+            ("mom", "Have you finished all chores I told you to do?"),
             ("daughter", "Y-yep... I'm just finishing up the last bit of cleaning..."),
-            ("mom", "Alright, just dont forget anything, see you soon!"),
+            ("mom", "Alright, just don't forget anything, see you soon!"),
             ("daughter", "I won't mom, I promise..."),
         ]
         self.dialogue_index = -1
