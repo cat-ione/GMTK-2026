@@ -57,7 +57,7 @@ class LivingRoom(Room):
         self.zooming = False
         self.start_cutscene(self.opening_cutscene)
 
-        self.hamster_cs_timer = Timer(2, True)
+        self.hamster_cs_timer = Timer(30, True)
         self.hamster_cutscene = HamsterCutscene(self)
 
         # Tutorial specific vars
