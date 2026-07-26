@@ -6,5 +6,7 @@ Made in 96 hours for GMTK 2026.
 
 Programming by cat_ione.
 Art by lumilk.
+Music and SFX by both.
+All assets original.
 
 itch.io: https://cat-ione.itch.io/did-you-defrost-the-chicken
