@@ -238,7 +238,7 @@ class Microwave(InteractableFurniture):
                 self.chicken.remove_thermometer()
                 self.heat_timer.reset()
                 if self.scene.game_data.first_play and not self.scene.have_done_chicken_2: # type: ignore
-                    self.scene.player.say("Gotta make sure I don't over-defrost it... I should check on it soon.")
+                    self.scene.player.say("I should check on it soon so that it doesn't over-defrost. In the meantime, I should check my clipboard for chores.")
                     self.scene.have_done_chicken_2 = True # type: ignore
 
         if self.chicken is not None:
