@@ -89,6 +89,8 @@ class LivingRoom(Room):
         else:
             self.clipboard.uncross("plates")
 
+        self.game_data.scores["plates"] = sum((int(cloth.has_plate()) for cloth in self.tablecloths)) * 5
+
         self.game_data.bathroom.bathtub.update()
 
         self.game_data.game_time = time.time() - self.game_data.start_time
