@@ -235,6 +235,8 @@ class Tablecloth(InteractableFurniture):
 
     def interact(self) -> None:
         if self.item is not None:
+            if isinstance(self.item, Plate):
+                self.item.on_table = False
             item = self.item
             self.item = self.scene.player.held_item
             self.scene.player.pickup_item(item)
