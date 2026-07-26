@@ -32,6 +32,7 @@ class LivingRoom(Room):
         self.chicken = cast(Chicken, self.fridge.chicken)
         self.tablecloths = cast(list[Tablecloth], self.find_all_furniture("tablecloth"))
 
+        self.dust_unspawnable = [((24, 30), (25, 16))]
         self._spawn_dust()
 
         vacuum = Vacuum(self, (21, 30))
@@ -110,6 +111,12 @@ class LivingRoom(Room):
             while not valid:
                 pos = Vec(randint(min_x, max_x), randint(min_y, max_y))
                 if not self.contains_point(pos, margin=2): continue
+                flag = False
+                for rect in self.dust_unspawnable:
+                    if RectHitbox(*rect, Anchor.TOPLEFT).collides_point(pos):
+                        flag = True
+                        break
+                if flag: continue
                 for furniture in self.furnitures:
                     if furniture.drawbox is None: continue
                     if furniture.drawbox.collides_point(pos, margin=2):
