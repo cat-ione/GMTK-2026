@@ -4,6 +4,7 @@ from pygame.constants import K_a, K_d, K_w, K_s, K_e
 from .item import Chicken
 from .furniture import Microwave, Fridge
 from .speech_bubble import GameSpeechBubble
+from .item import Plate
 
 if TYPE_CHECKING:
     from .item import Item
@@ -250,25 +251,26 @@ class Player(Sprite["Room"]):
             if pos is None:
                 pos = self.pos + self.ordinal_direction * 8
             pos = Vec(pos)
-            for furniture in self.scene.furnitures:
-                if furniture.hitbox is None: continue
-                if furniture.hitbox.size == Vec(0, 0): continue
-                if furniture.hitbox.collides_point(pos):
-                    distances = {
-                        "left": abs(self.pos.x - furniture.hitbox.topleft.x),
-                        "right": abs(self.pos.x - furniture.hitbox.bottomright.x),
-                        "top": abs(self.pos.y - furniture.hitbox.topleft.y),
-                        "bottom": abs(self.pos.y - furniture.hitbox.bottomright.y),
-                    }
-                    side = min(distances, key=lambda side: distances[side])
-                    if side == "left":
-                        pos = Vec(furniture.hitbox.topleft.x - 1, pos.y)
-                    elif side == "right":
-                        pos = Vec(furniture.hitbox.bottomright.x + 1, pos.y)
-                    elif side == "top":
-                        pos = Vec(pos.x, furniture.hitbox.topleft.y - 1)
-                    else:
-                        pos = Vec(pos.x, furniture.hitbox.bottomright.y + 1)
+            if not isinstance(self.held_item, Plate):
+                for furniture in self.scene.furnitures:
+                    if furniture.hitbox is None: continue
+                    if furniture.hitbox.size == Vec(0, 0): continue
+                    if furniture.hitbox.collides_point(pos):
+                        distances = {
+                            "left": abs(self.pos.x - furniture.hitbox.topleft.x),
+                            "right": abs(self.pos.x - furniture.hitbox.bottomright.x),
+                            "top": abs(self.pos.y - furniture.hitbox.topleft.y),
+                            "bottom": abs(self.pos.y - furniture.hitbox.bottomright.y),
+                        }
+                        side = min(distances, key=lambda side: distances[side])
+                        if side == "left":
+                            pos = Vec(furniture.hitbox.topleft.x - 1, pos.y)
+                        elif side == "right":
+                            pos = Vec(furniture.hitbox.bottomright.x + 1, pos.y)
+                        elif side == "top":
+                            pos = Vec(pos.x, furniture.hitbox.topleft.y - 1)
+                        else:
+                            pos = Vec(pos.x, furniture.hitbox.bottomright.y + 1)
             if not self.scene.contains_point(pos):
                 pos = Vec(self.pos)
             self.held_item.set_pos(pos)
