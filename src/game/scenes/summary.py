@@ -56,7 +56,7 @@ class Summary(Scene):
 
     def back_to_title(self) -> None:
         from .titlescreen import Titlescreen
-        self.game.set_scene(Titlescreen(self.game))
+        self.game.set_scene(Titlescreen(self.game, False))
 
     def draw(self, screen: pygame.Surface) -> None:
         screen.blit(Image.get("ending_background"))

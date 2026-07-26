@@ -14,7 +14,7 @@ from src.game.sprites.item import Chicken
 from src.game.sprites.mom_slider import MomSlider
 
 class LivingRoom(Room):
-    def __init__(self, game: Game) -> None:
+    def __init__(self, game: Game, first_play: bool = True) -> None:
         super().__init__(game, None, "living_room")
 
         self.set_boundary([(0, 29), (212, 29), (212, 139), (138, 139), (138, 86), (0, 86)])
@@ -47,7 +47,7 @@ class LivingRoom(Room):
         self.mom_slider = MomSlider(self)
         self.add(self.mom_slider)
 
-        self.game_data = GameData(game, self)
+        self.game_data = GameData(game, self, first_play)
 
         self.fade_opacity = 255
         self.fading = True

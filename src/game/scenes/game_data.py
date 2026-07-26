@@ -3,7 +3,7 @@ from .bedroom import Bedroom
 from .bathroom import Bathroom
 
 class GameData:
-    def __init__(self, game: Game, living_room: LivingRoom) -> None:
+    def __init__(self, game: Game, living_room: LivingRoom, first_play: bool = True) -> None:
         self.player = living_room.player
         self.camera = living_room.camera
         self.clipboard = living_room.clipboard
@@ -12,7 +12,7 @@ class GameData:
         self.bedroom = Bedroom(game, self)
         self.bathroom = Bathroom(game, self)
 
-        self.first_play = True
+        self.first_play = first_play
         self.start_time = 0.0
         self.game_time = 0.0
 

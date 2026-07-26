@@ -4,8 +4,9 @@ from src.game.sprites.button import Button
 from .living_room import LivingRoom
 
 class Titlescreen(Scene):
-    def __init__(self, game: Game) -> None:
+    def __init__(self, game: Game, first_play: bool = True) -> None:
         super().__init__(game)
+        self.first_play = first_play
 
         self.text_scroll = Animation(Spritesheet.get("title_text_scroll"), 0.3)
 
@@ -36,7 +37,7 @@ class Titlescreen(Scene):
         self.sprite_manager.draw(screen)
 
     def start_game(self) -> None:
-        living_room = LivingRoom(self.game)
+        living_room = LivingRoom(self.game, self.first_play)
         self.game.set_scene(living_room)
 
     def add_button(self, pos: VecLike, image: pygame.Surface, text: str, func: Callable) -> None:
