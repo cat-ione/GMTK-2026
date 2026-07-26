@@ -76,3 +76,5 @@ def define_resources() -> None:
     for i in range(1, 9):
         Sound(f"voice_2_{i}", f"voice_2_{i}.wav")
     Sound("microwave", "microwave_loud.wav")
+    Sound("fridge_open", "fridge_open.wav")
+    Sound("fridge_close", "fridge_close.wav")

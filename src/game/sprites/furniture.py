@@ -145,13 +145,16 @@ class Fridge(InteractableFurniture):
         self.chicken = Chicken(self.scene, pos)
         self.open_timer = Timer(1, True)
         self.freeze_timer = LoopTimer(6, True)
+        self.open = False
 
     def update(self) -> None:
         if self.open_timer.done:
             self.image = Image.get("fridge_closed")
+            Sound.get("fridge_close").play()
             self.open_timer.reset()
             self.open_timer.pause()
             self.scene.player.locked = False
+            self.open = False
 
             if self.chicken is not None:
                 self.scene.player.gain_item(self.chicken)
@@ -179,6 +182,9 @@ class Fridge(InteractableFurniture):
         self.image = Image.get("fridge_opened")
         self.open_timer.reset()
         self.scene.player.locked = True
+        if not self.open:
+            Sound.get("fridge_open").play()
+        self.open = True
 
 class Microwave(InteractableFurniture):
     update_group = UGroup.MAIN
