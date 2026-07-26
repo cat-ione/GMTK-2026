@@ -249,6 +249,28 @@ class Player(Sprite["Room"]):
         if self.held_item is not None:
             if pos is None:
                 pos = self.pos + self.ordinal_direction * 8
+            pos = Vec(pos)
+            for furniture in self.scene.furnitures:
+                if furniture.hitbox is None: continue
+                if furniture.hitbox.size == Vec(0, 0): continue
+                if furniture.hitbox.collides_point(pos):
+                    distances = {
+                        "left": abs(self.pos.x - furniture.hitbox.topleft.x),
+                        "right": abs(self.pos.x - furniture.hitbox.bottomright.x),
+                        "top": abs(self.pos.y - furniture.hitbox.topleft.y),
+                        "bottom": abs(self.pos.y - furniture.hitbox.bottomright.y),
+                    }
+                    side = min(distances, key=lambda side: distances[side])
+                    if side == "left":
+                        pos = Vec(furniture.hitbox.topleft.x - 1, pos.y)
+                    elif side == "right":
+                        pos = Vec(furniture.hitbox.bottomright.x + 1, pos.y)
+                    elif side == "top":
+                        pos = Vec(pos.x, furniture.hitbox.topleft.y - 1)
+                    else:
+                        pos = Vec(pos.x, furniture.hitbox.bottomright.y + 1)
+            if not self.scene.contains_point(pos):
+                pos = Vec(self.pos)
             self.held_item.set_pos(pos)
             self.scene.add_item(self.held_item)
             self.held_item.drop()
