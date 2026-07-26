@@ -141,6 +141,10 @@ class Plate(Item):
         if self.on_table: return
         self.selected = False
 
+    def interact(self) -> None:
+        if self.on_table: return
+        super().interact()
+
 class Chicken(Item):
     def __init__(self, scene: Room, pos: VecLike) -> None:
         super().__init__(scene, pos, Image.get("chicken"))
