@@ -80,3 +80,4 @@ def define_resources() -> None:
     Sound("fridge_close", "fridge_close.ogg")
     Sound("beep", "beep.ogg")
     Sound("triple_beep", "triple_beep.ogg")
+    Sound("knock", "knock.ogg")

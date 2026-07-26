@@ -90,7 +90,6 @@ class Room(Scene):
         if self._fading: return
         self.fade_timer.reset()
         self._fading = True
-        pygame.mixer.music.fadeout(2000)
 
     def start_cutscene(self, cutscene: Cutscene) -> None:
         self.cutscene = cutscene
@@ -133,7 +132,6 @@ class Room(Scene):
             screen.blit(img, pos)
 
         if self._fading:
-            info(self.fade_timer.progress)
             self.fade_surf.set_alpha(int(self.fade_timer.progress * 255))
             screen.blit(self.fade_surf)
 
