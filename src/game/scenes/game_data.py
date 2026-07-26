@@ -19,7 +19,6 @@ class GameData:
         self.scores = {
             "chicken": 0,
             "plates": 0,
-            "rice": 0,
             "vacuum": 0,
             "bathtub": 0,
             "hamsters": 0,
@@ -27,7 +26,6 @@ class GameData:
         self.max_scores = {
             "chicken": 62,
             "plates": 30, # 5 points per plate
-            "rice": 60,
             "vacuum": 40,
             "bathtub": 60,
             "hamsters": 48, # 4 points per hamster

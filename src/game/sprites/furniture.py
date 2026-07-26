@@ -108,6 +108,7 @@ class Door(InteractableFurniture):
         self.scene.clipboard.scene = new_scene
         if self.scene.player.speech_bubble is not None:
             self.scene.remove(self.scene.player.speech_bubble)
+            new_scene.add(self.scene.player.speech_bubble)
 
         rel_pos = self.scene.camera.pos - self.scene.player.pos
         self.scene.player.pos = Vec(self.target_pos)
@@ -225,10 +226,6 @@ class Microwave(InteractableFurniture):
         self.image = Image.get("microwave_opened")
         self.open_timer.reset()
         self.scene.player.locked = True
-
-class RiceCooker(InteractableFurniture):
-    def interact(self) -> None:
-        info("interacted with rice cooker")
 
 class Tablecloth(InteractableFurniture):
     def __init__(self, scene: Room, name: str, pos: VecLike, image: pygame.Surface, hitbox: list[int] | None) -> None:

@@ -27,7 +27,6 @@ class Summary(Scene):
             "Bathtub:",
             f"   {bath_temp}C/36C" if bath_full else "   not filled!",
             f"Plates: {plates}/6",
-            f"Rice: 0/0",
             f"Vacuum: {dust_percentage}%",
             f"Hamsters: {hamsters_captured}/{total_hamsters}",
             " ",

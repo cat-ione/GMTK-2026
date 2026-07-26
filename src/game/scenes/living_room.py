@@ -1,7 +1,7 @@
 from src.core import *
 
 from .room import Room
-from src.game.sprites.furniture import StackOfPlates, BedroomDoor, Fridge, Microwave, RiceCooker, Tablecloth
+from src.game.sprites.furniture import StackOfPlates, BedroomDoor, Fridge, Microwave, Tablecloth
 from src.game.sprites.dust import Dust
 from src.game.sprites.player import Player
 from src.game.sprites.vacuum import Vacuum
@@ -23,7 +23,6 @@ class LivingRoom(Room):
             "door": BedroomDoor,
             "fridge": Fridge,
             "microwave": Microwave,
-            "rice_cooker": RiceCooker,
             "tablecloth": Tablecloth,
         })
         self.load_furniture()
