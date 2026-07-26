@@ -48,7 +48,7 @@ class UGroup(Enum):
     MAIN = auto()
     HUD = auto()
 
-TITLE = "Pygame"
+TITLE = "Did you defrost the chicken?"
 SIZE = WIDTH, HEIGHT = 180, 135
 PX = 5 # Size of a pixel
 FPS = 60
