@@ -78,3 +78,5 @@ def define_resources() -> None:
     Sound("microwave", "microwave_loud.wav")
     Sound("fridge_open", "fridge_open.wav")
     Sound("fridge_close", "fridge_close.wav")
+    Sound("beep", "beep.wav")
+    Sound("triple_beep", "triple_beep.wav")

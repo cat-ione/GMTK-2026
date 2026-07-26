@@ -9,7 +9,8 @@ class Button(Sprite):
         pos: VecLike,
         image: pygame.Surface,
         text: str,
-        func: Callable
+        func: Callable,
+        sound: pygame.Sound | None = None
     ) -> None:
         super().__init__(scene)
 
@@ -19,6 +20,7 @@ class Button(Sprite):
         self.image = self.generate_image(image, text)
         self.hitbox = RectHitbox(self.pos, self.image.size, Anchor.TOPLEFT)
         self.func = func
+        self.sound = sound
 
         # Whether mouse button down happened inside the button
         self.down_in_me = False
@@ -43,6 +45,8 @@ class Button(Sprite):
 
     def press(self) -> None:
         self.pos.x -= 1
+        if self.sound is not None:
+            self.sound.play()
 
     def release(self) -> None:
         self.pos.x += 1
