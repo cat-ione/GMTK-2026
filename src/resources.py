@@ -75,3 +75,4 @@ def define_resources() -> None:
         Sound(f"voice_1_{i}", f"voice_1_{i}.wav")
     for i in range(1, 9):
         Sound(f"voice_2_{i}", f"voice_2_{i}.wav")
+    Sound("microwave", "microwave_loud.wav")

@@ -188,6 +188,7 @@ class Microwave(InteractableFurniture):
         self.chicken = None
         self.open_timer = Timer(1, True)
         self.heat_timer = LoopTimer(4, True)
+        self.sound_playing = False
 
     def update(self) -> None:
         if self.open_timer.done:
@@ -216,12 +217,19 @@ class Microwave(InteractableFurniture):
                     self.scene.have_done_chicken_2 = True # type: ignore
 
         if self.chicken is not None:
+            if not self.sound_playing:
+                Sound.get("microwave").play(loops=-1)
+                self.sound_playing = True
+            Sound.get("microwave").set_volume(1 - self.scene.player.pos.distance_to(self.pos) / 70)
             if self.heat_timer.done:
                 if self.chicken.temperature < 40:
                     self.chicken.temperature += 1
                     perc = 1 - abs(self.chicken.temperature - 22) / 40
                     self.scene.game_data.scores["chicken"] = int(perc * self.scene.game_data.max_scores["chicken"])
             watch("chicken_temp", self.chicken.temperature)
+        else:
+            Sound.get("microwave").stop()
+            self.sound_playing = False
 
     def interact(self) -> None:
         self.image = Image.get("microwave_opened")
