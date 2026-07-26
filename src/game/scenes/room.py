@@ -65,9 +65,10 @@ class Room(Scene):
                 self.clipboard.slide_out()
                 self.clipboard_visible = False
 
-        if self.game.keydown == pygame.K_RETURN:
-            summary = Summary(self.game, self.game_data)
-            self.game.set_scene(summary)
+        if __debug__:
+            if self.game.keydown == pygame.K_RETURN:
+                summary = Summary(self.game, self.game_data)
+                self.game.set_scene(summary)
 
         if self.game_data.scores["hamsters"] == self.game_data.max_scores["hamsters"]:
             self.clipboard.cross_out("hamsters")

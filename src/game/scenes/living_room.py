@@ -11,6 +11,7 @@ from src.game.cutscenes.hamster_cutscene import HamsterCutscene
 from src.game.cutscenes.opening_cutscene import OpeningCutscene
 from src.game.sprites.clipboard import Clipboard
 from src.game.sprites.item import Chicken
+from src.game.sprites.mom_slider import MomSlider
 
 class LivingRoom(Room):
     def __init__(self, game: Game) -> None:
@@ -44,6 +45,8 @@ class LivingRoom(Room):
         self.camera.center_on(self.player.pos)
 
         self.clipboard = Clipboard(self)
+        self.mom_slider = MomSlider(self)
+        self.add(self.mom_slider)
 
         self.game_data = GameData(game, self)
 
@@ -54,7 +57,7 @@ class LivingRoom(Room):
         self.zooming = False
         self.start_cutscene(self.opening_cutscene)
 
-        self.hamster_cs_timer = Timer(2, True)
+        self.hamster_cs_timer = Timer(30, True)
         self.hamster_cutscene = HamsterCutscene(self)
 
         # Tutorial specific vars

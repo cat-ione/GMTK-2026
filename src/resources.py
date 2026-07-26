@@ -64,3 +64,5 @@ def define_resources() -> None:
     Image("speech_bubble_side", "speech_bubble_side.png")
     Image("key_hint_e", "key_hint_e.png")
     Image("door_icon", "door_icon.png")
+    Image("mom_slider", "mom_slider_bar.png")
+    Image("mom_slider_knob", "mom_slider_icon.png")

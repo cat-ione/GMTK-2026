@@ -7,6 +7,7 @@ class GameData:
         self.player = living_room.player
         self.camera = living_room.camera
         self.clipboard = living_room.clipboard
+        self.mom_slider = living_room.mom_slider
         self.living_room = living_room
         self.bedroom = Bedroom(game, self)
         self.bathroom = Bathroom(game, self)

@@ -71,6 +71,7 @@ class OpeningCutscene(Cutscene["LivingRoom"]):
                 self.scene.player.pos.y += 2
                 self.scene.cutscene = None
                 self.scene.game_data.start_time = time.time()
+                self.scene.mom_slider.start()
 
     def next_dialogue(self) -> None:
         if self.current_dialogue is not None:
