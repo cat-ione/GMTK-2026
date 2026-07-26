@@ -37,6 +37,7 @@ class OpeningCutscene(Cutscene["LivingRoom"]):
             self.scene.player.pos = Vec(105, 41)
             self.scene.player.animation.loop("phone_2")
             self.scene.player.animation.one_shot("phone_1")
+            Sound.get("ringtone").play()
             self.surprise = Surprise(self.scene, player.pos + (5, -30))
             self.scene.add(self.surprise)
             self.timer.reset(4.5)

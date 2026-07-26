@@ -70,4 +70,4 @@ def define_resources() -> None:
     Spritesheet("mom_slider", "mom_slider_bar.png", 8)
     Image("mom_slider_knob", "mom_slider_icon.png")
 
-    Sound("background_music", "background_music.wav")
+    Sound("ringtone", "ringtone.wav")
